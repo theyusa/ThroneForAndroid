@@ -48,18 +48,37 @@
         <item>4</item>
     </string-array>
 
+    <string-array name="int_array_6" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string-array name="app_tls_version">
         <item>1.2</item>
         <item>1.3</item>
     </string-array>
 
     <string-array name="autosel_balance_modes">
-        <item>Zamana göre döndürme (oturumları kararlı tutar)</item>
-        <item>Bağlantı başına (en geniş dağılım)</item>
+        <item>Zamanlayıcıya göre döndür (oturumları stabil tutar)</item>
+        <item>Bağlantı başına (en geniş yayılım)</item>
+    </string-array>
+    <string-array name="autosel_balance_mode_values" translatable="false">
+        <item>rotate</item>
+        <item>connection</item>
     </string-array>
 
     <string-array name="congestion_control_entry">
         <item>@string/tri_state_default</item>
+        <item>cubic</item>
+        <item>new_reno</item>
+        <item>bbr</item>
+    </string-array>
+    <string-array name="congestion_control_value" translatable="false">
+        <item></item>
         <item>cubic</item>
         <item>new_reno</item>
         <item>bbr</item>
@@ -69,9 +88,20 @@
         <item>@string/remote_dns</item>
         <item>@string/direct_dns</item>
     </string-array>
+    <string-array name="dns_final_out_values" translatable="false">
+        <item>remote</item>
+        <item>direct</item>
+    </string-array>
 
     <string-array name="domain_strategy_entries">
         <item>@string/setting_default</item>
+        <item>ipv4_only</item>
+        <item>ipv6_only</item>
+        <item>prefer_ipv4</item>
+        <item>prefer_ipv6</item>
+    </string-array>
+    <string-array name="domain_strategy_values" translatable="false">
+        <item></item>
         <item>ipv4_only</item>
         <item>ipv6_only</item>
         <item>prefer_ipv4</item>
@@ -88,9 +118,25 @@
         <item>STRING</item>
         <item>BASE64</item>
     </string-array>
+    <string-array name="hysteria_auth_type_value" translatable="false">
+        <item></item>
+        <item>STRING</item>
+        <item>BASE64</item>
+    </string-array>
+
+    <string-array name="hysteria_obfs_type_value" translatable="false">
+        <item>salamander</item>
+        <item>gecko</item>
+    </string-array>
 
     <string-array name="hysteria_bbr_profile_entry">
         <item>@string/tri_state_default</item>
+        <item>standard</item>
+        <item>conservative</item>
+        <item>aggressive</item>
+    </string-array>
+    <string-array name="hysteria_bbr_profile_value" translatable="false">
+        <item></item>
         <item>standard</item>
         <item>conservative</item>
         <item>aggressive</item>
@@ -106,9 +152,21 @@
         <item>HTTP/2</item>
         <item>HTTP/3</item>
     </string-array>
+    <string-array name="masque_http_version_value" translatable="false">
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <string-array name="mieru_multiplexing_entry">
         <item>@string/tri_state_default</item>
+        <item>MULTIPLEXING_OFF</item>
+        <item>MULTIPLEXING_LOW</item>
+        <item>MULTIPLEXING_MIDDLE</item>
+        <item>MULTIPLEXING_HIGH</item>
+    </string-array>
+    <string-array name="mieru_multiplexing_value" translatable="false">
+        <item></item>
         <item>MULTIPLEXING_OFF</item>
         <item>MULTIPLEXING_LOW</item>
         <item>MULTIPLEXING_MIDDLE</item>
@@ -131,6 +189,17 @@
         <item>smux</item>
         <item>yamux</item>
     </string-array>
+    <string-array name="mux_protocol_value" translatable="false">
+        <item></item>
+        <item>h2mux</item>
+        <item>smux</item>
+        <item>yamux</item>
+    </string-array>
+    <string-array name="mux_protocol_preset" translatable="false">
+        <item>h2mux</item>
+        <item>smux</item>
+        <item>yamux</item>
+    </string-array>
 
     <string-array name="night_mode">
         <item>@string/follow_system</item>
@@ -146,6 +215,18 @@
         <item>@string/notification_switch</item>
         <item>@string/reset_connections</item>
     </string-array>
+    <string-array name="notification_action_values" translatable="false">
+        <item>stop</item>
+        <item>previous</item>
+        <item>next</item>
+        <item>switch</item>
+        <item>reset</item>
+    </string-array>
+    <string-array name="notification_action_defaults" translatable="false">
+        <item>stop</item>
+        <item>next</item>
+        <item>switch</item>
+    </string-array>
 
     <string-array name="openconnect_flavor_entry">
         <item>@string/tri_state_default</item>
@@ -156,16 +237,35 @@
         <item>F5</item>
         <item>Fortinet</item>
     </string-array>
+    <string-array name="openconnect_flavor_value" translatable="false">
+        <item></item>
+        <item>anyconnect</item>
+        <item>nc</item>
+        <item>gp</item>
+        <item>pulse</item>
+        <item>f5</item>
+        <item>fortinet</item>
+    </string-array>
 
     <string-array name="openvpn_network_entry">
         <item>@string/tri_state_default</item>
         <item>UDP</item>
         <item>TCP</item>
     </string-array>
+    <string-array name="openvpn_network_value" translatable="false">
+        <item></item>
+        <item>udp</item>
+        <item>tcp</item>
+    </string-array>
 
     <string-array name="packet_encoding_entry">
         <item>none</item>
         <item>packet</item>
+        <item>xudp</item>
+    </string-array>
+    <string-array name="packet_encoding_value" translatable="false">
+        <item></item>
+        <item>packetaddr</item>
         <item>xudp</item>
     </string-array>
 
@@ -174,11 +274,21 @@
         <item>IPv4</item>
         <item>IPv6</item>
     </string-array>
+    <string-array name="realm_ip_version_value" translatable="false">
+        <item>0</item>
+        <item>4</item>
+        <item>6</item>
+    </string-array>
 
     <string-array name="route_rule_ip_version_entries">
         <item>@string/route_rule_any</item>
         <item>IPv4</item>
         <item>IPv6</item>
+    </string-array>
+    <string-array name="route_rule_ip_version_values" translatable="false">
+        <item></item>
+        <item>4</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="route_rule_network_entries">
@@ -187,9 +297,34 @@
         <item>udp</item>
         <item>icmp</item>
     </string-array>
+    <string-array name="route_rule_network_values" translatable="false">
+        <item></item>
+        <item>tcp</item>
+        <item>udp</item>
+        <item>icmp</item>
+    </string-array>
+
+    <string-array name="route_rule_network_type_entries">
+        <item>@string/route_rule_network_type_wifi</item>
+        <item>@string/route_rule_network_type_cellular</item>
+        <item>@string/route_rule_network_type_ethernet</item>
+        <item>@string/route_rule_network_type_other</item>
+    </string-array>
 
     <string-array name="route_rule_protocol_entries">
         <item>@string/route_rule_any</item>
+        <item>http</item>
+        <item>tls</item>
+        <item>quic</item>
+        <item>stun</item>
+        <item>dns</item>
+        <item>bittorrent</item>
+        <item>dtls</item>
+        <item>ssh</item>
+        <item>rdp</item>
+    </string-array>
+    <string-array name="route_rule_protocol_values" translatable="false">
+        <item></item>
         <item>http</item>
         <item>tls</item>
         <item>quic</item>
@@ -207,12 +342,36 @@
         <item>drop</item>
         <item>reply</item>
     </string-array>
+    <string-array name="route_rule_reject_method_values" translatable="false">
+        <item></item>
+        <item>default</item>
+        <item>drop</item>
+        <item>reply</item>
+    </string-array>
+
+    <string-array name="route_rule_action_values" translatable="false">
+        <item>route</item>
+        <item>reject</item>
+        <item>hijack-dns</item>
+        <item>sniff</item>
+        <item>resolve</item>
+        <item>route-options</item>
+    </string-array>
+    <string-array name="route_rule_outbound_entries" translatable="false">
+        <item>proxy</item>
+        <item>direct</item>
+        <item>block</item>
+    </string-array>
+    <string-array name="route_rule_outbound_values" translatable="false">
+        <item>-1</item>
+        <item>-2</item>
+        <item>-3</item>
+    </string-array>
 
     <string-array name="service_mode_values">
         <item>vpn</item>
         <item>proxy</item>
     </string-array>
-
     <string-array name="service_modes">
         <item>@string/service_mode_vpn</item>
         <item>@string/service_mode_proxy</item>
@@ -223,7 +382,6 @@
         <item>TCP</item>
         <item>UDP</item>
     </string-array>
-
     <string-array name="snell_network_value">
         <item></item>
         <item>tcp</item>
@@ -235,7 +393,6 @@
         <item>HTTP</item>
         <item>TLS</item>
     </string-array>
-
     <string-array name="snell_obfs_modes_value">
         <item></item>
         <item>http</item>
@@ -244,14 +401,17 @@
 
     <string-array name="snell_v6_modes_entry">
         <item>Varsayılan</item>
-        <item>Biçimsiz</item>
-        <item>Güvensiz Raw</item>
+        <item>Unshaped</item>
+        <item>Unsafe Raw</item>
     </string-array>
-
     <string-array name="snell_v6_modes_value">
         <item>default</item>
         <item>unshaped</item>
         <item>unsafe-raw</item>
+    </string-array>
+    <string-array name="snell_supported_versions" translatable="false">
+        <item>4</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="speed_test_modes">
@@ -294,6 +454,11 @@
         <item>native</item>
         <item>quic</item>
     </string-array>
+    <string-array name="tuic_udp_relay_mode_value_opt" translatable="false">
+        <item></item>
+        <item>native</item>
+        <item>quic</item>
+    </string-array>
 
     <string-array name="utls_fingerprint_entry">
         <item></item>
@@ -308,7 +473,6 @@
         <item>random</item>
         <item>randomized</item>
     </string-array>
-
     <string-array name="utls_fingerprint_preset_entries">
         <item>@string/setting_default</item>
         <item>chrome</item>
@@ -323,6 +487,15 @@
         <item>randomized</item>
     </string-array>
 
+    <string-array name="warp_mode_entries" translatable="false">
+        <item>@string/warp_mode_wireguard</item>
+        <item>@string/warp_mode_masque</item>
+    </string-array>
+    <string-array name="warp_mode_values" translatable="false">
+        <item>wireguard</item>
+        <item>masque</item>
+    </string-array>
+
     <string-array name="warp_masque_http_mode_entries">
         <item>@string/warp_http3_fallback</item>
         <item>@string/warp_http3_only</item>
@@ -335,7 +508,6 @@
         <item>stream-up</item>
         <item>stream-one</item>
     </string-array>
-
     <string-array name="xhttp_mode_value">
         <item>auto</item>
         <item>packet-up</item>
@@ -347,6 +519,126 @@
         <item>@string/xray_vless_xhttp_only</item>
         <item>@string/xray_vless_xhttp_and_reality</item>
         <item>@string/xray_vless_all</item>
+    </string-array>
+
+    <string-array name="log_level" translatable="false">
+        <item>trace</item>
+        <item>debug</item>
+        <item>info</item>
+        <item>warn</item>
+        <item>error</item>
+        <item>fatal</item>
+        <item>panic</item>
+    </string-array>
+    <string-array name="socks_version_entry" translatable="false">
+        <item>SOCKS4</item>
+        <item>SOCKS5</item>
+    </string-array>
+    <string-array name="socks_version_value" translatable="false">
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="vmess_security_entry" translatable="false">
+        <item>auto</item>
+        <item>none</item>
+        <item>zero</item>
+        <item>aes-128-gcm</item>
+        <item>chacha20-poly1305</item>
+    </string-array>
+    <string-array name="vless_flow_entry" translatable="false">
+        <item>none</item>
+        <item>xtls-rprx-vision</item>
+    </string-array>
+    <string-array name="vless_flow_value" translatable="false">
+        <item></item>
+        <item>xtls-rprx-vision</item>
+    </string-array>
+    <string-array name="xray_flow_entry" translatable="false">
+        <item>none</item>
+        <item>xtls-rprx-vision</item>
+        <item>xtls-rprx-vision-udp443</item>
+    </string-array>
+    <string-array name="xray_flow_value" translatable="false">
+        <item></item>
+        <item>xtls-rprx-vision</item>
+        <item>xtls-rprx-vision-udp443</item>
+    </string-array>
+    <string-array name="transport_type_entry" translatable="false">
+        <item>TCP</item>
+        <item>WebSocket</item>
+        <item>HTTP</item>
+        <item>gRPC</item>
+        <item>HTTPUpgrade</item>
+    </string-array>
+    <string-array name="transport_type_value" translatable="false">
+        <item>tcp</item>
+        <item>ws</item>
+        <item>http</item>
+        <item>grpc</item>
+        <item>httpupgrade</item>
+    </string-array>
+    <string-array name="xray_network_entry" translatable="false">
+        <item>RAW</item>
+        <item>XHTTP</item>
+        <item>WebSocket</item>
+        <item>HTTPUpgrade</item>
+        <item>gRPC</item>
+    </string-array>
+    <string-array name="xray_network_value" translatable="false">
+        <item>raw</item>
+        <item>xhttp</item>
+        <item>ws</item>
+        <item>httpupgrade</item>
+        <item>grpc</item>
+    </string-array>
+    <string-array name="xray_security_entry" translatable="false">
+        <item>none</item>
+        <item>tls</item>
+        <item>reality</item>
+    </string-array>
+    <string-array name="shadowtls_versions" translatable="false">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="custom_subtype_entry" translatable="false">
+        <item>sing-box outbound</item>
+        <item>sing-box full config</item>
+        <item>Xray outbound</item>
+        <item>Xray full config</item>
+    </string-array>
+    <string-array name="custom_subtype_value" translatable="false">
+        <item>outbound</item>
+        <item>fullconfig</item>
+        <item>xrayoutbound</item>
+        <item>xrayfullconfig</item>
+    </string-array>
+    <string-array name="ruleset_mirror_entries" translatable="false">
+        <item>GitHub</item>
+        <item>jsDelivr (Cloudflare)</item>
+        <item>jsDelivr (Gcore)</item>
+        <item>jsDelivr (Quantil)</item>
+        <item>jsDelivr (Fastly)</item>
+        <item>jsDelivr (CDN)</item>
+    </string-array>
+    <string-array name="fragment_implementation_entries" translatable="false">
+        <item>built-in (sing-box)</item>
+        <item>custom (dialer)</item>
+    </string-array>
+    <string-array name="fragment_implementation_values" translatable="false">
+        <item>built-in</item>
+        <item>custom</item>
+    </string-array>
+    <string-array name="xray_log_level" translatable="false">
+        <item>debug</item>
+        <item>info</item>
+        <item>warning</item>
+        <item>error</item>
+        <item>none</item>
+    </string-array>
+    <string-array name="ntp_outbound_values" translatable="false">
+        <item>direct</item>
+        <item>proxy</item>
     </string-array>
 
 </resources>
