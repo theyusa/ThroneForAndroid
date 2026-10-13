@@ -1314,7 +1314,7 @@
     <string name="autosel_plan_counts">Gruptaki %2$d profilden %1$d tanesi kullanılabilir; %3$d tanesi çalışacak.</string>
     <string name="autosel_plan_skipped">Atlandı: %s.</string>
     <string name="autosel_plan_skip_item">%1$d %2$s</string>
-    <string name="autosel_list_separator">", "</string>
+    <string name="autosel_list_separator">\", \"</string>
     <string name="autosel_plan_kept_unavailable">Tüm profillerin son testi başarısız oldu. Bu durum sunuculardan ziyade ağ kopukluğunu gösterdiği için %d profilin tamamı saklandı ve yeniden test edilecek.</string>
     <string name="autosel_plan_truncated">%d profilden fazlası eşleşti, bu yüzden yalnızca en iyi sıralamadakiler tutuldu.</string>
     <string name="autosel_plan_reused">%d profilin yakın zamanda yapılmış test sonucu tekrar kullanılacak.</string>
@@ -1531,7 +1531,7 @@
     <string name="warp_wireguard_profile_name" translatable="false">WARP</string>
     <string name="warp_masque_profile_name" translatable="false">WARP MASQUE</string>
 
-    <string name="warp_tos_message"><![CDATA[WARP kimliği oluşturmak Cloudflare üzerinde yeni bir cihaz kaydeder.<br><br><a href="%1$s">Cloudflare WARP Hizmet Şartları</a>'nı kabul ediyor musunuz?]]></string>
+    <string name="warp_tos_message"><![CDATA[WARP kimliği oluşturmak Cloudflare üzerinde yeni bir cihaz kaydeder.<br><br><a href="%1$s">Cloudflare WARP Hizmet Şartları</a>\'nı kabul ediyor musunuz?]]></string>
     <string name="warp_proxy_not_started">Proxy ile istek yapıldı fakat hiçbir profil başlatılmadı.</string>
     <string name="warp_core_unreachable">Çekirdeğe erişilemedi.</string>
 
@@ -1641,7 +1641,7 @@
     <string name="backup_warn_orphan_rules">Eksik rota profillerine ait %d kural atlandı.</string>
     <string name="backup_warn_unsupported_rules">Bu uygulamanın desteklemediği alanları kullanan %1$d rota kuralı atlandı (%2$s).</string>
     <string name="backup_warn_raw_routes">Throne masaüstünden gelen %d ham rota profili salt okunur olarak tutuluyor; Android bunları çalıştıramaz.</string>
-    <string name="backup_warn_lan_access">Yedek dosyasında diğer cihazların bağlanmasına izin verilmişti (inbound adres %s); güvenlik nedeniyle kapatıldı. Gerekirse gelen ayarlarından açın.</string>
+    <string name="backup_warn_lan_access" formatted="false">Yedek dosyasında diğer cihazların bağlanmasına izin verilmişti (inbound adres %s); güvenlik nedeniyle kapatıldı. Gerekirse gelen ayarlarından açın.</string>
 
     <string name="webdav_choose_backup">Bir yedek seçin</string>
     <string name="webdav_no_backups">%s içinde .thrbackup dosyası bulunamadı.</string>
