@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Motion Tokens -->
+    <!-- Duration tokens (in milliseconds) -->
+    <integer name="m3_sys_duration_short">100</integer>
+    <integer name="m3_sys_duration_medium">200</integer>
+    <integer name="m3_sys_duration_medium2">250</integer>
+    <integer name="m3_sys_duration_long">300</integer>
+    <integer name="m3_sys_duration_long2">350</integer>
+    <integer name="m3_sys_duration_extra_long">400</integer>
+    <integer name="m3_sys_duration_extra_long2">500</integer>
+    
+    <!-- Easing tokens -->
+    <!-- Linear - no acceleration/deceleration -->
+    <string name="m3_sys_easing_linear">cubic-bezier(0.0, 0.0, 1.0, 1.0)</string>
+    
+    <!-- Ease In - accelerate from zero velocity -->
+    <string name="m3_sys_easing_ease_in">cubic-bezier(0.4, 0.0, 1.0, 1.0)</string>
+    
+    <!-- Ease Out - decelerate to zero velocity -->
+    <string name="m3_sys_easing_ease_out">cubic-bezier(0.0, 0.0, 0.2, 1.0)</string>
+    
+    <!-- Ease In Out - accelerate then decelerate -->
+    <string name="m3_sys_easing_ease_in_out">cubic-bezier(0.4, 0.0, 0.2, 1.0)</string>
+    
+    <!-- Emphasized - more dramatic easing -->
+    <string name="m3_sys_easing_emphasized">cubic-bezier(0.2, 0.0, 0.0, 1.0)</string>
+    
+    <!-- Emphasized Accelerate -->
+    <string name="m3_sys_easing_emphasized_accelerate">cubic-bezier(0.3, 0.0, 0.7, 1.0)</string>
+    
+    <!-- Emphasized Decelerate -->
+    <string name="m3_sys_easing_emphasized_decelerate">cubic-bezier(0.05, 0.0, 0.2, 1.0)</string>
+    
+    <!-- Legacy/Standard easing (M2 compatible) -->
+    <string name="m3_sys_easing_standard">cubic-bezier(0.4, 0.0, 0.2, 1.0)</string>
+    <string name="m3_sys_easing_decelerate">cubic-bezier(0.0, 0.0, 0.2, 1.0)</string>
+    <string name="m3_sys_easing_accelerate">cubic-bezier(0.4, 0.0, 1.0, 1.0)</string>
+    
+    <!-- Component-specific motion -->
+    <!-- Container transform -->
+    <integer name="m3_motion_duration_container_transform">@integer/m3_sys_duration_long</integer>
+    <string name="m3_motion_easing_container_transform">@string/m3_sys_easing_emphasized</string>
+    
+    <!-- Fade through -->
+    <integer name="m3_motion_duration_fade_through">@integer/m3_sys_duration_medium</integer>
+    <string name="m3_motion_easing_fade_through">@string/m3_sys_easing_standard</string>
+    
+    <!-- Fade -->
+    <integer name="m3_motion_duration_fade">@integer/m3_sys_duration_short</integer>
+    <string name="m3_motion_easing_fade">@string/m3_sys_easing_ease_out</string>
+    
+    <!-- Scale -->
+    <integer name="m3_motion_duration_scale">@integer/m3_sys_duration_medium</integer>
+    <string name="m3_motion_easing_scale">@string/m3_sys_easing_emphasized_decelerate</string>
+    
+    <!-- Slide -->
+    <integer name="m3_motion_duration_slide">@integer/m3_sys_duration_medium2</integer>
+    <string name="m3_motion_easing_slide">@string/m3_sys_easing_emphasized_decelerate</string>
+    
+    <!-- Navigation -->
+    <integer name="m3_motion_duration_nav">@integer/m3_sys_duration_medium</integer>
+    <string name="m3_motion_easing_nav">@string/m3_sys_easing_standard</string>
+    
+    <!-- Bottom sheet -->
+    <integer name="m3_motion_duration_bottom_sheet">@integer/m3_sys_duration_medium2</integer>
+    <string name="m3_motion_easing_bottom_sheet">@string/m3_sys_easing_emphasized_decelerate</string>
+    
+    <!-- Dialog -->
+    <integer name="m3_motion_duration_dialog">@integer/m3_sys_duration_short</integer>
+    <string name="m3_motion_easing_dialog">@string/m3_sys_easing_emphasized</string>
+    
+    <!-- Menu -->
+    <integer name="m3_motion_duration_menu">@integer/m3_sys_duration_short</integer>
+    <string name="m3_motion_easing_menu">@string/m3_sys_easing_emphasized_decelerate</string>
+    
+    <!-- Tooltip -->
+    <integer name="m3_motion_duration_tooltip">@integer/m3_sys_duration_short</integer>
+    <string name="m3_motion_easing_tooltip">@string/m3_sys_easing_emphasized_decelerate</string>
+    
+    <!-- Snackbar -->
+    <integer name="m3_motion_duration_snackbar">@integer/m3_sys_duration_medium</integer>
+    <string name="m3_motion_easing_snackbar">@string/m3_sys_easing_emphasized_decelerate</string>
+    
+    <!-- FAB -->
+    <integer name="m3_motion_duration_fab">@integer/m3_sys_duration_short</integer>
+    <string name="m3_motion_easing_fab">@string/m3_sys_easing_emphasized</string>
+    
+    <!-- Navigation bar -->
+    <integer name="m3_motion_duration_nav_bar">@integer/m3_sys_duration_medium</integer>
+    <string name="m3_motion_easing_nav_bar">@string/m3_sys_easing_standard</string>
+    
+    <!-- Carousel -->
+    <integer name="m3_motion_duration_carousel">@integer/m3_sys_duration_medium2</integer>
+    <string name="m3_motion_easing_carousel">@string/m3_sys_easing_emphasized_decelerate</string>
+</resources>

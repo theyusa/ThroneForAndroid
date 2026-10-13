@@ -56,7 +56,7 @@ import io.nekohasekai.sagernet.ui.profiles.SubscriptionInfoCard
 import io.nekohasekai.sagernet.ui.test.TestPanelController
 import io.nekohasekai.sagernet.ui.test.TestSessionClient
 import io.nekohasekai.sagernet.ui.test.TestUiState
-import io.nekohasekai.sagernet.utils.Theme
+import io.nekohasekai.sagernet.utils.ThemeM3
 import io.nekohasekai.sagernet.widget.applyInsetMargin
 import io.nekohasekai.sagernet.widget.applyInsetPadding
 import kotlinx.coroutines.CoroutineScope
@@ -402,7 +402,7 @@ class ConfigurationFragment : ToolbarFragment(R.layout.layout_group_list),
         val toolbar = toolbar ?: return
         toolbar.setNavigationIcon(icon)
         toolbar.setNavigationContentDescription(description)
-        if (Theme.isWhiteTheme()) {
+        if (ThemeM3.isWhiteTheme()) {
             toolbar.navigationIcon?.setTint(ContextCompat.getColor(requireContext(), R.color.black))
         }
     }

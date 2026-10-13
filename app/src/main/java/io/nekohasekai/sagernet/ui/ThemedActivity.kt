@@ -15,6 +15,7 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.utils.Theme
+import io.nekohasekai.sagernet.utils.ThemeM3
 import io.nekohasekai.sagernet.widget.applyTopInset
 
 abstract class ThemedActivity : AppCompatActivity {
@@ -37,11 +38,11 @@ abstract class ThemedActivity : AppCompatActivity {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (!isDialog) {
-            Theme.apply(this)
+            ThemeM3.apply(this)
         } else {
-            Theme.applyDialog(this)
+            ThemeM3.applyDialog(this)
         }
-        Theme.applyNightTheme()
+        ThemeM3.applyNightTheme()
         if (!isDialog) enableEdgeToEdge(statusBarStyle(), navigationBarStyle())
 
         super.onCreate(savedInstanceState)
@@ -61,7 +62,7 @@ abstract class ThemedActivity : AppCompatActivity {
     }
 
     /** Navigation bar icons follow the window background; 3-button navigation keeps a scrim. */
-    private fun navigationBarStyle() = SystemBarStyle.auto(LIGHT_SCRIM, DARK_SCRIM) { Theme.usingNightMode() }
+    private fun navigationBarStyle() = SystemBarStyle.auto(LIGHT_SCRIM, DARK_SCRIM) { ThemeM3.usingNightMode() }
 
     override fun onContentChanged() {
         super.onContentChanged()

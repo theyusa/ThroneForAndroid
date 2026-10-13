@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Palette - VerdantMint (Dark) -->
+    
+    <!-- Primary -->
+    <color name="m3_verdant_mint_primary">#7AE59B</color>
+    <color name="m3_verdant_mint_on_primary">#003D1E</color>
+    <color name="m3_verdant_mint_primary_container">#00542E</color>
+    <color name="m3_verdant_mint_on_primary_container">#B7F0D0</color>
+    
+    <!-- Secondary -->
+    <color name="m3_verdant_mint_secondary">#7AE59B</color>
+    <color name="m3_verdant_mint_on_secondary">#003D1E</color>
+    <color name="m3_verdant_mint_secondary_container">#00542E</color>
+    <color name="m3_verdant_mint_on_secondary_container">#B7F0D0</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_verdant_mint_tertiary">#D0BCFF</color>
+    <color name="m3_verdant_mint_on_tertiary">#31106D</color>
+    <color name="m3_verdant_mint_tertiary_container">#5943A8</color>
+    <color name="m3_verdant_mint_on_tertiary_container">#EADDFF</color>
+    
+    <!-- Error -->
+    <color name="m3_verdant_mint_error">@color/m3_sys_error</color>
+    <color name="m3_verdant_mint_on_error">@color/m3_sys_on_error</color>
+    <color name="m3_verdant_mint_error_container">@color/m3_sys_error_container</color>
+    <color name="m3_verdant_mint_on_error_container">@color/m3_sys_on_error_container</color>
+    
+    <!-- Surface -->
+    <color name="m3_verdant_mint_surface">@color/m3_sys_surface</color>
+    <color name="m3_verdant_mint_on_surface">@color/m3_sys_on_surface</color>
+    <color name="m3_verdant_mint_surface_variant">@color/m3_sys_surface_variant</color>
+    <color name="m3_verdant_mint_on_surface_variant">@color/m3_sys_on_surface_variant</color>
+    
+    <color name="m3_verdant_mint_surface_container_lowest">@color/m3_sys_surface_container_lowest</color>
+    <color name="m3_verdant_mint_surface_container_low">@color/m3_sys_surface_container_low</color>
+    <color name="m3_verdant_mint_surface_container">@color/m3_sys_surface_container</color>
+    <color name="m3_verdant_mint_surface_container_high">@color/m3_sys_surface_container_high</color>
+    <color name="m3_verdant_mint_surface_container_highest">@color/m3_sys_surface_container_highest</color>
+    
+    <!-- Outline -->
+    <color name="m3_verdant_mint_outline">@color/m3_sys_outline</color>
+    <color name="m3_verdant_mint_outline_variant">@color/m3_sys_outline_variant</color>
+    
+    <!-- Inverse -->
+    <color name="m3_verdant_mint_inverse_surface">@color/m3_sys_inverse_surface</color>
+    <color name="m3_verdant_mint_inverse_on_surface">@color/m3_sys_inverse_on_surface</color>
+    <color name="m3_verdant_mint_inverse_primary">@color/m3_sys_inverse_primary</color>
+</resources>

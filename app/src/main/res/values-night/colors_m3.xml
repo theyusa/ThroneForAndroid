@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Roles - Base (Pink_SSR) Dark Theme -->
+    
+    <!-- Primary -->
+    <color name="m3_sys_primary">#FFB3C6</color>
+    <color name="m3_sys_on_primary">#3D0013</color>
+    <color name="m3_sys_primary_container">#6B3041</color>
+    <color name="m3_sys_on_primary_container">#FFD8E4</color>
+    
+    <!-- Secondary -->
+    <color name="m3_sys_secondary">#FFB3C6</color>
+    <color name="m3_sys_on_secondary">#3D0013</color>
+    <color name="m3_sys_secondary_container">#6B3041</color>
+    <color name="m3_sys_on_secondary_container">#FFD8E4</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_sys_tertiary">#D0BCFF</color>
+    <color name="m3_sys_on_tertiary">#31106D</color>
+    <color name="m3_sys_tertiary_container">#5943A8</color>
+    <color name="m3_sys_on_tertiary_container">#EADDFF</color>
+    
+    <!-- Error -->
+    <color name="m3_sys_error">#FFB4AB</color>
+    <color name="m3_sys_on_error">#690005</color>
+    <color name="m3_sys_error_container">#93000A</color>
+    <color name="m3_sys_on_error_container">#FFDAD6</color>
+    
+    <!-- Surface -->
+    <color name="m3_sys_surface">#151314</color>
+    <color name="m3_sys_on_surface">#F5F0F1</color>
+    <color name="m3_sys_surface_dim">#151314</color>
+    <color name="m3_sys_surface_bright">#3C3A3A</color>
+    <color name="m3_sys_surface_container_lowest">#0F0D0E</color>
+    <color name="m3_sys_surface_container_low">#1D1B1C</color>
+    <color name="m3_sys_surface_container">#211F20</color>
+    <color name="m3_sys_surface_container_high">#2C2A2B</color>
+    <color name="m3_sys_surface_container_highest">#373536</color>
+    
+    <!-- Surface Variant -->
+    <color name="m3_sys_surface_variant">#4A4447</color>
+    <color name="m3_sys_on_surface_variant">#CAC4C7</color>
+    
+    <!-- Outline -->
+    <color name="m3_sys_outline">#948E91</color>
+    <color name="m3_sys_outline_variant">#4A4447</color>
+    
+    <!-- Inverse -->
+    <color name="m3_sys_inverse_surface">#F5F0F1</color>
+    <color name="m3_sys_inverse_on_surface">#323031</color>
+    <color name="m3_sys_inverse_primary">#FB7299</color>
+    
+    <!-- Shadow & Scrim -->
+    <color name="m3_sys_shadow">#000000</color>
+    <color name="m3_sys_scrim">#000000</color>
+    
+    <!-- Primary Fixed -->
+    <color name="m3_sys_primary_fixed">#FFD8E4</color>
+    <color name="m3_sys_on_primary_fixed">#3D0013</color>
+    <color name="m3_sys_primary_fixed_dim">#FFB3C6</color>
+    <color name="m3_sys_on_primary_fixed_variant">#6B3041</color>
+    
+    <!-- Secondary Fixed -->
+    <color name="m3_sys_secondary_fixed">#FFD8E4</color>
+    <color name="m3_sys_on_secondary_fixed">#3D0013</color>
+    <color name="m3_sys_secondary_fixed_dim">#FFB3C6</color>
+    <color name="m3_sys_on_secondary_fixed_variant">#6B3041</color>
+    
+    <!-- Tertiary Fixed -->
+    <color name="m3_sys_tertiary_fixed">#EADDFF</color>
+    <color name="m3_sys_on_tertiary_fixed">#31106D</color>
+    <color name="m3_sys_tertiary_fixed_dim">#D0BCFF</color>
+    <color name="m3_sys_on_tertiary_fixed_variant">#5943A8</color>
+</resources>

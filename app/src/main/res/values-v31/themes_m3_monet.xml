@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Monet (Dynamic Color) Theme - Requires API 31+ -->
+    
+    <style name="Theme.Throne.M3.Monet" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Dynamic Color - System provides all color roles via Material3 -->
+        <!-- These are resolved at runtime from wallpaper -->
+        
+        <!-- Shape Appearance -->
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Throne.CornerExtraSmall</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Throne.CornerSmall</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.CornerMedium</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Throne.CornerLarge</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Throne.CornerExtraLarge</item>
+        <item name="shapeAppearanceCornerFull">@style/ShapeAppearance.Throne.CornerFull</item>
+        
+        <!-- Typography -->
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.Throne.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.Throne.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.Throne.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.Throne.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.Throne.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Throne.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Throne.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Throne.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Throne.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Throne.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Throne.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Throne.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Throne.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Throne.LabelSmall</item>
+        
+        <!-- Window -->
+        <item name="android:windowBackground">?attr/colorSurface</item>
+        <item name="android:colorBackground">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?attr/colorSurfaceContainer</item>
+        <item name="android:navigationBarDividerColor">?attr/colorOutlineVariant</item>
+        <item name="android:statusBarColor">?attr/colorSurfaceContainerHighest</item>
+        
+        <!-- Edge-to-edge -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        
+        <!-- Component styles -->
+        <item name="materialButtonStyle">@style/Widget.Throne.Button</item>
+        <item name="materialCardViewStyle">@style/Widget.Throne.CardView.Elevated</item>
+        <item name="textInputStyle">@style/Widget.Throne.TextInputLayout.OutlinedBox</item>
+        <item name="chipStyle">@style/Widget.Throne.Chip.Choice</item>
+        <item name="tabStyle">@style/Widget.Throne.TabLayout.Primary</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Throne.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Throne.MaterialAlertDialog</item>
+        <item name="popupMenuStyle">@style/Widget.Throne.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.Throne.PopupMenu.Overflow</item>
+        <item name="navigationViewStyle">@style/Widget.Throne.NavigationView</item>
+        <item name="navigationBarViewStyle">@style/Widget.Throne.NavigationBarView</item>
+        <item name="floatingActionButtonStyle">@style/Widget.Throne.FloatingActionButton</item>
+        <item name="extendedFloatingActionButtonStyle">@style/Widget.Throne.ExtendedFloatingActionButton</item>
+        <item name="snackbarStyle">@style/Widget.Throne.Snackbar</item>
+        <item name="tooltipStyle">@style/Widget.Throne.Tooltip</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Throne</item>
+    </style>
+    
+    <!-- Dialog Theme -->
+    <style name="Theme.Throne.M3.Dialog.Monet" parent="Theme.Material3.DayNight.Dialog.Alert">
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.Dialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Throne.Button.Dialog.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Throne.Button.Dialog.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.Throne.Button.Dialog.Neutral</item>
+    </style>
+</resources>

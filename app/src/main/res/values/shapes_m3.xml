@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Shape Tokens -->
+    <!-- Corner sizes for different component types -->
+    
+    <!-- Extra Small (4dp) - Buttons, Chips, Checkboxes, Radio buttons, Switches -->
+    <dimen name="m3_sys_shape_corner_extra_small">4dp</dimen>
+    
+    <!-- Small (8dp) - Cards, Dialogs, Menus, Text fields, Bottom sheets (small) -->
+    <dimen name="m3_sys_shape_corner_small">8dp</dimen>
+    
+    <!-- Medium (12dp) - Bottom sheets, Navigation drawers, Side sheets -->
+    <dimen name="m3_sys_shape_corner_medium">12dp</dimen>
+    
+    <!-- Large (16dp) - Large containers, Full-screen surfaces -->
+    <dimen name="m3_sys_shape_corner_large">16dp</dimen>
+    
+    <!-- Extra Large (28dp) - Expressive: Full-width banners, Hero surfaces -->
+    <dimen name="m3_sys_shape_corner_extra_large">28dp</dimen>
+    
+    <!-- Full (9999dp) - Pills, FAB, Circular avatars, Chips (fully rounded) -->
+    <dimen name="m3_sys_shape_corner_full">9999dp</dimen>
+    
+    <!-- Shape Appearance Styles -->
+    <style name="ShapeAppearance.Throne.CornerExtraSmall" parent="ShapeAppearance.Material3.CornerExtraSmall">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/m3_sys_shape_corner_extra_small</item>
+    </style>
+    
+    <style name="ShapeAppearance.Throne.CornerSmall" parent="ShapeAppearance.Material3.CornerSmall">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/m3_sys_shape_corner_small</item>
+    </style>
+    
+    <style name="ShapeAppearance.Throne.CornerMedium" parent="ShapeAppearance.Material3.CornerMedium">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/m3_sys_shape_corner_medium</item>
+    </style>
+    
+    <style name="ShapeAppearance.Throne.CornerLarge" parent="ShapeAppearance.Material3.CornerLarge">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/m3_sys_shape_corner_large</item>
+    </style>
+    
+    <style name="ShapeAppearance.Throne.CornerExtraLarge" parent="ShapeAppearance.Material3.CornerExtraLarge">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/m3_sys_shape_corner_extra_large</item>
+    </style>
+    
+    <style name="ShapeAppearance.Throne.CornerFull" parent="ShapeAppearance.Material3.CornerFull">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/m3_sys_shape_corner_full</item>
+    </style>
+    
+    <!-- Component-specific shapes -->
+    <style name="ShapeAppearance.Throne.Button" parent="ShapeAppearance.Throne.CornerSmall">
+        <!-- Buttons use small (8dp) -->
+    </style>
+    
+    <style name="ShapeAppearance.Throne.Card" parent="ShapeAppearance.Throne.CornerMedium">
+        <!-- Cards use medium (12dp) -->
+    </style>
+    
+    <style name="ShapeAppearance.Throne.TextInput" parent="ShapeAppearance.Throne.CornerSmall">
+        <!-- Text fields use small (8dp) -->
+    </style>
+    
+    <style name="ShapeAppearance.Throne.BottomSheet" parent="ShapeAppearance.Throne.CornerLarge">
+        <!-- Bottom sheets use large (16dp) top corners only -->
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/m3_sys_shape_corner_large</item>
+        <item name="cornerSizeTopRight">@dimen/m3_sys_shape_corner_large</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+    
+    <style name="ShapeAppearance.Throne.Dialog" parent="ShapeAppearance.Throne.CornerMedium">
+        <!-- Dialogs use medium (12dp) -->
+    </style>
+    
+    <style name="ShapeAppearance.Throne.Chip" parent="ShapeAppearance.Throne.CornerFull">
+        <!-- Chips use full rounded -->
+    </style>
+    
+    <style name="ShapeAppearance.Throne.Fab" parent="ShapeAppearance.Throne.CornerFull">
+        <!-- FAB uses full rounded -->
+    </style>
+    
+    <style name="ShapeAppearance.Throne.NavigationBar" parent="ShapeAppearance.Throne.CornerExtraLarge">
+        <!-- Navigation bar uses extra large (28dp) top corners -->
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/m3_sys_shape_corner_extra_large</item>
+        <item name="cornerSizeTopRight">@dimen/m3_sys_shape_corner_extra_large</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+</resources>

@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.appbar.AppBarLayout
 import io.nekohasekai.sagernet.R
-import io.nekohasekai.sagernet.utils.Theme
+import io.nekohasekai.sagernet.utils.ThemeM3
 import io.nekohasekai.sagernet.widget.applyTopInset
 
 open class ToolbarFragment : Fragment {
@@ -27,7 +27,7 @@ open class ToolbarFragment : Fragment {
         toolbar?.setNavigationIcon(R.drawable.ic_navigation_menu)
         toolbar?.setNavigationContentDescription(R.string.navigation_open_drawer)
         // White theme: the toolbar is white, so the menu, title and navigation icon turn dark
-        if (Theme.isWhiteTheme()) {
+        if (ThemeM3.isWhiteTheme()) {
             toolbar?.apply {
                 setTitleTextColor(ContextCompat.getColor(requireContext(), R.color.black))
                 navigationIcon?.setTint(ContextCompat.getColor(requireContext(), R.color.black))

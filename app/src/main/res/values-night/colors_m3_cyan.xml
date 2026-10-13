@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Palette - Cyan (Dark) -->
+    
+    <!-- Primary -->
+    <color name="m3_cyan_primary">#E0F7FA</color>
+    <color name="m3_cyan_on_primary">#006064</color>
+    <color name="m3_cyan_primary_container">#0097A7</color>
+    <color name="m3_cyan_on_primary_container">#E0F7FA</color>
+    
+    <!-- Secondary -->
+    <color name="m3_cyan_secondary">#80DEEA</color>
+    <color name="m3_cyan_on_secondary">#00343A</color>
+    <color name="m3_cyan_secondary_container">#0097A7</color>
+    <color name="m3_cyan_on_secondary_container">#E0F7FA</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_cyan_tertiary">#D0BCFF</color>
+    <color name="m3_cyan_on_tertiary">#31106D</color>
+    <color name="m3_cyan_tertiary_container">#5943A8</color>
+    <color name="m3_cyan_on_tertiary_container">#EADDFF</color>
+    
+    <!-- Error -->
+    <color name="m3_cyan_error">@color/m3_sys_error</color>
+    <color name="m3_cyan_on_error">@color/m3_sys_on_error</color>
+    <color name="m3_cyan_error_container">@color/m3_sys_error_container</color>
+    <color name="m3_cyan_on_error_container">@color/m3_sys_on_error_container</color>
+    
+    <!-- Surface -->
+    <color name="m3_cyan_surface">@color/m3_sys_surface</color>
+    <color name="m3_cyan_on_surface">@color/m3_sys_on_surface</color>
+    <color name="m3_cyan_surface_variant">@color/m3_sys_surface_variant</color>
+    <color name="m3_cyan_on_surface_variant">@color/m3_sys_on_surface_variant</color>
+    
+    <color name="m3_cyan_surface_container_lowest">@color/m3_sys_surface_container_lowest</color>
+    <color name="m3_cyan_surface_container_low">@color/m3_sys_surface_container_low</color>
+    <color name="m3_cyan_surface_container">@color/m3_sys_surface_container</color>
+    <color name="m3_cyan_surface_container_high">@color/m3_sys_surface_container_high</color>
+    <color name="m3_cyan_surface_container_highest">@color/m3_sys_surface_container_highest</color>
+    
+    <!-- Outline -->
+    <color name="m3_cyan_outline">@color/m3_sys_outline</color>
+    <color name="m3_cyan_outline_variant">@color/m3_sys_outline_variant</color>
+    
+    <!-- Inverse -->
+    <color name="m3_cyan_inverse_surface">@color/m3_sys_inverse_surface</color>
+    <color name="m3_cyan_inverse_on_surface">@color/m3_sys_inverse_on_surface</color>
+    <color name="m3_cyan_inverse_primary">@color/m3_sys_inverse_primary</color>
+</resources>

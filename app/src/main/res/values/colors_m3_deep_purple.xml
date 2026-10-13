@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Palette - DeepPurple (Light) -->
+    
+    <!-- Primary -->
+    <color name="m3_deep_purple_primary">#673AB7</color>
+    <color name="m3_deep_purple_on_primary">#FFFFFF</color>
+    <color name="m3_deep_purple_primary_container">#EDE7F6</color>
+    <color name="m3_deep_purple_on_primary_container">#311B92</color>
+    
+    <!-- Secondary -->
+    <color name="m3_deep_purple_secondary">#D1C4E9</color>
+    <color name="m3_deep_purple_on_secondary">#1A003A</color>
+    <color name="m3_deep_purple_secondary_container">#EDE7F6</color>
+    <color name="m3_deep_purple_on_secondary_container">#311B92</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_deep_purple_tertiary">#D0BCFF</color>
+    <color name="m3_deep_purple_on_tertiary">#381E72</color>
+    <color name="m3_deep_purple_tertiary_container">#EADDFF</color>
+    <color name="m3_deep_purple_on_tertiary_container">#31106D</color>
+    
+    <!-- Error -->
+    <color name="m3_deep_purple_error">@color/m3_sys_error</color>
+    <color name="m3_deep_purple_on_error">@color/m3_sys_on_error</color>
+    <color name="m3_deep_purple_error_container">@color/m3_sys_error_container</color>
+    <color name="m3_deep_purple_on_error_container">@color/m3_sys_on_error_container</color>
+    
+    <!-- Surface -->
+    <color name="m3_deep_purple_surface">@color/m3_sys_surface</color>
+    <color name="m3_deep_purple_on_surface">@color/m3_sys_on_surface</color>
+    <color name="m3_deep_purple_surface_variant">@color/m3_sys_surface_variant</color>
+    <color name="m3_deep_purple_on_surface_variant">@color/m3_sys_on_surface_variant</color>
+    
+    <color name="m3_deep_purple_surface_container_lowest">@color/m3_sys_surface_container_lowest</color>
+    <color name="m3_deep_purple_surface_container_low">@color/m3_sys_surface_container_low</color>
+    <color name="m3_deep_purple_surface_container">@color/m3_sys_surface_container</color>
+    <color name="m3_deep_purple_surface_container_high">@color/m3_sys_surface_container_high</color>
+    <color name="m3_deep_purple_surface_container_highest">@color/m3_sys_surface_container_highest</color>
+    
+    <!-- Outline -->
+    <color name="m3_deep_purple_outline">@color/m3_sys_outline</color>
+    <color name="m3_deep_purple_outline_variant">@color/m3_sys_outline_variant</color>
+    
+    <!-- Inverse -->
+    <color name="m3_deep_purple_inverse_surface">@color/m3_sys_inverse_surface</color>
+    <color name="m3_deep_purple_inverse_on_surface">@color/m3_sys_inverse_on_surface</color>
+    <color name="m3_deep_purple_inverse_primary">@color/m3_sys_inverse_primary</color>
+</resources>

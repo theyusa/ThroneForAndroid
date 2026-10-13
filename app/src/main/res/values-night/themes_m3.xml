@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Base Theme - Dark -->
+    <style name="Theme.Throne.M3" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Color Roles -->
+        <item name="colorPrimary">@color/m3_sys_primary</item>
+        <item name="colorOnPrimary">@color/m3_sys_on_primary</item>
+        <item name="colorPrimaryContainer">@color/m3_sys_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/m3_sys_on_primary_container</item>
+        
+        <item name="colorSecondary">@color/m3_sys_secondary</item>
+        <item name="colorOnSecondary">@color/m3_sys_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/m3_sys_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/m3_sys_on_secondary_container</item>
+        
+        <item name="colorTertiary">@color/m3_sys_tertiary</item>
+        <item name="colorOnTertiary">@color/m3_sys_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/m3_sys_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/m3_sys_on_tertiary_container</item>
+        
+        <item name="colorError">@color/m3_sys_error</item>
+        <item name="colorOnError">@color/m3_sys_on_error</item>
+        <item name="colorErrorContainer">@color/m3_sys_error_container</item>
+        <item name="colorOnErrorContainer">@color/m3_sys_on_error_container</item>
+        
+        <item name="colorSurface">@color/m3_sys_surface</item>
+        <item name="colorOnSurface">@color/m3_sys_on_surface</item>
+        <item name="colorSurfaceVariant">@color/m3_sys_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/m3_sys_on_surface_variant</item>
+        
+        <item name="colorOutline">@color/m3_sys_outline</item>
+        <item name="colorOutlineVariant">@color/m3_sys_outline_variant</item>
+        
+        <item name="colorSurfaceContainerLowest">@color/m3_sys_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/m3_sys_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/m3_sys_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/m3_sys_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/m3_sys_surface_container_highest</item>
+        
+        <item name="colorInverseSurface">@color/m3_sys_inverse_surface</item>
+        <item name="colorInverseOnSurface">@color/m3_sys_inverse_on_surface</item>
+        <item name="colorInversePrimary">@color/m3_sys_inverse_primary</item>
+        
+        <item name="colorScrim">@color/m3_sys_scrim</item>
+        <item name="colorShadow">@color/m3_sys_shadow</item>
+        
+        <!-- Surface tint (for elevation overlays) -->
+        <item name="colorSurfaceTint">@color/m3_sys_primary</item>
+        
+        <!-- Shape Appearance -->
+        <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Throne.CornerExtraSmall</item>
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Throne.CornerSmall</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.CornerMedium</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Throne.CornerLarge</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.Throne.CornerExtraLarge</item>
+        <item name="shapeAppearanceCornerFull">@style/ShapeAppearance.Throne.CornerFull</item>
+        
+        <!-- Typography -->
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.Throne.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.Throne.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.Throne.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.Throne.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.Throne.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Throne.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Throne.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.Throne.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.Throne.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.Throne.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Throne.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.Throne.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.Throne.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.Throne.LabelSmall</item>
+        
+        <!-- Window -->
+        <item name="android:windowBackground">@color/m3_sys_surface</item>
+        <item name="android:colorBackground">@color/m3_sys_surface</item>
+        <item name="android:navigationBarColor">@color/m3_sys_surface_container</item>
+        <item name="android:navigationBarDividerColor">@color/m3_sys_outline_variant</item>
+        <item name="android:statusBarColor">@color/m3_sys_surface_container_highest</item>
+        
+        <!-- Edge-to-edge -->
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        
+        <!-- Ripple -->
+        <item name="colorControlHighlight">@color/m3_sys_on_surface</item>
+        
+        <!-- Component styles -->
+        <item name="materialButtonStyle">@style/Widget.Throne.Button</item>
+        <item name="materialCardViewStyle">@style/Widget.Throne.CardView.Elevated</item>
+        <item name="textInputStyle">@style/Widget.Throne.TextInputLayout.OutlinedBox</item>
+        <item name="chipStyle">@style/Widget.Throne.Chip.Choice</item>
+        <item name="tabStyle">@style/Widget.Throne.TabLayout.Primary</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Throne.BottomSheetDialog</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.Throne.MaterialAlertDialog</item>
+        <item name="popupMenuStyle">@style/Widget.Throne.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.Throne.PopupMenu.Overflow</item>
+        <item name="navigationViewStyle">@style/Widget.Throne.NavigationView</item>
+        <item name="navigationBarViewStyle">@style/Widget.Throne.NavigationBarView</item>
+        <item name="floatingActionButtonStyle">@style/Widget.Throne.FloatingActionButton</item>
+        <item name="extendedFloatingActionButtonStyle">@style/Widget.Throne.ExtendedFloatingActionButton</item>
+        <item name="snackbarStyle">@style/Widget.Throne.Snackbar</item>
+        <item name="tooltipStyle">@style/Widget.Throne.Tooltip</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Throne</item>
+    </style>
+    
+    <!-- Dialog Theme -->
+    <style name="Theme.Throne.M3.Dialog" parent="Theme.Material3.DayNight.Dialog.Alert">
+        <item name="colorPrimary">@color/m3_sys_primary</item>
+        <item name="colorOnPrimary">@color/m3_sys_on_primary</item>
+        <item name="colorPrimaryContainer">@color/m3_sys_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/m3_sys_on_primary_container</item>
+        <item name="colorSurface">@color/m3_sys_surface</item>
+        <item name="colorOnSurface">@color/m3_sys_on_surface</item>
+        <item name="colorSurfaceVariant">@color/m3_sys_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/m3_sys_on_surface_variant</item>
+        <item name="colorOutline">@color/m3_sys_outline</item>
+        <item name="colorError">@color/m3_sys_error</item>
+        <item name="colorOnError">@color/m3_sys_on_error</item>
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.Dialog</item>
+    </style>
+</resources>

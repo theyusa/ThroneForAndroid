@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Component Styles -->
+    
+    <!-- ==================== BUTTONS ==================== -->
+    
+    <!-- Filled Button (Primary) -->
+    <style name="Widget.Throne.Button" parent="Widget.Material3.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Button</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="rippleColor">?attr/colorOnPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">8dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- Filled Tonal Button -->
+    <style name="Widget.Throne.Button.FilledTonal" parent="Widget.Material3.Button.FilledTonal">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Button</item>
+        <item name="backgroundTint">?attr/colorSecondaryContainer</item>
+        <item name="rippleColor">?attr/colorOnSecondaryContainer</item>
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">8dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- Outlined Button -->
+    <style name="Widget.Throne.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Button</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">8dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- Text Button -->
+    <style name="Widget.Throne.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Button</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">8dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- Elevated Button -->
+    <style name="Widget.Throne.Button.Elevated" parent="Widget.Material3.Button.ElevatedButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Button</item>
+        <item name="elevation">@dimen/m3_sys_elevation_level1</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="rippleColor">?attr/colorOnPrimary</item>
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="iconGravity">start</item>
+        <item name="iconPadding">8dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- Icon Button -->
+    <style name="Widget.Throne.Button.Icon" parent="Widget.Material3.Button.IconButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.CornerFull</item>
+        <item name="rippleColor">?attr/colorOnSurface</item>
+        <item name="android:minWidth">40dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- Icon Button Toggle -->
+    <style name="Widget.Throne.Button.Icon.Toggle" parent="Widget.Material3.Button.IconButton.ToggleButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.CornerFull</item>
+        <item name="rippleColor">?attr/colorOnSurface</item>
+        <item name="android:minWidth">40dp</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+    
+    <!-- ==================== CARD VIEW ==================== -->
+    
+    <style name="Widget.Throne.CardView" parent="Widget.Material3.CardView">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Card</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <style name="Widget.Throne.CardView.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Card</item>
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainerLow</item>
+        <item name="cardElevation">@dimen/m3_elevation_card_rest</item>
+        <item name="cardMaxElevation">@dimen/m3_elevation_card_hover</item>
+    </style>
+    
+    <style name="Widget.Throne.CardView.Outlined" parent="Widget.Material3.CardView.Outlined">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Card</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+    
+    <style name="Widget.Throne.CardView.Filled" parent="Widget.Material3.CardView.Filled">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Card</item>
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainerHighest</item>
+    </style>
+    
+    <!-- ==================== TEXT INPUT LAYOUT ==================== -->
+    
+    <style name="Widget.Throne.TextInputLayout.OutlinedBox" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.TextInput</item>
+        <item name="boxStrokeColor">@color/m3_textinput_outline_color</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxBackgroundColor">?attr/colorSurface</item>
+        <item name="hintTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Hint</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Placeholder</item>
+        <item name="errorTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Error</item>
+        <item name="counterTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Counter</item>
+        <item name="endIconTint">?attr/colorOnSurfaceVariant</item>
+    </style>
+    
+    <style name="Widget.Throne.TextInputLayout.Filled" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.TextInput</item>
+        <item name="boxStrokeColor">@color/m3_textinput_outline_color</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxBackgroundColor">?attr/colorSurfaceContainerHighest</item>
+        <item name="hintTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Hint</item>
+        <item name="placeholderTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Placeholder</item>
+        <item name="errorTextAppearance">@style/TextAppearance.Throne.TextInputLayout.Error</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.TextInputLayout.Hint" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.TextInputLayout.Placeholder" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.TextInputLayout.Error" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">?attr/colorError</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.TextInputLayout.Counter" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+    
+    <!-- TextInput colors -->
+    <color name="m3_textinput_outline_color">?attr/colorOutline</color>
+    <color name="m3_textinput_outline_color_focused">?attr/colorPrimary</color>
+    <color name="m3_textinput_outline_color_error">?attr/colorError</color>
+    <color name="m3_textinput_outline_color_disabled">?attr/colorOnSurface</color>
+    
+    <!-- ==================== CHIPS ==================== -->
+    
+    <style name="Widget.Throne.Chip" parent="Widget.Material3.Chip">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Chip</item>
+        <item name="chipBackgroundColor">@color/m3_chip_background_color</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+        <item name="iconStartTint">?attr/colorOnSurfaceVariant</item>
+        <item name="closeIconTint">?attr/colorOnSurfaceVariant</item>
+        <item name="checkedIconTint">?attr/colorOnPrimary</item>
+        <item name="chipStrokeColor">?attr/colorOutlineVariant</item>
+        <item name="chipStrokeWidth">1dp</item>
+    </style>
+    
+    <style name="Widget.Throne.Chip.Choice" parent="Widget.Material3.Chip.Choice">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Chip</item>
+        <item name="chipBackgroundColor">@color/m3_chip_choice_background_color</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+        <item name="checkedIconTint">?attr/colorOnPrimary</item>
+    </style>
+    
+    <style name="Widget.Throne.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Chip</item>
+        <item name="chipBackgroundColor">@color/m3_chip_filter_background_color</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+        <item name="checkedIconTint">?attr/colorOnPrimary</item>
+    </style>
+    
+    <style name="Widget.Throne.Chip.Action" parent="Widget.Material3.Chip.Action">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Chip</item>
+        <item name="chipBackgroundColor">@color/m3_chip_action_background_color</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+    </style>
+    
+    <style name="Widget.Throne.Chip.Suggestion" parent="Widget.Material3.Chip.Suggestion">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Chip</item>
+        <item name="chipBackgroundColor">@color/m3_chip_suggestion_background_color</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+    </style>
+    
+    <style name="Widget.Throne.Chip.Entry" parent="Widget.Material3.Chip.Entry">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Chip</item>
+        <item name="chipBackgroundColor">@color/m3_chip_entry_background_color</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+    </style>
+    
+    <!-- Chip color state lists -->
+    <color name="m3_chip_background_color">?attr/colorSurfaceContainerHighest</color>
+    <color name="m3_chip_choice_background_color">?attr/colorSecondaryContainer</color>
+    <color name="m3_chip_filter_background_color">?attr/colorSurfaceContainerHighest</color>
+    <color name="m3_chip_action_background_color">?attr/colorSurfaceContainerHighest</color>
+    <color name="m3_chip_suggestion_background_color">?attr/colorSurfaceContainerHighest</color>
+    <color name="m3_chip_entry_background_color">?attr/colorSurfaceContainerHighest</color>
+    
+    <!-- ==================== TAB LAYOUT ==================== -->
+    
+    <style name="Widget.Throne.TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabIndicator">@drawable/m3_tab_indicator</item>
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabIndicatorColor">?attr/colorPrimary</item>
+        <item name="tabSelectedTextColor">?attr/colorPrimary</item>
+        <item name="tabTextColor">?attr/colorOnSurfaceVariant</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Throne.LabelMedium</item>
+        <item name="tabGravity">fill</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabRippleColor">@color/m3_tab_ripple_color</item>
+    </style>
+    
+    <style name="Widget.Throne.TabLayout.Primary" parent="Widget.Throne.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorPrimary</item>
+        <item name="tabSelectedTextColor">?attr/colorPrimary</item>
+    </style>
+    
+    <style name="Widget.Throne.TabLayout.Secondary" parent="Widget.Throne.TabLayout">
+        <item name="tabIndicatorColor">?attr/colorSecondary</item>
+        <item name="tabSelectedTextColor">?attr/colorSecondary</item>
+    </style>
+    
+    <color name="m3_tab_ripple_color">?attr/colorPrimary</color>
+    
+    <!-- Tab indicator drawable is @drawable/m3_tab_indicator -->
+    
+    <!-- ==================== BOTTOM SHEET ==================== -->
+    
+    <style name="ThemeOverlay.Throne.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Throne.BottomSheet.Modal</item>
+        <item name="shapeAppearanceCornerLarge">@style/ShapeAppearance.Throne.BottomSheet</item>
+    </style>
+    
+    <style name="Widget.Throne.BottomSheet.Modal" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.BottomSheet</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+    
+    <style name="Widget.Throne.BottomSheet.Standard" parent="Widget.Material3.BottomSheet.Standard">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.BottomSheet</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+    </style>
+    
+    <!-- ==================== DIALOG / ALERT DIALOG ==================== -->
+    
+    <style name="ThemeOverlay.Throne.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.Dialog</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Throne.Button.Dialog.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.Throne.Button.Dialog.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.Throne.Button.Dialog.Neutral</item>
+        <item name="colorSurface">?attr/colorSurface</item>
+        <item name="colorOnSurface">?attr/colorOnSurface</item>
+    </style>
+    
+    <style name="Widget.Throne.Button.Dialog.Positive" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
+    </style>
+    
+    <style name="Widget.Throne.Button.Dialog.Negative" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="rippleColor">?attr/colorOnSurface</item>
+    </style>
+    
+    <style name="Widget.Throne.Button.Dialog.Neutral" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="rippleColor">?attr/colorOnSurface</item>
+    </style>
+    
+    <!-- ==================== POPUP MENU ==================== -->
+    
+    <style name="Widget.Throne.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">?attr/colorSurfaceContainer</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+    </style>
+    
+    <style name="Widget.Throne.PopupMenu.Overflow" parent="Widget.Material3.PopupMenu.Overflow">
+        <item name="android:popupBackground">?attr/colorSurfaceContainer</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+    </style>
+    
+    <!-- ==================== NAVIGATION VIEW / DRAWER ==================== -->
+    
+    <style name="Widget.Throne.NavigationView" parent="Widget.Material3.NavigationView">
+        <item name="itemTextAppearance">@style/TextAppearance.Throne.BodyLarge</item>
+        <item name="itemIconTint">@color/m3_nav_item_icon_tint</item>
+        <item name="itemTextColor">@color/m3_nav_item_text_color</item>
+        <item name="itemBackground">@drawable/m3_nav_item_background</item>
+        <item name="itemShapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
+        <item name="itemHorizontalPadding">16dp</item>
+        <item name="itemVerticalPadding">12dp</item>
+        <item name="itemIconPadding">16dp</item>
+    </style>
+    
+    <color name="m3_nav_item_icon_tint">?attr/colorOnSurfaceVariant</color>
+    <color name="m3_nav_item_text_color">?attr/colorOnSurface</color>
+    
+    <!-- Navigation item background drawable is @drawable/m3_nav_item_background -->
+    
+    <!-- ==================== NAVIGATION BAR ==================== -->
+    
+    <style name="Widget.Throne.NavigationBarView" parent="Widget.Material3.NavigationBarView">
+        <item name="itemShapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
+        <item name="itemActiveIndicatorShapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
+        <item name="itemActiveIndicatorWidth">90%</item>
+        <item name="itemActiveIndicatorHeight">40dp</item>
+        <item name="itemActiveIndicatorColor">?attr/colorPrimaryContainer</item>
+        <item name="itemLabelTextAppearanceActive">@style/TextAppearance.Throne.LabelSmall</item>
+        <item name="itemLabelTextAppearanceInactive">@style/TextAppearance.Throne.LabelSmall</item>
+        <item name="itemIconTint">@color/m3_nav_bar_item_tint</item>
+        <item name="itemTextColor">@color/m3_nav_bar_item_text_color</item>
+        <item name="itemRippleColor">@color/m3_nav_bar_ripple</item>
+    </style>
+    
+    <color name="m3_nav_bar_item_tint">?attr/colorOnSurfaceVariant</color>
+    <color name="m3_nav_bar_item_text_color">?attr/colorOnSurface</color>
+    <color name="m3_nav_bar_ripple">?attr/colorPrimary</color>
+    
+    <!-- ==================== FLOATING ACTION BUTTON ==================== -->
+    
+    <style name="Widget.Throne.FloatingActionButton" parent="Widget.Material3.FloatingActionButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Fab</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="rippleColor">?attr/colorOnPrimary</item>
+        <item name="elevation">@dimen/m3_elevation_fab_rest</item>
+        <item name="hoveredFocusedElevation">@dimen/m3_elevation_fab_hover</item>
+        <item name="pressedElevation">@dimen/m3_elevation_fab_press</item>
+    </style>
+    
+    <style name="Widget.Throne.ExtendedFloatingActionButton" parent="Widget.Material3.ExtendedFloatingActionButton">
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.Fab</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="rippleColor">?attr/colorOnPrimary</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelLarge</item>
+        <item name="elevation">@dimen/m3_elevation_fab_rest</item>
+        <item name="hoveredFocusedElevation">@dimen/m3_elevation_fab_hover</item>
+        <item name="pressedElevation">@dimen/m3_elevation_fab_press</item>
+        <item name="iconPadding">12dp</item>
+    </style>
+    
+    <!-- ==================== SNACKBAR ==================== -->
+    
+    <style name="Widget.Throne.Snackbar" parent="Widget.Material3.Snackbar">
+        <item name="backgroundTint">?attr/colorSurfaceContainerHighest</item>
+        <item name="actionTextColor">?attr/colorPrimary</item>
+        <item name="textColor">?attr/colorOnSurface</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
+        <item name="elevation">@dimen/m3_elevation_snackbar</item>
+    </style>
+    
+    <!-- ==================== TOOLTIP ==================== -->
+    
+    <style name="Widget.Throne.Tooltip" parent="Widget.Material3.Tooltip">
+        <item name="backgroundTint">?attr/colorSurfaceContainerHighest</item>
+        <item name="textColor">?attr/colorOnSurface</item>
+        <item name="textAppearance">@style/TextAppearance.Throne.LabelSmall</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
+    </style>
+    
+    <!-- ==================== PREFERENCES ==================== -->
+    
+    <style name="PreferenceThemeOverlay.Throne" parent="PreferenceThemeOverlay.Material3">
+        <item name="preferenceStyle">@style/Preference.Throne</item>
+        <item name="preferenceCategoryStyle">@style/Preference.Throne.Category</item>
+        <item name="switchPreferenceStyle">@style/Preference.Throne.Switch</item>
+        <item name="dialogPreferenceStyle">@style/Preference.Throne.Dialog</item>
+        <item name="editTextPreferenceStyle">@style/Preference.Throne.EditText</item>
+        <item name="listPreferenceStyle">@style/Preference.Throne.List</item>
+    </style>
+    
+    <style name="Preference.Throne" parent="Preference.Material3">
+        <item name="layout">@layout/m3_preference_material</item>
+    </style>
+    
+    <style name="Preference.Throne.Category" parent="Preference.Material3.Category">
+        <item name="layout">@layout/m3_preference_category_material</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Throne.TitleSmall</item>
+        <item name="titleTextColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+    
+    <style name="Preference.Throne.Switch" parent="Preference.Material3.SwitchPreference">
+        <item name="layout">@layout/m3_preference_switch_material</item>
+    </style>
+    
+    <style name="Preference.Throne.Dialog" parent="Preference.Material3.DialogPreference">
+        <item name="dialogLayout">@layout/m3_preference_dialog_material</item>
+    </style>
+    
+    <style name="Preference.Throne.EditText" parent="Preference.Material3.EditTextPreference">
+        <item name="dialogLayout">@layout/m3_preference_dialog_edittext_material</item>
+    </style>
+    
+    <style name="Preference.Throne.List" parent="Preference.Material3.ListPreference">
+        <item name="dialogLayout">@layout/m3_preference_dialog_list_material</item>
+    </style>
+</resources>

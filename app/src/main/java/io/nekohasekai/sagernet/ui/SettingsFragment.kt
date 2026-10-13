@@ -11,7 +11,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.ui.settings.SettingsScreenFragment
-import io.nekohasekai.sagernet.utils.Theme
+import io.nekohasekai.sagernet.utils.ThemeM3
 import io.nekohasekai.sagernet.widget.applyListInsets
 
 /** Hosts the settings root and its sub-screens; back and the toolbar arrow return to the previous screen. */
@@ -111,7 +111,7 @@ class SettingsFragment : ToolbarFragment(R.layout.layout_config_settings),
             }
         }
         // White theme: the toolbar is white, so the navigation icon turns dark
-        if (Theme.isWhiteTheme()) {
+        if (ThemeM3.isWhiteTheme()) {
             toolbar.navigationIcon?.setTint(ContextCompat.getColor(requireContext(), R.color.black))
         }
     }

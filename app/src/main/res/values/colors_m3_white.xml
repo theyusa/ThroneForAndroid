@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Palette - White (Light) -->
+    
+    <!-- Primary - Dark grey for white theme -->
+    <color name="m3_white_primary">#212121</color>
+    <color name="m3_white_on_primary">#FFFFFF</color>
+    <color name="m3_white_primary_container">#E0E0E0</color>
+    <color name="m3_white_on_primary_container">#212121</color>
+    
+    <!-- Secondary -->
+    <color name="m3_white_secondary">#424242</color>
+    <color name="m3_white_on_secondary">#FFFFFF</color>
+    <color name="m3_white_secondary_container">#E0E0E0</color>
+    <color name="m3_white_on_secondary_container">#212121</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_white_tertiary">#616161</color>
+    <color name="m3_white_on_tertiary">#FFFFFF</color>
+    <color name="m3_white_tertiary_container">#E0E0E0</color>
+    <color name="m3_white_on_tertiary_container">#212121</color>
+    
+    <!-- Error -->
+    <color name="m3_white_error">@color/m3_sys_error</color>
+    <color name="m3_white_on_error">@color/m3_sys_on_error</color>
+    <color name="m3_white_error_container">@color/m3_sys_error_container</color>
+    <color name="m3_white_on_error_container">@color/m3_sys_on_error_container</color>
+    
+    <!-- Surface - White theme uses white surfaces -->
+    <color name="m3_white_surface">#FFFFFF</color>
+    <color name="m3_white_on_surface">#212121</color>
+    <color name="m3_white_surface_variant">#F5F5F5</color>
+    <color name="m3_white_on_surface_variant">#424242</color>
+    
+    <color name="m3_white_surface_container_lowest">#FFFFFF</color>
+    <color name="m3_white_surface_container_low">#FAFAFA</color>
+    <color name="m3_white_surface_container">#F5F5F5</color>
+    <color name="m3_white_surface_container_high">#EEEEEE</color>
+    <color name="m3_white_surface_container_highest">#E0E0E0</color>
+    
+    <!-- Outline -->
+    <color name="m3_white_outline">#9E9E9E</color>
+    <color name="m3_white_outline_variant">#E0E0E0</color>
+    
+    <!-- Inverse -->
+    <color name="m3_white_inverse_surface">#212121</color>
+    <color name="m3_white_inverse_on_surface">#FFFFFF</color>
+    <color name="m3_white_inverse_primary">#E0E0E0</color>
+</resources>

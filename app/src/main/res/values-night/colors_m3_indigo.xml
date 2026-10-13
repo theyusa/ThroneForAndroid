@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Palette - Indigo (Dark) -->
+    
+    <!-- Primary -->
+    <color name="m3_indigo_primary">#E8EAF6</color>
+    <color name="m3_indigo_on_primary">#1A237E</color>
+    <color name="m3_indigo_primary_container">#303F9F</color>
+    <color name="m3_indigo_on_primary_container">#E8EAF6</color>
+    
+    <!-- Secondary -->
+    <color name="m3_indigo_secondary">#C5CAE9</color>
+    <color name="m3_indigo_on_secondary">#001042</color>
+    <color name="m3_indigo_secondary_container">#303F9F</color>
+    <color name="m3_indigo_on_secondary_container">#E8EAF6</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_indigo_tertiary">#D0BCFF</color>
+    <color name="m3_indigo_on_tertiary">#31106D</color>
+    <color name="m3_indigo_tertiary_container">#5943A8</color>
+    <color name="m3_indigo_on_tertiary_container">#EADDFF</color>
+    
+    <!-- Error -->
+    <color name="m3_indigo_error">@color/m3_sys_error</color>
+    <color name="m3_indigo_on_error">@color/m3_sys_on_error</color>
+    <color name="m3_indigo_error_container">@color/m3_sys_error_container</color>
+    <color name="m3_indigo_on_error_container">@color/m3_sys_on_error_container</color>
+    
+    <!-- Surface -->
+    <color name="m3_indigo_surface">@color/m3_sys_surface</color>
+    <color name="m3_indigo_on_surface">@color/m3_sys_on_surface</color>
+    <color name="m3_indigo_surface_variant">@color/m3_sys_surface_variant</color>
+    <color name="m3_indigo_on_surface_variant">@color/m3_sys_on_surface_variant</color>
+    
+    <color name="m3_indigo_surface_container_lowest">@color/m3_sys_surface_container_lowest</color>
+    <color name="m3_indigo_surface_container_low">@color/m3_sys_surface_container_low</color>
+    <color name="m3_indigo_surface_container">@color/m3_sys_surface_container</color>
+    <color name="m3_indigo_surface_container_high">@color/m3_sys_surface_container_high</color>
+    <color name="m3_indigo_surface_container_highest">@color/m3_sys_surface_container_highest</color>
+    
+    <!-- Outline -->
+    <color name="m3_indigo_outline">@color/m3_sys_outline</color>
+    <color name="m3_indigo_outline_variant">@color/m3_sys_outline_variant</color>
+    
+    <!-- Inverse -->
+    <color name="m3_indigo_inverse_surface">@color/m3_sys_inverse_surface</color>
+    <color name="m3_indigo_inverse_on_surface">@color/m3_sys_inverse_on_surface</color>
+    <color name="m3_indigo_inverse_primary">@color/m3_sys_inverse_primary</color>
+</resources>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Type Scale -->
+    <!-- Display Styles (Large headlines) -->
+    <style name="TextAppearance.Throne.DisplayLarge" parent="TextAppearance.Material3.DisplayLarge">
+        <item name="android:textSize">57sp</item>
+        <item name="android:lineSpacingExtra">8sp</item>
+        <item name="android:letterSpacing">-0.004</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.DisplayMedium" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="android:textSize">45sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.DisplaySmall" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:textSize">36sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Headline Styles -->
+    <style name="TextAppearance.Throne.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textSize">32sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textSize">28sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">24sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Title Styles -->
+    <style name="TextAppearance.Throne.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">22sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.0015</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.001</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <!-- Body Styles -->
+    <style name="TextAppearance.Throne.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">16sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.005</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.0025</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.004</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Label Styles -->
+    <style name="TextAppearance.Throne.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.001</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">12sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.005</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textSize">11sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">0.005</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <!-- Expressive: Custom headline styles for hero sections -->
+    <style name="TextAppearance.Throne.DisplayHero" parent="TextAppearance.Throne.DisplayLarge">
+        <item name="android:textSize">72sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">-0.01</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+    
+    <style name="TextAppearance.Throne.HeadlineHero" parent="TextAppearance.Throne.HeadlineLarge">
+        <item name="android:textSize">48sp</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+        <item name="android:letterSpacing">-0.005</item>
+        <item name="android:fontWeight">600</item>
+    </style>
+</resources>

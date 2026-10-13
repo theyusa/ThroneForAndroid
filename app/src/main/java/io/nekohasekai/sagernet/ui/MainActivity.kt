@@ -55,6 +55,7 @@ import io.nekohasekai.sagernet.database.RouteManager
 import io.nekohasekai.sagernet.utils.AppShortcuts
 import io.nekohasekai.sagernet.utils.PlatformNotifications
 import io.nekohasekai.sagernet.utils.Theme
+import io.nekohasekai.sagernet.utils.ThemeM3
 import io.nekohasekai.sagernet.utils.WifiStateAccess
 import io.nekohasekai.sagernet.widget.bars
 import androidx.lifecycle.lifecycleScope
@@ -85,16 +86,16 @@ class MainActivity : ThemedActivity(),
         binding = LayoutMainBinding.inflate(layoutInflater)
         binding.fab.initProgress(binding.fabProgress)
         // White theme: a dark FAB with a light icon (white on white is unreadable)
-        if (Theme.isWhiteTheme()) {
+        if (ThemeM3.isWhiteTheme()) {
             binding.fab.backgroundTintList = android.content.res.ColorStateList.valueOf(
                 ContextCompat.getColor(this, R.color.color_white_theme_fab)
             )
         }
         if (themeResId !in intArrayOf(
-                R.style.Theme_SagerNet_Black,
+                R.style.Theme_Throne_M3_Black,
                 // The White theme and its night fallback read ?itemShapeFillColor too, so the selection stays visible
-                R.style.Theme_SagerNet_White,
-                R.style.Theme_SagerNet_White_Night
+                R.style.Theme_Throne_M3_White,
+                R.style.Theme_Throne_M3_White_Night
             )
         ) {
             navigation = binding.navView
@@ -118,7 +119,7 @@ class MainActivity : ThemedActivity(),
                 if ((slideOffset > 0.5f) == overDrawer) return
                 overDrawer = !overDrawer
                 WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars =
-                    if (overDrawer) !Theme.usingNightMode() else lightStatusBar
+                    if (overDrawer) !ThemeM3.usingNightMode() else lightStatusBar
             }
         })
 
