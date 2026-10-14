@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- M3 Expressive Color Palette - White (Night/Dark fallback) -->
+    
+    <!-- Primary -->
+    <color name="m3_white_night_primary">#9E9E9E</color>
+    <color name="m3_white_night_on_primary">#212121</color>
+    <color name="m3_white_night_primary_container">#424242</color>
+    <color name="m3_white_night_on_primary_container">#FFFFFF</color>
+    
+    <!-- Secondary -->
+    <color name="m3_white_night_secondary">#757575</color>
+    <color name="m3_white_night_on_secondary">#FFFFFF</color>
+    <color name="m3_white_night_secondary_container">#424242</color>
+    <color name="m3_white_night_on_secondary_container">#FFFFFF</color>
+    
+    <!-- Tertiary -->
+    <color name="m3_white_night_tertiary">#B0BEC5</color>
+    <color name="m3_white_night_on_tertiary">#212121</color>
+    <color name="m3_white_night_tertiary_container">#455A64</color>
+    <color name="m3_white_night_on_tertiary_container">#FFFFFF</color>
+    
+    <!-- Error -->
+    <color name="m3_white_night_error">@color/m3_sys_error</color>
+    <color name="m3_white_night_on_error">@color/m3_sys_on_error</color>
+    <color name="m3_white_night_error_container">@color/m3_sys_error_container</color>
+    <color name="m3_white_night_on_error_container">@color/m3_sys_on_error_container</color>
+    
+    <!-- Surface - Dark surfaces for night mode -->
+    <color name="m3_white_night_surface">#121212</color>
+    <color name="m3_white_night_on_surface">#FFFFFF</color>
+    <color name="m3_white_night_surface_variant">#2C2C2C</color>
+    <color name="m3_white_night_on_surface_variant">#B0B0B0</color>
+    
+    <color name="m3_white_night_surface_container_lowest">#000000</color>
+    <color name="m3_white_night_surface_container_low">#121212</color>
+    <color name="m3_white_night_surface_container">#1A1A1A</color>
+    <color name="m3_white_night_surface_container_high">#2C2C2C</color>
+    <color name="m3_white_night_surface_container_highest">#363636</color>
+    
+    <!-- Outline -->
+    <color name="m3_white_night_outline">#616161</color>
+    <color name="m3_white_night_outline_variant">#424242</color>
+    
+    <!-- Inverse -->
+    <color name="m3_white_night_inverse_surface">#FFFFFF</color>
+    <color name="m3_white_night_inverse_on_surface">#212121</color>
+    <color name="m3_white_night_inverse_primary">#9E9E9E</color>
+</resources>
