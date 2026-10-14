@@ -22,32 +22,33 @@
     <dimen name="m3_sys_shape_corner_full">9999dp</dimen>
     
     <!-- Shape Appearance Styles -->
-    <style name="ShapeAppearance.Throne.CornerExtraSmall" parent="ShapeAppearance.Material3.CornerExtraSmall">
+    <!-- M3 Views doesn't have ShapeAppearance.Material3, define from scratch -->
+    <style name="ShapeAppearance.Throne.CornerExtraSmall">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/m3_sys_shape_corner_extra_small</item>
     </style>
     
-    <style name="ShapeAppearance.Throne.CornerSmall" parent="ShapeAppearance.Material3.CornerSmall">
+    <style name="ShapeAppearance.Throne.CornerSmall">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/m3_sys_shape_corner_small</item>
     </style>
     
-    <style name="ShapeAppearance.Throne.CornerMedium" parent="ShapeAppearance.Material3.CornerMedium">
+    <style name="ShapeAppearance.Throne.CornerMedium">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/m3_sys_shape_corner_medium</item>
     </style>
     
-    <style name="ShapeAppearance.Throne.CornerLarge" parent="ShapeAppearance.Material3.CornerLarge">
+    <style name="ShapeAppearance.Throne.CornerLarge">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/m3_sys_shape_corner_large</item>
     </style>
     
-    <style name="ShapeAppearance.Throne.CornerExtraLarge" parent="ShapeAppearance.Material3.CornerExtraLarge">
+    <style name="ShapeAppearance.Throne.CornerExtraLarge">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/m3_sys_shape_corner_extra_large</item>
     </style>
     
-    <style name="ShapeAppearance.Throne.CornerFull" parent="ShapeAppearance.Material3.CornerFull">
+    <style name="ShapeAppearance.Throne.CornerFull">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/m3_sys_shape_corner_full</item>
     </style>

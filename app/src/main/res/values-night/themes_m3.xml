@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- M3 Expressive Base Theme - Dark -->
-    <style name="Theme.Throne.M3" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Color Roles -->
+    <!-- M3 Expressive Base Theme - Dark (using M2 base with M3 customizations) -->
+    <style name="Theme.Throne.M3" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Color Roles (M3 names mapped to M2 attrs) -->
         <item name="colorPrimary">@color/m3_sys_primary</item>
+        <item name="colorPrimaryDark">@color/m3_sys_primary_container</item>
+        <item name="colorAccent">@color/m3_sys_secondary</item>
+        
+        <!-- M3 Color Roles (for custom views) -->
         <item name="colorOnPrimary">@color/m3_sys_on_primary</item>
         <item name="colorPrimaryContainer">@color/m3_sys_primary_container</item>
         <item name="colorOnPrimaryContainer">@color/m3_sys_on_primary_container</item>
@@ -37,17 +41,7 @@
         <item name="colorSurfaceContainerHigh">@color/m3_sys_surface_container_high</item>
         <item name="colorSurfaceContainerHighest">@color/m3_sys_surface_container_highest</item>
         
-        <item name="colorInverseSurface">@color/m3_sys_inverse_surface</item>
-        <item name="colorInverseOnSurface">@color/m3_sys_inverse_on_surface</item>
-        <item name="colorInversePrimary">@color/m3_sys_inverse_primary</item>
-        
-        <item name="colorScrim">@color/m3_sys_scrim</item>
-        <item name="colorShadow">@color/m3_sys_shadow</item>
-        
-        <!-- Surface tint (for elevation overlays) -->
-        <item name="colorSurfaceTint">@color/m3_sys_primary</item>
-        
-        <!-- Shape Appearance -->
+        <!-- Shape Appearance (using custom attrs) -->
         <item name="shapeAppearanceCornerExtraSmall">@style/ShapeAppearance.Throne.CornerExtraSmall</item>
         <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Throne.CornerSmall</item>
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.CornerMedium</item>
@@ -98,7 +92,6 @@
         <item name="popupMenuStyle">@style/Widget.Throne.PopupMenu</item>
         <item name="actionOverflowMenuStyle">@style/Widget.Throne.PopupMenu.Overflow</item>
         <item name="navigationViewStyle">@style/Widget.Throne.NavigationView</item>
-        <item name="navigationBarViewStyle">@style/Widget.Throne.NavigationBarView</item>
         <item name="floatingActionButtonStyle">@style/Widget.Throne.FloatingActionButton</item>
         <item name="extendedFloatingActionButtonStyle">@style/Widget.Throne.ExtendedFloatingActionButton</item>
         <item name="snackbarStyle">@style/Widget.Throne.Snackbar</item>
@@ -107,7 +100,7 @@
     </style>
     
     <!-- Dialog Theme -->
-    <style name="Theme.Throne.M3.Dialog" parent="Theme.Material3.DayNight.Dialog.Alert">
+    <style name="Theme.Throne.M3.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="colorPrimary">@color/m3_sys_primary</item>
         <item name="colorOnPrimary">@color/m3_sys_on_primary</item>
         <item name="colorPrimaryContainer">@color/m3_sys_primary_container</item>

@@ -311,7 +311,7 @@
     
     <!-- ==================== NAVIGATION BAR ==================== -->
     
-    <style name="Widget.Throne.NavigationBarView" parent="Widget.Material3.NavigationBarView">
+    <style name="Widget.Throne.NavigationBarView" parent="Widget.MaterialComponents.NavigationBarView">
         <item name="itemShapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
         <item name="itemActiveIndicatorShapeAppearance">@style/ShapeAppearance.Throne.CornerSmall</item>
         <item name="itemActiveIndicatorWidth">90%</item>
@@ -330,7 +330,7 @@
     
     <!-- ==================== FLOATING ACTION BUTTON ==================== -->
     
-    <style name="Widget.Throne.FloatingActionButton" parent="Widget.Material3.FloatingActionButton">
+    <style name="Widget.Throne.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="shapeAppearance">@style/ShapeAppearance.Throne.Fab</item>
         <item name="backgroundTint">?attr/colorPrimary</item>
         <item name="rippleColor">?attr/colorOnPrimary</item>
@@ -339,7 +339,7 @@
         <item name="pressedElevation">@dimen/m3_elevation_fab_press</item>
     </style>
     
-    <style name="Widget.Throne.ExtendedFloatingActionButton" parent="Widget.Material3.ExtendedFloatingActionButton">
+    <style name="Widget.Throne.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
         <item name="shapeAppearance">@style/ShapeAppearance.Throne.Fab</item>
         <item name="backgroundTint">?attr/colorPrimary</item>
         <item name="rippleColor">?attr/colorOnPrimary</item>
@@ -352,7 +352,7 @@
     
     <!-- ==================== SNACKBAR ==================== -->
     
-    <style name="Widget.Throne.Snackbar" parent="Widget.Material3.Snackbar">
+    <style name="Widget.Throne.Snackbar" parent="Widget.MaterialComponents.Snackbar">
         <item name="backgroundTint">?attr/colorSurfaceContainerHighest</item>
         <item name="actionTextColor">?attr/colorPrimary</item>
         <item name="textColor">?attr/colorOnSurface</item>
@@ -362,7 +362,7 @@
     
     <!-- ==================== TOOLTIP ==================== -->
     
-    <style name="Widget.Throne.Tooltip" parent="Widget.Material3.Tooltip">
+    <style name="Widget.Throne.Tooltip" parent="Widget.MaterialComponents.Tooltip">
         <item name="backgroundTint">?attr/colorSurfaceContainerHighest</item>
         <item name="textColor">?attr/colorOnSurface</item>
         <item name="textAppearance">@style/TextAppearance.Throne.LabelSmall</item>

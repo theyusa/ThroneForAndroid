@@ -168,8 +168,6 @@ TEMPLATE_THEME_LIGHT = """<?xml version="1.0" encoding="utf-8"?>
         
         <item name="colorOutline">@color/m3_{theme}_outline</item>
         <item name="colorOutlineVariant">@color/m3_{theme}_outline_variant</item>
-        
-        <item name="colorSurfaceTint">@color/m3_{theme}_primary</item>
     </style>
     
     <style name="Theme.Throne.M3.Dialog.{theme_pascal}" parent="Theme.Throne.M3.Dialog">
@@ -216,8 +214,6 @@ TEMPLATE_THEME_DARK = """<?xml version="1.0" encoding="utf-8"?>
         
         <item name="colorOutline">@color/m3_{theme}_outline</item>
         <item name="colorOutlineVariant">@color/m3_{theme}_outline_variant</item>
-        
-        <item name="colorSurfaceTint">@color/m3_{theme}_primary</item>
     </style>
     
     <style name="Theme.Throne.M3.Dialog.{theme_pascal}" parent="Theme.Throne.M3.Dialog">

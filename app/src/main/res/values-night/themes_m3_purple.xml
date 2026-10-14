@@ -31,8 +31,6 @@
         
         <item name="colorOutline">@color/m3_purple_outline</item>
         <item name="colorOutlineVariant">@color/m3_purple_outline_variant</item>
-        
-        <item name="colorSurfaceTint">@color/m3_purple_primary</item>
     </style>
     
     <style name="Theme.Throne.M3.Dialog.Purple" parent="Theme.Throne.M3.Dialog">

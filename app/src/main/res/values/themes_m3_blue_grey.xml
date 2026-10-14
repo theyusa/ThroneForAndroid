@@ -31,8 +31,6 @@
         
         <item name="colorOutline">@color/m3_blue_grey_outline</item>
         <item name="colorOutlineVariant">@color/m3_blue_grey_outline_variant</item>
-        
-        <item name="colorSurfaceTint">@color/m3_blue_grey_primary</item>
     </style>
     
     <style name="Theme.Throne.M3.Dialog.BlueGrey" parent="Theme.Throne.M3.Dialog">

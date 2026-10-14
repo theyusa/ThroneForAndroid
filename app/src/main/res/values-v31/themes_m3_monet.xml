@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- M3 Expressive Monet (Dynamic Color) Theme - Requires API 31+ -->
+    <!-- Uses MaterialComponents base with dynamic color attrs -->
     
-    <style name="Theme.Throne.M3.Monet" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Throne.M3.Monet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Dynamic Color - System provides all color roles via Material3 -->
         <!-- These are resolved at runtime from wallpaper -->
         
@@ -52,7 +53,6 @@
         <item name="popupMenuStyle">@style/Widget.Throne.PopupMenu</item>
         <item name="actionOverflowMenuStyle">@style/Widget.Throne.PopupMenu.Overflow</item>
         <item name="navigationViewStyle">@style/Widget.Throne.NavigationView</item>
-        <item name="navigationBarViewStyle">@style/Widget.Throne.NavigationBarView</item>
         <item name="floatingActionButtonStyle">@style/Widget.Throne.FloatingActionButton</item>
         <item name="extendedFloatingActionButtonStyle">@style/Widget.Throne.ExtendedFloatingActionButton</item>
         <item name="snackbarStyle">@style/Widget.Throne.Snackbar</item>
@@ -61,7 +61,7 @@
     </style>
     
     <!-- Dialog Theme -->
-    <style name="Theme.Throne.M3.Dialog.Monet" parent="Theme.Material3.DayNight.Dialog.Alert">
+    <style name="Theme.Throne.M3.Dialog.Monet" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Throne.Dialog</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Throne.Button.Dialog.Positive</item>
         <item name="buttonBarNegativeButtonStyle">@style/Widget.Throne.Button.Dialog.Negative</item>
