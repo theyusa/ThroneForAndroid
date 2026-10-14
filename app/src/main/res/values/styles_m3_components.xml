@@ -370,8 +370,9 @@
     </style>
     
     <!-- ==================== PREFERENCES ==================== -->
+    <!-- M3 Views doesn't have Preference styles yet, use M2 base with M3 customizations -->
     
-    <style name="PreferenceThemeOverlay.Throne" parent="PreferenceThemeOverlay.Material3">
+    <style name="PreferenceThemeOverlay.Throne" parent="PreferenceThemeOverlay">
         <item name="preferenceStyle">@style/Preference.Throne</item>
         <item name="preferenceCategoryStyle">@style/Preference.Throne.Category</item>
         <item name="switchPreferenceStyle">@style/Preference.Throne.Switch</item>
@@ -380,29 +381,36 @@
         <item name="listPreferenceStyle">@style/Preference.Throne.List</item>
     </style>
     
-    <style name="Preference.Throne" parent="Preference.Material3">
-        <item name="layout">@layout/m3_preference_material</item>
+    <style name="Preference.Throne" parent="Preference.Material">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Throne.Preference</item>
     </style>
     
-    <style name="Preference.Throne.Category" parent="Preference.Material3.Category">
-        <item name="layout">@layout/m3_preference_category_material</item>
+    <style name="Preference.Throne.Category" parent="Preference.Material.Category">
         <item name="titleTextAppearance">@style/TextAppearance.Throne.TitleSmall</item>
         <item name="titleTextColor">?attr/colorOnSurfaceVariant</item>
     </style>
     
-    <style name="Preference.Throne.Switch" parent="Preference.Material3.SwitchPreference">
-        <item name="layout">@layout/m3_preference_switch_material</item>
+    <style name="Preference.Throne.Switch" parent="Preference.Material.SwitchPreference">
     </style>
     
-    <style name="Preference.Throne.Dialog" parent="Preference.Material3.DialogPreference">
-        <item name="dialogLayout">@layout/m3_preference_dialog_material</item>
+    <style name="Preference.Throne.Dialog" parent="Preference.Material.DialogPreference">
     </style>
     
-    <style name="Preference.Throne.EditText" parent="Preference.Material3.EditTextPreference">
-        <item name="dialogLayout">@layout/m3_preference_dialog_edittext_material</item>
+    <style name="Preference.Throne.EditText" parent="Preference.Material.EditTextPreference">
     </style>
     
-    <style name="Preference.Throne.List" parent="Preference.Material3.ListPreference">
-        <item name="dialogLayout">@layout/m3_preference_dialog_list_material</item>
+    <style name="Preference.Throne.List" parent="Preference.Material.ListPreference">
+    </style>
+    
+    <!-- Theme overlay for preference internals -->
+    <style name="ThemeOverlay.Throne.Preference" parent="ThemeOverlay.MaterialComponents.Preference">
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorOnPrimary">?attr/colorOnPrimary</item>
+        <item name="colorSecondary">?attr/colorSecondary</item>
+        <item name="colorOnSecondary">?attr/colorOnSecondary</item>
+        <item name="colorSurface">?attr/colorSurface</item>
+        <item name="colorOnSurface">?attr/colorOnSurface</item>
+        <item name="colorError">?attr/colorError</item>
+        <item name="colorOnError">?attr/colorOnError</item>
     </style>
 </resources>
