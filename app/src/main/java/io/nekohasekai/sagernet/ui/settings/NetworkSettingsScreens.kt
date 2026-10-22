@@ -20,6 +20,8 @@ import io.nekohasekai.sagernet.ui.AppManagerActivity
 import io.nekohasekai.sagernet.ui.GroupSettingsActivity
 import io.nekohasekai.sagernet.ui.MainActivity
 import io.nekohasekai.sagernet.ui.route.RouteQuickSwitch
+import io.nekohasekai.sagernet.utils.HotspotGatewayManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.nekohasekai.sagernet.validation.Empty
 import io.nekohasekai.sagernet.validation.Family
 import io.nekohasekai.sagernet.validation.Severity
@@ -135,6 +137,110 @@ class InboundSettingsFragment : SettingsScreenFragment(R.xml.settings_inbound) {
             httpProxyBypass.isVisible = false
         }
         reloadOn(randomPort.key, user.key, pass.key, httpProxyBypass.key)
+
+        val hotspotPref = pref<SwitchPreference>("hotspot_gateway_enabled")
+        fun updateHotspotSummary() {
+            val baseSum = getString(R.string.hotspot_gateway_sum)
+            if (!DataStore.hotspotGatewayEnabled) {
+                hotspotPref.summary = baseSum
+                return
+            }
+            val gateway = HotspotGatewayManager.getGatewayIp()
+            val gwText = if (!gateway.isNullOrEmpty()) {
+                getString(R.string.hotspot_gateway_current, gateway)
+            } else {
+                getString(R.string.hotspot_gateway_no_gateway)
+            }
+            hotspotPref.summary = "$baseSum — $gwText"
+        }
+
+        hotspotPref.isChecked = DataStore.hotspotGatewayEnabled
+        updateHotspotSummary()
+
+        HotspotGatewayManager.onGatewayChanged = {
+            activity?.runOnUiThread { updateHotspotSummary() }
+        }
+
+        fun showHotspotDialog(onSave: (Boolean) -> Unit) {
+            val dialogView = layoutInflater.inflate(R.layout.layout_hotspot_gateway_dialog, null)
+            val editPort = dialogView.findViewById<android.widget.EditText>(R.id.edit_port)
+            val editUser = dialogView.findViewById<android.widget.EditText>(R.id.edit_user)
+            val editPass = dialogView.findViewById<android.widget.EditText>(R.id.edit_pass)
+            val checkUot = dialogView.findViewById<android.widget.CompoundButton>(R.id.check_uot)
+
+            editPort.setText(DataStore.hotspotGatewayPort.toString())
+            editUser.setText(DataStore.hotspotGatewayUser)
+            editPass.setText(DataStore.hotspotGatewayPass)
+            checkUot.isChecked = DataStore.hotspotGatewayUot
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.hotspot_gateway)
+                .setView(dialogView)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val portStr = editPort.text.toString().trim()
+                    val port = portStr.toIntOrNull() ?: 2080
+                    if (port !in 1..65535) {
+                        toast(R.string.invalid_port, portStr)
+                        onSave(false)
+                        return@setPositiveButton
+                    }
+                    DataStore.hotspotGatewayPort = port
+                    DataStore.hotspotGatewayUser = editUser.text.toString().trim()
+                    DataStore.hotspotGatewayPass = editPass.text.toString().trim()
+                    DataStore.hotspotGatewayUot = checkUot.isChecked
+                    onSave(true)
+                }
+                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                    onSave(false)
+                }
+                .setOnCancelListener {
+                    onSave(false)
+                }
+                .show()
+        }
+
+        hotspotPref.setOnPreferenceChangeListener { _, newValue ->
+            val enabled = newValue as Boolean
+            if (enabled) {
+                showHotspotDialog { saved ->
+                    if (saved) {
+                        DataStore.hotspotGatewayEnabled = true
+                        hotspotPref.isChecked = true
+                        HotspotGatewayManager.onSwitchChanged(true)
+                        updateHotspotSummary()
+                    } else {
+                        DataStore.hotspotGatewayEnabled = false
+                        hotspotPref.isChecked = false
+                        updateHotspotSummary()
+                    }
+                }
+                false
+            } else {
+                DataStore.hotspotGatewayEnabled = false
+                HotspotGatewayManager.onSwitchChanged(false)
+                updateHotspotSummary()
+                true
+            }
+        }
+
+        hotspotPref.setOnPreferenceClickListener {
+            if (DataStore.hotspotGatewayEnabled) {
+                showHotspotDialog { saved ->
+                    if (saved) {
+                        HotspotGatewayManager.checkAndUpdate(forceReload = true)
+                        updateHotspotSummary()
+                    }
+                }
+            }
+            true
+        }
+    }
+
+    override fun onDestroyView() {
+        if (HotspotGatewayManager.onGatewayChanged != null) {
+            HotspotGatewayManager.onGatewayChanged = null
+        }
+        super.onDestroyView()
     }
 
     private companion object {

@@ -14,6 +14,7 @@ import io.nekohasekai.sagernet.outbound.config.AutoSelectorBuild
 import io.nekohasekai.sagernet.outbound.config.GeneratedConfig
 import io.nekohasekai.sagernet.outbound.config.PortLease
 import io.nekohasekai.sagernet.outbound.types.Custom
+import io.nekohasekai.sagernet.utils.HotspotGatewayManager
 import io.throneproj.mobile.Instance
 import io.throneproj.mobile.Mobile
 import io.throneproj.mobile.StartOptions
@@ -61,6 +62,7 @@ abstract class BoxInstance(
     }
 
     open suspend fun init() {
+        HotspotGatewayManager.beforeCoreConnect()
         buildConfig()
         core = CoreConfig.from(config, listOf(CoreConfig.TAG_PROXY))
         CoreRuntime.applyLogLevel(config.coreConfig)

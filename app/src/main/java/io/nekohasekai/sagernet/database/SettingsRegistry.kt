@@ -157,6 +157,13 @@ object SettingsRegistry {
     @JvmField val INBOUND_USER = string("inbound_user", "")
     @JvmField val INBOUND_PASS = string("inbound_pass", "")
     @JvmField val CUSTOM_INBOUND = string("custom_inbound", "{\"inbounds\": []}")
+    @JvmField val HOTSPOT_GATEWAY_ENABLED = bool("hotspot_gateway_enabled", false)
+    @JvmField val HOTSPOT_GATEWAY_PORT = int("hotspot_gateway_port", 2080, SettingValidators::isPort)
+    @JvmField val HOTSPOT_GATEWAY_USER = string("hotspot_gateway_user", "")
+    @JvmField val HOTSPOT_GATEWAY_PASS = string("hotspot_gateway_pass", "")
+    @JvmField val HOTSPOT_GATEWAY_LAST = string("hotspot_gateway_last", "")
+    @JvmField val HOTSPOT_GATEWAY_PROFILE_ID = long("hotspot_gateway_profile_id", 0L) { it >= 0 }
+    @JvmField val HOTSPOT_GATEWAY_UOT = bool("hotspot_gateway_uot", false)
 
     // ------------------------------------------------------------------------------------------------ tun
 

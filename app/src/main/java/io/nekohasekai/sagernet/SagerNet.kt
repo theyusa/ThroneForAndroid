@@ -81,6 +81,7 @@ class SagerNet : Application(),
                 PackageCache.register()
                 cleanWebview()
             }
+            HotspotGatewayManager.init()
         }
 
         if (isMainProcess) {
