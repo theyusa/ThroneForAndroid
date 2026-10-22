@@ -16,6 +16,7 @@ import io.nekohasekai.sagernet.database.SettingsRegistry
 import io.nekohasekai.sagernet.database.preference.EditTextPreferenceModifiers
 import io.nekohasekai.sagernet.group.RemoteRouteUpdater
 import io.nekohasekai.sagernet.ktx.needReload
+import io.nekohasekai.sagernet.ktx.runOnDefaultDispatcher
 import io.nekohasekai.sagernet.ui.AppManagerActivity
 import io.nekohasekai.sagernet.ui.GroupSettingsActivity
 import io.nekohasekai.sagernet.ui.MainActivity
@@ -227,7 +228,9 @@ class InboundSettingsFragment : SettingsScreenFragment(R.xml.settings_inbound) {
             if (DataStore.hotspotGatewayEnabled) {
                 showHotspotDialog { saved ->
                     if (saved) {
-                        HotspotGatewayManager.checkAndUpdate(forceReload = true)
+                        runOnDefaultDispatcher {
+                            HotspotGatewayManager.checkAndUpdate(forceReload = true)
+                        }
                         updateHotspotSummary()
                     }
                 }

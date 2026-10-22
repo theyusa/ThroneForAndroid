@@ -11,22 +11,27 @@ import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.database.GroupRepo
 import io.nekohasekai.sagernet.database.ProfileManager
 import io.nekohasekai.sagernet.ktx.Logs
+import io.nekohasekai.sagernet.ktx.runOnDefaultDispatcher
 import io.nekohasekai.sagernet.outbound.types.Socks
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.net.Inet4Address
 
 object HotspotGatewayManager {
     private const val PROFILE_NAME = "Hotspot Gateway"
     private val debounceHandler = Handler(Looper.getMainLooper())
+    private val mutex = Mutex()
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
     private var isRegistered = false
     var onGatewayChanged: (() -> Unit)? = null
 
     fun init() {
         if (DataStore.hotspotGatewayEnabled) {
-            checkAndUpdate(forceReload = false)
+            runOnDefaultDispatcher {
+                checkAndUpdate(forceReload = false)
+            }
             registerCallback()
         } else {
             unregisterCallback()
@@ -35,7 +40,9 @@ object HotspotGatewayManager {
 
     fun onSwitchChanged(enabled: Boolean) {
         if (enabled) {
-            checkAndUpdate(forceReload = true)
+            runOnDefaultDispatcher {
+                checkAndUpdate(forceReload = true)
+            }
             registerCallback()
         } else {
             unregisterCallback()
@@ -43,9 +50,9 @@ object HotspotGatewayManager {
         onGatewayChanged?.invoke()
     }
 
-    fun beforeCoreConnect() {
+    suspend fun beforeCoreConnect() {
         if (DataStore.hotspotGatewayEnabled) {
-            checkAndUpdate(forceReload = false)
+            checkAndUpdate(forceReload = false, reload = false)
         }
     }
 
@@ -88,8 +95,12 @@ object HotspotGatewayManager {
     private fun scheduleCheck() {
         debounceHandler.removeCallbacksAndMessages(null)
         debounceHandler.postDelayed({
-            checkAndUpdate(forceReload = true)
-            onGatewayChanged?.invoke()
+            runOnDefaultDispatcher {
+                checkAndUpdate(forceReload = false)
+                withContext(Dispatchers.Main) {
+                    onGatewayChanged?.invoke()
+                }
+            }
         }, 500L)
     }
 
@@ -127,23 +138,23 @@ object HotspotGatewayManager {
         return null
     }
 
-    fun checkAndUpdate(forceReload: Boolean) {
-        if (!DataStore.hotspotGatewayEnabled) return
+    suspend fun checkAndUpdate(forceReload: Boolean, reload: Boolean = true) = mutex.withLock {
+        if (!DataStore.hotspotGatewayEnabled) return@withLock
         val gateway = getGatewayIp()
         val lastGateway = DataStore.hotspotGatewayLast
 
         if (gateway.isNullOrEmpty()) {
             // No Wi-Fi gateway (not on Wi-Fi): keep last profile unchanged, do not delete anything.
-            return
+            return@withLock
         }
 
         if (gateway == lastGateway && !forceReload) {
-            return
+            return@withLock
         }
 
         DataStore.hotspotGatewayLast = gateway
 
-        runBlocking(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             val profileId = DataStore.hotspotGatewayProfileId
             var profile = if (profileId > 0L) ProfileManager.getProfile(profileId) else null
 
@@ -178,10 +189,10 @@ object HotspotGatewayManager {
                 DataStore.hotspotGatewayProfileId = profile.id
             }
 
-            val runningProfileId = ProfileManager.runningProfileId()
-            val managedId = DataStore.hotspotGatewayProfileId
-            if (DataStore.serviceState.started && (runningProfileId == managedId || ProfileManager.runningUses(managedId))) {
-                withContext(Dispatchers.Main) {
+            if (reload) {
+                val runningProfileId = ProfileManager.runningProfileId()
+                val managedId = DataStore.hotspotGatewayProfileId
+                if (DataStore.serviceState.started && (runningProfileId == managedId || ProfileManager.runningUses(managedId))) {
                     SagerNet.reloadService()
                 }
             }

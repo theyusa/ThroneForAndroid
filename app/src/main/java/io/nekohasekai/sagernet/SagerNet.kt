@@ -81,7 +81,6 @@ class SagerNet : Application(),
                 PackageCache.register()
                 cleanWebview()
             }
-            HotspotGatewayManager.init()
         }
 
         if (isMainProcess) {
@@ -89,6 +88,7 @@ class SagerNet : Application(),
             Theme.applyNightTheme()
             AppLocale.apply()
             UpdateManager.onAppStart(this)
+            HotspotGatewayManager.init()
             runOnDefaultDispatcher {
                 DefaultNetworkListener.start(this) {
                     underlyingNetwork = it
