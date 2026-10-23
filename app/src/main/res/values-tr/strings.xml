@@ -2366,4 +2366,9 @@
     <string name="validation_route_dns_dropped">Profilin kendi DNS ayarları atıldı, bu yüzden genel ayarları kullanıyor: %1$s</string>
     <string name="route_dns_global_servers">Uzak %1$s, direkt %2$s</string>
     <string name="dns_server_suggestions">Son kullanılan ve önerilen sunucular</string>
+    <string name="hotspot_gateway">Hotspot Ağ Geçidi</string>
+    <string name="hotspot_gateway_sum">Wi-Fi ağ geçidini otomatik olarak SOCKS5 sunucusu olarak kullan</string>
+    <string name="hotspot_gateway_current">Mevcut ağ geçidi: %1$s</string>
+    <string name="hotspot_gateway_no_gateway">Wi-Fi ağ geçidi yok</string>
+    <string name="hotspot_gateway_uot">TCP Üzerinden UDP (UoT)</string>
 </resources>

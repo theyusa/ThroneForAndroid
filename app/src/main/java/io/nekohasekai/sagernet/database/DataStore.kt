@@ -157,6 +157,13 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var inboundUser by SettingsRegistry.INBOUND_USER
     var inboundPass by SettingsRegistry.INBOUND_PASS
     var customInbound by SettingsRegistry.CUSTOM_INBOUND
+    var hotspotGatewayEnabled by SettingsRegistry.HOTSPOT_GATEWAY_ENABLED
+    var hotspotGatewayPort by SettingsRegistry.HOTSPOT_GATEWAY_PORT
+    var hotspotGatewayUser by SettingsRegistry.HOTSPOT_GATEWAY_USER
+    var hotspotGatewayPass by SettingsRegistry.HOTSPOT_GATEWAY_PASS
+    var hotspotGatewayLast by SettingsRegistry.HOTSPOT_GATEWAY_LAST
+    var hotspotGatewayProfileId by SettingsRegistry.HOTSPOT_GATEWAY_PROFILE_ID
+    var hotspotGatewayUot by SettingsRegistry.HOTSPOT_GATEWAY_UOT
 
     /** disable_mixed_inbound only applies in VPN mode: the proxy-only service mode needs the mixed inbound. */
     val mixedInboundDisabled: Boolean

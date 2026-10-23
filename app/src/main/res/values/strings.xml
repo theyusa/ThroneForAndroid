@@ -2581,4 +2581,9 @@
     <string name="validation_route_dns_dropped">The profile\'s own DNS settings were dropped, so it uses the global ones: %1$s</string>
     <string name="route_dns_global_servers">Remote %1$s, direct %2$s</string>
     <string name="dns_server_suggestions">Recent and suggested servers</string>
+    <string name="hotspot_gateway">Hotspot Gateway</string>
+    <string name="hotspot_gateway_sum">Use the Wi-Fi gateway as a SOCKS5 server automatically</string>
+    <string name="hotspot_gateway_current">Current gateway: %1$s</string>
+    <string name="hotspot_gateway_no_gateway">no Wi-Fi gateway</string>
+    <string name="hotspot_gateway_uot">UDP over TCP (UoT)</string>
 </resources>
