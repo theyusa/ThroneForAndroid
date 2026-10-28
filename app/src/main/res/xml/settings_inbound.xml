@@ -22,6 +22,11 @@
             app:summary="@string/allow_access_sum"
             app:title="@string/allow_access" />
         <SwitchPreference
+            app:icon="@drawable/ic_hardware_router"
+            app:key="hotspot_gateway_enabled"
+            app:summary="@string/hotspot_gateway_sum"
+            app:title="@string/hotspot_gateway" />
+        <SwitchPreference
             app:icon="@drawable/ic_baseline_http_24"
             app:key="appendHttpProxy"
             app:summary="@string/append_http_proxy_sum"

@@ -1,11 +1,16 @@
 package io.nekohasekai.sagernet.ui.settings
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import io.nekohasekai.sagernet.Action
 import io.nekohasekai.sagernet.Key
 import io.nekohasekai.sagernet.R
 import androidx.lifecycle.lifecycleScope
@@ -15,11 +20,17 @@ import io.nekohasekai.sagernet.database.SettingValidators
 import io.nekohasekai.sagernet.database.SettingsRegistry
 import io.nekohasekai.sagernet.database.preference.EditTextPreferenceModifiers
 import io.nekohasekai.sagernet.group.RemoteRouteUpdater
+import io.nekohasekai.sagernet.ktx.Logs
 import io.nekohasekai.sagernet.ktx.needReload
+import io.nekohasekai.sagernet.ktx.runOnDefaultDispatcher
 import io.nekohasekai.sagernet.ui.AppManagerActivity
 import io.nekohasekai.sagernet.ui.GroupSettingsActivity
 import io.nekohasekai.sagernet.ui.MainActivity
 import io.nekohasekai.sagernet.ui.route.RouteQuickSwitch
+import io.nekohasekai.sagernet.utils.HotspotGatewayManager
+import io.nekohasekai.sagernet.utils.HotspotGatewayState
+import io.nekohasekai.sagernet.utils.HotspotGatewayStatus
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.nekohasekai.sagernet.validation.Empty
 import io.nekohasekai.sagernet.validation.Family
 import io.nekohasekai.sagernet.validation.Severity
@@ -135,6 +146,150 @@ class InboundSettingsFragment : SettingsScreenFragment(R.xml.settings_inbound) {
             httpProxyBypass.isVisible = false
         }
         reloadOn(randomPort.key, user.key, pass.key, httpProxyBypass.key)
+
+        val hotspotPref = pref<SwitchPreference>("hotspot_gateway_enabled")
+        // The summary renders only the shared status record: no gateway lookup, no socket, nothing on the UI thread.
+        fun updateHotspotSummary() {
+            val baseSum = getString(R.string.hotspot_gateway_sum)
+            if (!DataStore.hotspotGatewayEnabled) {
+                hotspotPref.summary = baseSum
+                return
+            }
+            val snapshot = HotspotGatewayState.snapshot()
+            val statusText = when (snapshot.status) {
+                HotspotGatewayStatus.NO_GATEWAY -> getString(R.string.hotspot_gateway_status_no_gateway)
+                HotspotGatewayStatus.PROBING -> getString(R.string.hotspot_gateway_status_probing)
+                HotspotGatewayStatus.FOUND ->
+                    getString(R.string.hotspot_gateway_status_found, snapshot.gateway, snapshot.port)
+
+                HotspotGatewayStatus.NOT_FOUND -> getString(R.string.hotspot_gateway_status_not_found)
+                HotspotGatewayStatus.PAIRING_REQUIRED -> getString(R.string.hotspot_gateway_status_pairing_required)
+                HotspotGatewayStatus.AUTH_REQUIRED -> getString(R.string.hotspot_gateway_status_auth_required)
+                HotspotGatewayStatus.UNSUPPORTED_AUTH ->
+                    getString(R.string.hotspot_gateway_status_unsupported_auth)
+
+                // Disabled and the future states fall back to the plain summary line.
+                else -> baseSum
+            }
+            hotspotPref.summary = "$baseSum — $statusText"
+        }
+
+        hotspotPref.isChecked = DataStore.hotspotGatewayEnabled
+        updateHotspotSummary()
+
+        // The manager publishes this package-scoped broadcast after every status change, in either process.
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) = updateHotspotSummary()
+        }
+        runCatching {
+            ContextCompat.registerReceiver(
+                requireContext(),
+                receiver,
+                IntentFilter(Action.HOTSPOT_GATEWAY_STATUS),
+                ContextCompat.RECEIVER_NOT_EXPORTED,
+            )
+        }.onSuccess { statusReceiver = receiver }.onFailure { Logs.w(it) }
+
+        HotspotGatewayManager.onGatewayChanged = {
+            activity?.runOnUiThread { updateHotspotSummary() }
+        }
+
+        fun showHotspotDialog(onSave: (Boolean) -> Unit) {
+            val dialogView = layoutInflater.inflate(R.layout.layout_hotspot_gateway_dialog, null)
+            val editPort = dialogView.findViewById<android.widget.EditText>(R.id.edit_port)
+            val editUser = dialogView.findViewById<android.widget.EditText>(R.id.edit_user)
+            val editPass = dialogView.findViewById<android.widget.EditText>(R.id.edit_pass)
+            val checkUot = dialogView.findViewById<android.widget.CompoundButton>(R.id.check_uot)
+            val checkStopOnLoss = dialogView.findViewById<android.widget.CompoundButton>(R.id.check_stop_on_loss)
+            val checkAutoSwitch = dialogView.findViewById<android.widget.CompoundButton>(R.id.check_auto_switch)
+
+            editPort.setText(DataStore.hotspotGatewayPort.toString())
+            editUser.setText(DataStore.hotspotGatewayUser)
+            editPass.setText(DataStore.hotspotGatewayPass)
+            checkUot.isChecked = DataStore.hotspotGatewayUot
+            // Default off: without it a lost hotspot with no previous profile only warns and keeps running.
+            checkStopOnLoss.isChecked = DataStore.hotspotGatewayStopOnLoss
+            checkAutoSwitch.isChecked = DataStore.hotspotGatewayAutoSwitch
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.hotspot_gateway)
+                .setView(dialogView)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    val portStr = editPort.text.toString().trim()
+                    val port = portStr.toIntOrNull()
+                    // Blank or out-of-range input is refused: there is no silent 2080 fallback.
+                    if (port == null || !SettingValidators.isPort(port)) {
+                        toast(R.string.invalid_port, portStr)
+                        onSave(false)
+                        return@setPositiveButton
+                    }
+                    DataStore.hotspotGatewayPort = port
+                    DataStore.hotspotGatewayUser = editUser.text.toString().trim()
+                    // The password is stored verbatim: trimming it would silently change the credential.
+                    DataStore.hotspotGatewayPass = editPass.text.toString()
+                    DataStore.hotspotGatewayUot = checkUot.isChecked
+                    DataStore.hotspotGatewayStopOnLoss = checkStopOnLoss.isChecked
+                    DataStore.hotspotGatewayAutoSwitch = checkAutoSwitch.isChecked
+                    onSave(true)
+                }
+                .setNegativeButton(android.R.string.cancel) { _, _ ->
+                    onSave(false)
+                }
+                .setOnCancelListener {
+                    onSave(false)
+                }
+                .show()
+        }
+
+        hotspotPref.setOnPreferenceChangeListener { _, newValue ->
+            val enabled = newValue as Boolean
+            if (enabled) {
+                showHotspotDialog { saved ->
+                    if (saved) {
+                        DataStore.hotspotGatewayEnabled = true
+                        hotspotPref.isChecked = true
+                        HotspotGatewayManager.onSwitchChanged(true)
+                        updateHotspotSummary()
+                    } else {
+                        DataStore.hotspotGatewayEnabled = false
+                        hotspotPref.isChecked = false
+                        updateHotspotSummary()
+                    }
+                }
+                false
+            } else {
+                DataStore.hotspotGatewayEnabled = false
+                HotspotGatewayManager.onSwitchChanged(false)
+                updateHotspotSummary()
+                true
+            }
+        }
+
+        hotspotPref.setOnPreferenceClickListener {
+            if (DataStore.hotspotGatewayEnabled) {
+                showHotspotDialog { saved ->
+                    if (saved) {
+                        runOnDefaultDispatcher {
+                            HotspotGatewayManager.checkAndUpdate(forceReload = true)
+                        }
+                        updateHotspotSummary()
+                    }
+                }
+            }
+            true
+        }
+    }
+
+    /** Set while the screen is alive; unregistered in [onDestroyView]. */
+    private var statusReceiver: BroadcastReceiver? = null
+
+    override fun onDestroyView() {
+        statusReceiver?.let { receiver ->
+            runCatching { requireContext().unregisterReceiver(receiver) }.onFailure { Logs.w(it) }
+            statusReceiver = null
+        }
+        HotspotGatewayManager.onGatewayChanged = null
+        super.onDestroyView()
     }
 
     private companion object {
