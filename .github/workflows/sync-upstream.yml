@@ -41,6 +41,15 @@ jobs:
             exit 0
           fi
 
+          # Configure the merge drivers declared in .gitattributes (see that file).
+          # During a rebase the merge sides are swapped: %B is the fork commit being
+          # replayed, %A is the upstream base. keep-fork copies %B over %A (fork wins);
+          # yusa-nb4a forces our package name onto upstream's version/core.
+          git config merge.keep-fork.name "keep fork version"
+          git config merge.keep-fork.driver 'cp %B %A'
+          git config merge.yusa-nb4a.name "keep .yusa package, upstream version/core"
+          git config merge.yusa-nb4a.driver 'sed -i "s/^PACKAGE_NAME=.*/PACKAGE_NAME=com.nb4a.throne.yusa/" %A'
+
           # The upstream commits newly merged (clean list, no patch commit noise).
           NEW_COMMITS="$(git log --pretty=format:'%h %s' HEAD..upstream/main)"
 
@@ -68,6 +77,6 @@ jobs:
             git rebase --abort
             gh issue create \
               --title "Sync conflict with upstream/main" \
-              --body "Rebase of the Hotspot Gateway patch onto upstream/main failed. Resolve the conflict manually (typically \`nb4a.properties\`: keep \`PACKAGE_NAME=com.nb4a.throne.yusa\` and take the upstream version/core values)."
+              --body "Rebase of the Hotspot Gateway patch onto upstream/main failed. Identity files (README.md, README.tr.md, nb4a.properties, release.yml, sync-upstream.yml, buildScript/auto_release_notes.sh) resolve automatically via merge drivers. A remaining conflict means a feature file (e.g. BaseService.kt, SettingsRegistry.kt, DataStore.kt) was touched by both sides and needs manual resolution. Resolve it, then \`git rebase --continue\` and force-push."
             exit 1
           fi
