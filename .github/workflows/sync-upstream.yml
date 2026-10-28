@@ -1,0 +1,49 @@
+name: Sync upstream
+
+on:
+  schedule:
+    # Daily at 03:00 UTC — rebase the single patch commit onto the latest upstream/main.
+    - cron: '0 3 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: hotspot-gateway
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync onto upstream/main
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote add upstream https://github.com/throneproj/ThroneForAndroid.git
+          git fetch upstream main
+
+          if [ "$(git rev-list --count HEAD..upstream/main)" -eq 0 ]; then
+            echo "No new upstream commits; nothing to do."
+            exit 0
+          fi
+
+          if git rebase upstream/main; then
+            git push --force-with-lease origin hotspot-gateway
+          else
+            git rebase --abort
+            gh issue create \
+              --title "Sync conflict with upstream/main" \
+              --body "Rebase of the Hotspot Gateway patch onto upstream/main failed. Resolve the conflict manually (typically \`nb4a.properties\`: keep \`PACKAGE_NAME=com.nb4a.throne.yusa\` and take the upstream version/core values)."
+            exit 1
+          fi
