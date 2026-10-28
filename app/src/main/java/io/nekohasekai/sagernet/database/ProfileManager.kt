@@ -135,6 +135,50 @@ object ProfileManager {
     suspend fun createProfile(groupId: Long, outbound: Outbound): ProxyEntity = addProfile(outbound, groupId)
 
     /**
+     * The fixed-name ensure of the managed "Hotspot Gateway" profile: [preferredProfileId] is the id this manager
+     * itself stored, so an existing row is updated in place and nothing else is touched. When the id is unknown (0
+     * or the row is gone) the write falls through to the compare-and-set create keyed on `(groupId, name)`: the
+     * creation is the single `INSERT ... WHERE NOT EXISTS` statement of [ProxyEntity.Dao.insertNamedIfAbsent], so
+     * the main process and `:bg` racing on the first creation - both still reading `hotspotGatewayProfileId = 0` -
+     * get one row, the loser re-reading the winner's row inside the same transaction. The CAS key never matches
+     * outside [groupId], so a same-named profile in another group is never adopted. The write runs in one
+     * transaction; `onAdd` fires only when a row is really inserted, the listeners fire only after it commits.
+     */
+    suspend fun upsertNamed(groupId: Long, preferredProfileId: Long, outbound: Outbound): ProxyEntity {
+        val gid = if (groupId <= 0) GroupRepo.currentId() else groupId
+        val (profile, created) = SagerDatabase.instance.runInTransaction(Callable {
+            // Fresh id check inside the transaction: the id is honored only when its row still exists when this
+            // write serializes; a deleted row falls through to the CAS create below.
+            val own = if (preferredProfileId > 0L) getProfile(preferredProfileId) else null
+            if (own != null) {
+                own.putOutbound(outbound)
+                dao.updateProxy(own)
+                return@Callable own to false
+            }
+            val same = dao.getByNameInGroup(gid, outbound.name)
+            if (same != null) {
+                // The named row already exists - created concurrently by the other process (the CAS lost) or
+                // earlier with the setting since lost: update it in place instead of making a duplicate.
+                same.putOutbound(outbound)
+                dao.updateProxy(same)
+                return@Callable same to false
+            }
+            val profile = ProxyEntity(groupId = gid).putOutbound(outbound)
+            dao.insertNamedIfAbsent(gid, profile.type, outbound.name, profile.outboundJson)
+            // The statement above is atomic: either this process inserted the row or a concurrent one did; the
+            // re-read inside the same transaction returns that single row.
+            dao.getByNameInGroup(gid, outbound.name)!! to true
+        })
+        if (created) {
+            iterator { onAdd(profile) }
+            GroupSort.repositionLater(mapOf(gid to listOf(profile.id)), SortInput.MEMBERSHIP)
+        } else {
+            iterator { onUpdated(profile, false) }
+        }
+        return profile
+    }
+
+    /**
      * ProfilesRepo::AddProfileBatch: appended to group [groupId] (the current group when <= 0) in input order,
      * inserted in chunks. The listeners get one reload of the group.
      */

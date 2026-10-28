@@ -29,7 +29,10 @@ import io.nekohasekai.sagernet.database.SagerDatabase
 import io.nekohasekai.sagernet.ktx.*
 import io.nekohasekai.sagernet.outbound.json.jsonObjectOf
 import io.nekohasekai.sagernet.utils.DefaultNetworkListener
+import io.nekohasekai.sagernet.utils.HotspotGatewayAuthException
+import io.nekohasekai.sagernet.utils.HotspotGatewayManager
 import io.nekohasekai.sagernet.utils.PlatformNotifications
+import io.nekohasekai.sagernet.utils.Socks5AuthFailure
 import io.nekohasekai.sagernet.utils.WifiStateAccess
 import io.throneproj.mobile.Instance
 import kotlinx.coroutines.*
@@ -346,6 +349,10 @@ class BaseService {
                 data.wifiMonitor = null
             }
 
+            // The hotspot gateway monitor (network callback + pending check) is released with the runner; a restart
+            // re-arms it in preInit().
+            HotspotGatewayManager.stopServiceMonitor()
+
             try {
                 if (proxy != null) withContext(coreDispatcher) { proxy.close() }
                 Logs.i(
@@ -529,6 +536,22 @@ class BaseService {
             stopRunner(false, message)
         }
 
+        /**
+         * The EN/TR text of a refused hotspot start check ([HotspotGatewayAuthException]), handed to [failRunner].
+         * A protocol, timeout or IO problem is deliberately not worded as a wrong password - it is a gateway problem.
+         */
+        private fun hotspotAuthMessage(reason: Socks5AuthFailure): String {
+            this as Context
+            return when (reason) {
+                Socks5AuthFailure.AUTH_FAILED -> getString(R.string.hotspot_gateway_auth_failed)
+                Socks5AuthFailure.UNSUPPORTED_AUTH -> getString(R.string.hotspot_gateway_auth_unsupported)
+                Socks5AuthFailure.INVALID_CREDENTIALS -> getString(R.string.hotspot_gateway_auth_invalid_credentials)
+                Socks5AuthFailure.CREDENTIALS_NOT_ENFORCED -> getString(R.string.hotspot_gateway_auth_not_enforced)
+                Socks5AuthFailure.NOT_FOUND -> getString(R.string.hotspot_gateway_auth_not_found)
+                else -> getString(R.string.hotspot_gateway_auth_gateway)
+            }
+        }
+
         fun persistStats() {
             // TODO NEW save app stats?
         }
@@ -551,6 +574,9 @@ class BaseService {
                     }
                 }
             }
+            // The `:bg` process monitors the Wi-Fi gateway for its own lifetime: a restart re-arms it here, while
+            // the main process keeps its own monitor for the settings screen.
+            HotspotGatewayManager.startServiceMonitor()
         }
 
         suspend fun lateInit() {
@@ -681,6 +707,10 @@ class BaseService {
                         else exc.readableMessage,
                         geoSettings = true,
                     )
+                } catch (exc: HotspotGatewayAuthException) {
+                    // The managed profile's own start check refused the credential (or the method): an EN/TR message
+                    // through the normal failure path - no reload loop, no generic "service failed" text.
+                    failRunner(hotspotAuthMessage(exc.reason))
                 } catch (exc: Throwable) {
                     // gomobile surfaces Go errors as go.Universe$proxyerror: message only, no stack worth logging
                     if (exc.javaClass.name.endsWith("proxyerror")) {

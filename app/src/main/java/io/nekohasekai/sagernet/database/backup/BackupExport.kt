@@ -2,6 +2,7 @@ package io.nekohasekai.sagernet.database.backup
 
 import android.database.DatabaseErrorHandler
 import android.database.sqlite.SQLiteDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import io.nekohasekai.sagernet.BuildConfig
 import io.nekohasekai.sagernet.Key
 import io.nekohasekai.sagernet.R
@@ -134,6 +135,7 @@ object BackupExport {
 
             if (selection.profiles) {
                 s.profiles = copy(PROFILES, "`id`")
+                redactManagedProfile(s.profiles, managedProfileId(live))
                 s.groups = copy(GROUPS, "`display_order`, `id`")
             }
             if (selection.routes) {
@@ -173,8 +175,7 @@ object BackupExport {
         profileIds: Set<Long>,
         routes: List<Pair<Long, Boolean>>,
     ): Map<String, String> {
-        val out = LinkedHashMap<String, String>()
-        for ((key, value) in stored) if (key !in SettingsRegistry.DEVICE_LOCAL_KEYS) out[key] = value
+        val out = HotspotBackupSanitizer.sanitizeExportedSettings(stored).toMutableMap()
         fun id(key: String): Long? = stored[key]?.trim()?.toLongOrNull()
 
         val group = id(SettingsRegistry.CURRENT_GROUP.key)?.takeIf { it in groupIds } ?: groupIds.firstOrNull()
@@ -190,6 +191,28 @@ object BackupExport {
         } ?: DesktopSchema.NO_PROFILE_ID
         out[REMEMBER_ID] = remember.toString()
         return out
+    }
+
+    /** The managed profile id straight from the live settings table: a profiles-only export has no settings snapshot. */
+    private fun managedProfileId(live: SupportSQLiteDatabase): Long =
+        live.query(
+            "SELECT `value` FROM `$SETTINGS` WHERE `key` = ?",
+            arrayOf<Any?>(SettingsRegistry.HOTSPOT_GATEWAY_PROFILE_ID.key),
+        ).use { c -> if (c.moveToFirst()) c.getString(0)?.trim()?.toLongOrNull() ?: 0L else 0L }
+
+    /** Redacts the managed SOCKS profile's `outbound_json` in place; no managed profile row is a no-op. */
+    private fun redactManagedProfile(table: SqlTable?, managedId: Long) {
+        val rows = table ?: return
+        if (managedId <= 0L) return
+        val idIndex = rows.index("id")
+        val jsonIndex = rows.index("outbound_json")
+        if (idIndex < 0 || jsonIndex < 0) return
+        for (row in rows.rows) {
+            if ((row[idIndex] as? Long) != managedId) continue
+            val json = row[jsonIndex] as? String ?: error("hotspot gateway managed profile has no outbound JSON")
+            row[jsonIndex] = HotspotBackupSanitizer.redactManagedSocks(json)
+            return
+        }
     }
 
     private fun fill(db: SQLiteDatabase, s: Snapshot, selection: Selection) {

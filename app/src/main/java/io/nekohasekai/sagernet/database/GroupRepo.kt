@@ -86,6 +86,21 @@ object GroupRepo {
         dao.insertDefaultIfEmpty(SagerDatabase.defaultGroupName())
     }
 
+    /**
+     * Ensures a fixed-named, non-subscription (`url=""`) group exists and returns it. The main process and `:bg`
+     * racing on the first call get the same row: the creation is the single `INSERT ... WHERE NOT EXISTS` statement
+     * of [ProxyGroup.Dao.insertNamedNonSubscriptionIfAbsent], so only one row is ever inserted and both callers read
+     * it back. It never matches a subscription that happens to share the name, and never touches the Default group.
+     */
+    fun ensureNamedNonSubscription(name: String): ProxyGroup =
+        SagerDatabase.instance.runInTransaction(Callable {
+            dao.getByNameNonSubscription(name)?.let { return@Callable it }
+            dao.insertNamedNonSubscriptionIfAbsent(name)
+            // The statement above is atomic: either this process inserted the row or a concurrent one did; the
+            // re-read inside the same transaction returns that single row.
+            dao.getByNameNonSubscription(name)!!
+        })
+
     // ------------------------------------------------------------------------------------------------ writes
 
     /** GroupsRepo::AddGroup: a new id and the last tab (display_order = MAX + 1). */

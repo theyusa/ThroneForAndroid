@@ -163,6 +163,33 @@ object SettingsRegistry {
     @JvmField val INBOUND_USER = string("inbound_user", "")
     @JvmField val INBOUND_PASS = string("inbound_pass", "")
     @JvmField val CUSTOM_INBOUND = string("custom_inbound", "{\"inbounds\": []}")
+    @JvmField val HOTSPOT_GATEWAY_ENABLED = bool("hotspot_gateway_enabled", false)
+    @JvmField val HOTSPOT_GATEWAY_PORT = int("hotspot_gateway_port", 2080, SettingValidators::isPort)
+    @JvmField val HOTSPOT_GATEWAY_USER = string("hotspot_gateway_user", "")
+    @JvmField val HOTSPOT_GATEWAY_PASS = string("hotspot_gateway_pass", "")
+    @JvmField val HOTSPOT_GATEWAY_LAST = string("hotspot_gateway_last", "")
+    @JvmField val HOTSPOT_GATEWAY_PROFILE_ID = long("hotspot_gateway_profile_id", 0L) { it >= 0 }
+    /** The dedicated fixed-named non-subscription group (HotspotGatewayProfiles.ensureDedicatedGroup); 0 = unresolved. */
+    @JvmField val HOTSPOT_GATEWAY_GROUP_ID = long("hotspot_gateway_group_id", 0L) { it >= 0 }
+    @JvmField val HOTSPOT_GATEWAY_UOT = bool("hotspot_gateway_uot", false)
+    /** The shared status record (HotspotGatewayState): code, gateway, port and epoch-ms timestamp; no credential. */
+    @JvmField val HOTSPOT_GATEWAY_STATUS = string("hotspot_gateway_status", "DISABLED")
+    @JvmField val HOTSPOT_GATEWAY_STATUS_GATEWAY = string("hotspot_gateway_status_gateway", "")
+    @JvmField val HOTSPOT_GATEWAY_STATUS_PORT = int("hotspot_gateway_status_port", 0) { it in 0..65535 }
+    @JvmField val HOTSPOT_GATEWAY_STATUS_UPDATED_AT = long("hotspot_gateway_status_updated_at", 0L) { it >= 0 }
+    /** The last *verified* gateway port; a failed probe never writes it. */
+    @JvmField val HOTSPOT_GATEWAY_LAST_PORT = int("hotspot_gateway_last_port", 0) { it in 0..65535 }
+    /** Selection takeover: -1 = never taken over (sentinel), 0 = "no profile was selected", >0 = a profile id. */
+    @JvmField val HOTSPOT_GATEWAY_PREV_SELECTED = long("hotspot_gateway_prev_selected", -1L) { it >= -1L }
+    /** SHA-256 of the applied config (HotspotGatewayPolicy.configFingerprint); never a credential, never logged. */
+    @JvmField val HOTSPOT_GATEWAY_CONFIG_FINGERPRINT = string("hotspot_gateway_config_fingerprint", "")
+    /** SHA-256 of the config last written to the managed profile; the revisit fast-path compares against it. */
+    @JvmField val HOTSPOT_GATEWAY_APPLIED_FINGERPRINT = string("hotspot_gateway_applied_fingerprint", "")
+    /** Epoch-ms of the last reload/switch that applied a config; the 5000 ms floor is measured from it. */
+    @JvmField val HOTSPOT_GATEWAY_LAST_RELOAD_AT = long("hotspot_gateway_last_reload_at", 0L) { it >= 0 }
+    /** Restore-off default: with no previous profile the service keeps running and a warning is shown instead. */
+    @JvmField val HOTSPOT_GATEWAY_STOP_ON_LOSS = bool("hotspot_gateway_stop_on_loss", false)
+    @JvmField val HOTSPOT_GATEWAY_AUTO_SWITCH = bool("hotspot_gateway_auto_switch", false)
 
     // ------------------------------------------------------------------------------------------------ tun
 
@@ -389,6 +416,15 @@ object SettingsRegistry {
         Key.BATTERY_PROMPT_SHOWN, Key.HWID_FALLBACK, Key.RESUME_AFTER_UPDATE, Key.UPDATE_SKIPPED_VERSION_CODE,
         Key.WIFI_PERMISSION_ASKED, Key.SERVICE_ERROR, Key.SERVICE_ERROR_DNS, Key.SERVICE_ERROR_GEO,
         Key.SERVICE_ERROR_RULE_SETS, Key.START_WITHOUT_RULE_SETS, Key.RUNNING_PROFILES, CORE_BOX_API_PORT.key,
+        // The Hotspot Gateway identity and its runtime/session state are device-local: the pairing (port, user, pass,
+        // UoT) is a secret, and the last gateway / profile / group / selection / fingerprint / status name this
+        // device's own rows and applied config. A restore keeps them and onBackupRestored() resets the runtime part.
+        HOTSPOT_GATEWAY_ENABLED.key, HOTSPOT_GATEWAY_PORT.key, HOTSPOT_GATEWAY_USER.key, HOTSPOT_GATEWAY_PASS.key,
+        HOTSPOT_GATEWAY_UOT.key, HOTSPOT_GATEWAY_LAST.key, HOTSPOT_GATEWAY_LAST_PORT.key,
+        HOTSPOT_GATEWAY_PROFILE_ID.key, HOTSPOT_GATEWAY_GROUP_ID.key, HOTSPOT_GATEWAY_PREV_SELECTED.key,
+        HOTSPOT_GATEWAY_CONFIG_FINGERPRINT.key, HOTSPOT_GATEWAY_APPLIED_FINGERPRINT.key, HOTSPOT_GATEWAY_LAST_RELOAD_AT.key, HOTSPOT_GATEWAY_STATUS.key,
+        HOTSPOT_GATEWAY_STATUS_GATEWAY.key, HOTSPOT_GATEWAY_STATUS_PORT.key, HOTSPOT_GATEWAY_STATUS_UPDATED_AT.key,
+        HOTSPOT_GATEWAY_STOP_ON_LOSS.key, HOTSPOT_GATEWAY_AUTO_SWITCH.key,
     )
 
     // ------------------------------------------------------------------------------------------------ lookup

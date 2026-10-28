@@ -14,6 +14,7 @@ import io.nekohasekai.sagernet.outbound.config.AutoSelectorBuild
 import io.nekohasekai.sagernet.outbound.config.GeneratedConfig
 import io.nekohasekai.sagernet.outbound.config.PortLease
 import io.nekohasekai.sagernet.outbound.types.Custom
+import io.nekohasekai.sagernet.utils.HotspotGatewayManager
 import io.throneproj.mobile.Instance
 import io.throneproj.mobile.Mobile
 import io.throneproj.mobile.StartOptions
@@ -22,7 +23,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
 abstract class BoxInstance(
-    val profile: ProxyEntity
+    var profile: ProxyEntity
 ) : AbstractInstance {
 
     lateinit var config: GeneratedConfig
@@ -61,6 +62,11 @@ abstract class BoxInstance(
     }
 
     open suspend fun init() {
+        // The managed hotspot profile may have been rewritten while this process slept: only the root managed
+        // profile is ever replaced, and only with a row read *after* the verification/auth check - so the config
+        // built right below is never the stale outbound JSON captured when the service object was created. A chain
+        // hop, route or selector that merely uses the managed profile gets null back and starts normally.
+        HotspotGatewayManager.beforeCoreConnect(profile.id)?.let { profile = it }
         buildConfig()
         core = CoreConfig.from(config, listOf(CoreConfig.TAG_PROXY))
         CoreRuntime.applyLogLevel(config.coreConfig)

@@ -105,6 +105,22 @@ data class ProxyGroup(
         @Query("INSERT INTO `groups` (`name`, `display_order`) SELECT :name, 1 WHERE NOT EXISTS (SELECT 1 FROM `groups`)")
         fun insertDefaultIfEmpty(name: String)
 
+        /** The fixed-named, non-subscription group, if one exists (GroupRepo.ensureNamedNonSubscription). */
+        @Query("SELECT * FROM `groups` WHERE `name` = :name AND `url` = '' ORDER BY `id` LIMIT 1")
+        fun getByNameNonSubscription(name: String): ProxyGroup?
+
+        /**
+         * Materializes the fixed-named non-subscription group only while it is still absent, in one statement so the
+         * main process and `:bg` can both call it without creating two rows: `INSERT ... WHERE NOT EXISTS` is atomic at
+         * the SQLite statement level (the losing process's insert affects 0 rows and then reads the winner's row).
+         */
+        @Query(
+            "INSERT INTO `groups` (`name`, `url`, `display_order`) " +
+                "SELECT :name, '', (SELECT COALESCE(MAX(`display_order`), 0) + 1 FROM `groups`) " +
+                "WHERE NOT EXISTS (SELECT 1 FROM `groups` WHERE `name` = :name AND `url` = '')"
+        )
+        fun insertNamedNonSubscriptionIfAbsent(name: String)
+
         @Insert
         fun insert(group: ProxyGroup): Long
 

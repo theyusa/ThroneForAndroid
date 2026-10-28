@@ -157,6 +157,33 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var inboundUser by SettingsRegistry.INBOUND_USER
     var inboundPass by SettingsRegistry.INBOUND_PASS
     var customInbound by SettingsRegistry.CUSTOM_INBOUND
+    var hotspotGatewayEnabled by SettingsRegistry.HOTSPOT_GATEWAY_ENABLED
+    var hotspotGatewayPort by SettingsRegistry.HOTSPOT_GATEWAY_PORT
+    var hotspotGatewayUser by SettingsRegistry.HOTSPOT_GATEWAY_USER
+    var hotspotGatewayPass by SettingsRegistry.HOTSPOT_GATEWAY_PASS
+    var hotspotGatewayLast by SettingsRegistry.HOTSPOT_GATEWAY_LAST
+    var hotspotGatewayProfileId by SettingsRegistry.HOTSPOT_GATEWAY_PROFILE_ID
+    /** The dedicated group's id (HotspotGatewayProfiles.ensureDedicatedGroup); 0 = not resolved yet. */
+    var hotspotGatewayGroupId by SettingsRegistry.HOTSPOT_GATEWAY_GROUP_ID
+    var hotspotGatewayUot by SettingsRegistry.HOTSPOT_GATEWAY_UOT
+    /** The shared status record the settings summary renders (HotspotGatewayState), written by both processes. */
+    var hotspotGatewayStatus by SettingsRegistry.HOTSPOT_GATEWAY_STATUS
+    var hotspotGatewayStatusGateway by SettingsRegistry.HOTSPOT_GATEWAY_STATUS_GATEWAY
+    var hotspotGatewayStatusPort by SettingsRegistry.HOTSPOT_GATEWAY_STATUS_PORT
+    var hotspotGatewayStatusUpdatedAt by SettingsRegistry.HOTSPOT_GATEWAY_STATUS_UPDATED_AT
+    /** The last *verified* gateway port; a failed probe keeps the stored value. */
+    var hotspotGatewayLastPort by SettingsRegistry.HOTSPOT_GATEWAY_LAST_PORT
+    /** The selection before the automatic takeover: -1 sentinel, 0 "no profile", else a profile id. */
+    var hotspotGatewayPrevSelected by SettingsRegistry.HOTSPOT_GATEWAY_PREV_SELECTED
+    /** The fingerprint of the config the core last applied; a reload is claimed exactly once per value. */
+    var hotspotGatewayConfigFingerprint by SettingsRegistry.HOTSPOT_GATEWAY_CONFIG_FINGERPRINT
+    /** The fingerprint of the config last written to the managed profile; the revisit fast-path compares against it. */
+    var hotspotGatewayAppliedFingerprint by SettingsRegistry.HOTSPOT_GATEWAY_APPLIED_FINGERPRINT
+    /** Epoch-ms of the last applied config; the 5000 ms reload floor and the wall-clock guard read it. */
+    var hotspotGatewayLastReloadAt by SettingsRegistry.HOTSPOT_GATEWAY_LAST_RELOAD_AT
+    /** Default off: without it a lost hotspot with no previous profile only warns. */
+    var hotspotGatewayStopOnLoss by SettingsRegistry.HOTSPOT_GATEWAY_STOP_ON_LOSS
+    var hotspotGatewayAutoSwitch by SettingsRegistry.HOTSPOT_GATEWAY_AUTO_SWITCH
 
     /** disable_mixed_inbound only applies in VPN mode: the proxy-only service mode needs the mixed inbound. */
     val mixedInboundDisabled: Boolean

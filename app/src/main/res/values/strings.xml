@@ -1665,6 +1665,7 @@
     <string name="backup_part_settings">Settings</string>
     <string name="backup_part_otp">OTP profiles (not restored on Android)</string>
     <string name="backup_local_summary">Backups use the Throne desktop format (.thrbackup): either app restores them. WebDAV credentials stay on this device.</string>
+    <string name="backup_hotspot_note">Hotspot Gateway pairing credentials are never included in a backup. After a restore on another device (or without a pairing) you will need to pair again.</string>
     <string name="backup_create">Create backup</string>
     <string name="backup_restore">Restore</string>
     <string name="backup_select_part">Select at least one part to include in the backup.</string>
@@ -2641,4 +2642,26 @@
     <string name="validation_route_dns_dropped">The profile\'s own DNS settings were dropped, so it uses the global ones: %1$s</string>
     <string name="route_dns_global_servers">Remote %1$s, direct %2$s</string>
     <string name="dns_server_suggestions">Recent and suggested servers</string>
+    <string name="hotspot_gateway">Hotspot Gateway</string>
+    <string name="hotspot_gateway_sum">Use the Wi-Fi gateway as a SOCKS5 server automatically</string>
+    <string name="hotspot_gateway_current">Current gateway: %1$s</string>
+    <string name="hotspot_gateway_no_gateway">no Wi-Fi gateway</string>
+    <string name="hotspot_gateway_uot">UDP over TCP (UoT)</string>
+    <string name="hotspot_gateway_status_no_gateway">no Wi-Fi gateway</string>
+    <string name="hotspot_gateway_status_probing">probing…</string>
+    <string name="hotspot_gateway_status_found">SOCKS5 at %1$s:%2$d</string>
+    <string name="hotspot_gateway_status_not_found">no SOCKS5 server found</string>
+    <string name="hotspot_gateway_status_pairing_required">set a valid port first</string>
+    <string name="hotspot_gateway_status_auth_required">credentials required</string>
+    <string name="hotspot_gateway_status_unsupported_auth">unsupported authentication</string>
+    <string name="hotspot_gateway_stop_on_loss">Stop the service when the hotspot is lost and there is no previous profile</string>
+    <string name="hotspot_gateway_auto_switch">Switch a running service to the gateway automatically</string>
+    <string name="hotspot_gateway_auth_failed">Hotspot gateway: the username or password was rejected</string>
+    <string name="hotspot_gateway_auth_unsupported">Hotspot gateway: unsupported authentication method</string>
+    <string name="hotspot_gateway_auth_invalid_credentials">Hotspot gateway: the credentials are empty or longer than 255 bytes</string>
+    <string name="hotspot_gateway_auth_gateway">Hotspot gateway: the start check could not reach a SOCKS5 server</string>
+    <string name="hotspot_gateway_auth_not_enforced">Hotspot gateway: the server accepted random credentials, so it is not the configured gateway</string>
+    <string name="hotspot_gateway_auth_not_found">Hotspot gateway: no SOCKS5 server found at the Wi-Fi gateway</string>
+    <string name="hotspot_gateway_no_previous_title">Hotspot lost</string>
+    <string name="hotspot_gateway_no_previous_text">There is no previous profile to return to, so Throne keeps running with the current selection.</string>
 </resources>

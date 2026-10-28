@@ -370,6 +370,23 @@ data class ProxyEntity(
         @Query("SELECT * FROM `profiles` WHERE `id` = :proxyId")
         fun getById(proxyId: Long): ProxyEntity?
 
+        /** The profile named [name] inside [groupId], if any (the managed fixed-named row, ProfileManager.upsertNamed). */
+        @Query("SELECT * FROM `profiles` WHERE `gid` = :groupId AND `name` = :name ORDER BY `user_order`, `id` LIMIT 1")
+        fun getByNameInGroup(groupId: Long, name: String): ProxyEntity?
+
+        /**
+         * Materializes the profile named [name] only while it is still absent from [groupId], in one statement so the
+         * main process and `:bg` racing on the first creation never make two rows: `INSERT ... WHERE NOT EXISTS` is
+         * atomic at the SQLite statement level (the losing process's insert affects 0 rows, then its transaction's
+         * re-read returns the winner's row). Mirrors [io.nekohasekai.sagernet.database.ProxyGroup.Dao.insertNamedNonSubscriptionIfAbsent].
+         */
+        @Query(
+            "INSERT INTO `profiles` (`type`, `name`, `gid`, `user_order`, `outbound_json`) " +
+                "SELECT :type, :name, :groupId, (SELECT COALESCE(MAX(`user_order`), -1) + 1 FROM `profiles` WHERE `gid` = :groupId), :outboundJson " +
+                "WHERE NOT EXISTS (SELECT 1 FROM `profiles` WHERE `gid` = :groupId AND `name` = :name)"
+        )
+        fun insertNamedIfAbsent(groupId: Long, type: String, name: String, outboundJson: String)
+
         @Query("DELETE FROM `profiles` WHERE `id` = :proxyId")
         fun deleteById(proxyId: Long): Int
 

@@ -1456,6 +1456,7 @@
     <string name="backup_part_settings">Ayarlar</string>
     <string name="backup_part_otp">OTP profilleri (Android\'de geri yüklenmez)</string>
     <string name="backup_local_summary">Yedekler Throne masaüstü biçimini (.thrbackup) kullanır: her iki uygulama da geri yükleyebilir. WebDAV bilgileri bu cihazda kalır.</string>
+    <string name="backup_hotspot_note">Hotspot Gateway eşleşme kimlikleri yedeklere asla dahil edilmez. Başka bir cihazda geri yükleme sonrası (veya eşleşme yoksa) yeniden eşleşmeniz gerekir.</string>
     <string name="backup_create">Yedek oluştur</string>
     <string name="backup_restore">Geri yükle</string>
     <string name="backup_select_part">Yedeğe dahil etmek için en az bir bölüm seçin.</string>
@@ -2426,4 +2427,26 @@
     <string name="validation_route_dns_dropped">Profilin kendi DNS ayarları atıldı, bu yüzden genel ayarları kullanıyor: %1$s</string>
     <string name="route_dns_global_servers">Uzak %1$s, direkt %2$s</string>
     <string name="dns_server_suggestions">Son kullanılan ve önerilen sunucular</string>
+    <string name="hotspot_gateway">Hotspot Ağ Geçidi</string>
+    <string name="hotspot_gateway_sum">Wi-Fi ağ geçidini otomatik olarak SOCKS5 sunucusu olarak kullan</string>
+    <string name="hotspot_gateway_current">Mevcut ağ geçidi: %1$s</string>
+    <string name="hotspot_gateway_no_gateway">Wi-Fi ağ geçidi yok</string>
+    <string name="hotspot_gateway_uot">TCP Üzerinden UDP (UoT)</string>
+    <string name="hotspot_gateway_status_no_gateway">Wi-Fi ağ geçidi yok</string>
+    <string name="hotspot_gateway_status_probing">deneniyor…</string>
+    <string name="hotspot_gateway_status_found">SOCKS5 %1$s:%2$d</string>
+    <string name="hotspot_gateway_status_not_found">SOCKS5 sunucusu bulunamadı</string>
+    <string name="hotspot_gateway_status_pairing_required">önce geçerli bir port girin</string>
+    <string name="hotspot_gateway_status_auth_required">kimlik bilgisi gerekli</string>
+    <string name="hotspot_gateway_status_unsupported_auth">desteklenmeyen kimlik doğrulama</string>
+    <string name="hotspot_gateway_stop_on_loss">Önceki profil yokken hotspot kaybında servisi durdur</string>
+    <string name="hotspot_gateway_auto_switch">Çalışan servisi otomatik olarak ağ geçidine geçir</string>
+    <string name="hotspot_gateway_auth_failed">Hotspot ağ geçidi: kullanıcı adı veya parola reddedildi</string>
+    <string name="hotspot_gateway_auth_unsupported">Hotspot ağ geçidi: desteklenmeyen kimlik doğrulama yöntemi</string>
+    <string name="hotspot_gateway_auth_invalid_credentials">Hotspot ağ geçidi: kimlik bilgileri boş veya 255 bayttan uzun</string>
+    <string name="hotspot_gateway_auth_gateway">Hotspot ağ geçidi: başlatma kontrolü SOCKS5 sunucusuna ulaşamadı</string>
+    <string name="hotspot_gateway_auth_not_enforced">Hotspot ağ geçidi: sunucu rastgele kimlik bilgilerini kabul etti, yapılandırılan ağ geçidi değil</string>
+    <string name="hotspot_gateway_auth_not_found">Hotspot ağ geçidi: Wi-Fi ağ geçidinde SOCKS5 sunucusu bulunamadı</string>
+    <string name="hotspot_gateway_no_previous_title">Hotspot kaybedildi</string>
+    <string name="hotspot_gateway_no_previous_text">Dönülecek önceki profil yok, Throne mevcut seçimle çalışmaya devam ediyor.</string>
 </resources>

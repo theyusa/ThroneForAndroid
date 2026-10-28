@@ -20,6 +20,7 @@ object PlatformNotifications {
     private const val TAG = "platform"
     private const val ID_WIFI_RULES = 1
     private const val ID_ALWAYS_ON = 2
+    private const val ID_HOTSPOT_NO_PREVIOUS = 3
 
     fun wifiRulesInactive(context: Context) = post(
         context, ID_WIFI_RULES, R.string.wifi_rules_inactive_title, R.string.wifi_rules_inactive_text,
@@ -34,6 +35,16 @@ object PlatformNotifications {
     )
 
     fun cancelAlwaysOnNoProfile(context: Context) = cancel(context, ID_ALWAYS_ON)
+
+    /**
+     * The hotspot was lost and there is no previous profile to return to: Throne keeps running with the current
+     * selection (the default; `hotspot_gateway_stop_on_loss` is the opt-in that stops instead). The manager posts
+     * this at most once per loss session.
+     */
+    fun hotspotNoPreviousProfile(context: Context) = post(
+        context, ID_HOTSPOT_NO_PREVIOUS, R.string.hotspot_gateway_no_previous_title,
+        R.string.hotspot_gateway_no_previous_text, mainIntent(context),
+    )
 
     private fun mainIntent(context: Context) = Intent(context, MainActivity::class.java)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
