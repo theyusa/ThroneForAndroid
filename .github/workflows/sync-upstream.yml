@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 jobs:
   sync:
@@ -29,6 +30,8 @@ jobs:
         id: sync
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           git remote add upstream https://github.com/throneproj/ThroneForAndroid.git
           git fetch upstream main
@@ -38,8 +41,29 @@ jobs:
             exit 0
           fi
 
+          # The upstream commits newly merged (clean list, no patch commit noise).
+          NEW_COMMITS="$(git log --pretty=format:'%h %s' HEAD..upstream/main)"
+
           if git rebase upstream/main; then
             git push --force-with-lease origin hotspot-gateway
+
+            VERSION_NAME="$(sed -n 's/^VERSION_NAME=//p' nb4a.properties | tr -d '\r[:space:]')"
+            BASE_TAG="v${VERSION_NAME}"
+            TAG="$BASE_TAG"
+            if git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
+              TAG="${BASE_TAG}-$(date -u +%Y%m%d%H%M%S)"
+            fi
+
+            # Record the synced commits in the tag message; the Release workflow
+            # reads it back to build the release notes.
+            printf '%s\n' "$NEW_COMMITS" | git tag -a "$TAG" -F -
+            git push origin "refs/tags/$TAG"
+
+            # Trigger the Release workflow (build + publish). workflow_dispatch is
+            # exempt from the GITHUB_TOKEN re-trigger restriction.
+            gh workflow run release.yml -f tag="$TAG"
+
+            echo "Tagged $TAG and triggered the Release workflow."
           else
             git rebase --abort
             gh issue create \
