@@ -73,6 +73,10 @@
         <activity
             android:name="io.nekohasekai.sagernet.ui.BlankActivity"
             android:configChanges="uiMode" />
+        <activity
+            android:name="io.nekohasekai.sagernet.ui.LanSharingActivity"
+            android:configChanges="uiMode"
+            android:label="@string/lan_sharing" />
 
         <activity
             android:name="io.nekohasekai.sagernet.ui.MainActivity"

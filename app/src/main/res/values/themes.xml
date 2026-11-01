@@ -269,12 +269,15 @@
     <style name="Widget.SagerNet.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.SagerNet.Button</item>
         <item name="android:textColor">@color/dialog_button_text</item>
+        <item name="iconTint">@color/dialog_button_text</item>
+        <item name="strokeColor">@color/dialog_button_text</item>
         <item name="rippleColor">@color/dialog_button_ripple</item>
     </style>
 
     <style name="Widget.SagerNet.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.SagerNet.Button</item>
         <item name="android:textColor">@color/dialog_button_text</item>
+        <item name="iconTint">@color/dialog_button_text</item>
         <item name="rippleColor">@color/dialog_button_ripple</item>
     </style>
 
