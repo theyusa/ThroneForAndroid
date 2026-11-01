@@ -160,13 +160,21 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         }
 
         binding.btnCopyHotspotIp.setOnClickListener {
-            val ip = detectedHotspotIp ?: "192.168.43.1"
+            val ip = currentHotspotHostIp()
             copyToClipboard(ip, getString(R.string.lan_sharing_copied_ip, ip))
         }
         binding.btnCopyHotspotPort.setOnClickListener {
             val port = currentConfiguredPort()
             copyToClipboard(port.toString(), getString(R.string.lan_sharing_copied_port, port))
         }
+        binding.btnCopyHotspotLink.setOnClickListener {
+            val link = buildSocksLinkForHost(currentHotspotHostIp())
+            copyToClipboard(link, getString(R.string.lan_sharing_copied_link))
+        }
+        binding.btnShareHotspotLink.setOnClickListener {
+            shareSocksLink(buildSocksLinkForHost(currentHotspotHostIp()))
+        }
+
         binding.btnCopyWifiIp.setOnClickListener {
             val ip = detectedWifiIp
             if (!ip.isNullOrBlank()) {
@@ -176,6 +184,19 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         binding.btnCopyWifiPort.setOnClickListener {
             val port = currentConfiguredPort()
             copyToClipboard(port.toString(), getString(R.string.lan_sharing_copied_port, port))
+        }
+        binding.btnCopyWifiLink.setOnClickListener {
+            val ip = detectedWifiIp
+            if (!ip.isNullOrBlank()) {
+                val link = buildSocksLinkForHost(ip)
+                copyToClipboard(link, getString(R.string.lan_sharing_copied_link))
+            }
+        }
+        binding.btnShareWifiLink.setOnClickListener {
+            val ip = detectedWifiIp
+            if (!ip.isNullOrBlank()) {
+                shareSocksLink(buildSocksLinkForHost(ip))
+            }
         }
 
         val openConfig = View.OnClickListener {
@@ -280,34 +301,41 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
 
         // Hotspot card
         val gatewayOrHotspotIp = snapshot.gateway.takeIf { it.isNotBlank() } ?: detectedHotspotIp
+        val hotspotIp = gatewayOrHotspotIp ?: "192.168.43.1"
+        binding.textHotspotIp.text = hotspotIp
+        binding.textHotspotPort.text = port.toString()
+        binding.textHotspotSocksLink.text = buildSocksLinkForHost(hotspotIp)
         if (hotspotActive || !gatewayOrHotspotIp.isNullOrBlank()) {
-            val ip = gatewayOrHotspotIp ?: "192.168.43.1"
-            binding.textHotspotIp.text = ip
             binding.badgeHotspotStatus.text = getString(R.string.lan_sharing_hotspot_detected)
             binding.badgeHotspotStatus.setTextColor(primaryColor)
             binding.textHotspotDesc.text = getString(R.string.lan_sharing_hotspot_desc)
         } else {
-            binding.textHotspotIp.text = "192.168.43.1"
             binding.badgeHotspotStatus.text = getString(R.string.lan_sharing_hotspot_not_active)
             binding.badgeHotspotStatus.setTextColor(secondaryColor)
             binding.textHotspotDesc.text = getString(R.string.lan_sharing_hotspot_hint_off)
         }
-        binding.textHotspotPort.text = port.toString()
 
         // Wi-Fi card
         val wifiIp = detectedWifiIp
+        binding.textWifiPort.text = port.toString()
         if (!wifiIp.isNullOrBlank()) {
             binding.textWifiIp.text = wifiIp
+            binding.textWifiSocksLink.text = buildSocksLinkForHost(wifiIp)
             binding.badgeWifiStatus.text = getString(R.string.lan_sharing_wifi_detected)
             binding.badgeWifiStatus.setTextColor(primaryColor)
             binding.textWifiDesc.text = getString(R.string.lan_sharing_wifi_desc)
             binding.btnCopyWifiIp.isEnabled = true
+            binding.btnCopyWifiLink.isEnabled = true
+            binding.btnShareWifiLink.isEnabled = true
         } else {
-            binding.textWifiIp.text = getString(R.string.lan_sharing_not_connected)
+            binding.textWifiIp.text = getString(R.string.lan_sharing_not_detected)
+            binding.textWifiSocksLink.text = buildSocksLinkForHost("0.0.0.0")
             binding.badgeWifiStatus.text = getString(R.string.lan_sharing_wifi_not_connected)
             binding.badgeWifiStatus.setTextColor(secondaryColor)
             binding.textWifiDesc.text = getString(R.string.lan_sharing_wifi_hint_off)
             binding.btnCopyWifiIp.isEnabled = false
+            binding.btnCopyWifiLink.isEnabled = false
+            binding.btnShareWifiLink.isEnabled = false
         }
 
         // Auth row
@@ -468,6 +496,31 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
             }
             binding.layoutDevicesList.addView(row)
         }
+    }
+
+    private fun currentHotspotHostIp(): String {
+        val snap = HotspotGatewayState.snapshot()
+        return snap.gateway.takeIf { it.isNotBlank() } ?: detectedHotspotIp ?: "192.168.43.1"
+    }
+
+    private fun buildSocksLinkForHost(host: String): String {
+        return LanSharingLogics.buildSocks5ShareLink(
+            host = host,
+            port = currentConfiguredPort(),
+            username = DataStore.hotspotGatewayUser,
+            password = DataStore.hotspotGatewayPass,
+            uot = DataStore.hotspotGatewayUot,
+            remark = getString(R.string.lan_sharing),
+        )
+    }
+
+    private fun shareSocksLink(link: String) {
+        if (link.isBlank()) return
+        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, link)
+        }
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.lan_sharing_share_link_btn)))
     }
 
     private fun copyToClipboard(text: String, message: String) {
