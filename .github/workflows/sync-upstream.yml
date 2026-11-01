@@ -1,0 +1,162 @@
+name: Sync Upstream (throneproj/ThroneForAndroid)
+
+on:
+  schedule:
+    # Run daily at 03:00 UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hotspot-gateway
+        uses: actions/checkout@v4
+        with:
+          ref: hotspot-gateway
+          fetch-depth: 0
+
+      - name: Check for new upstream commits and rebase
+        id: sync
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Register custom merge drivers used by .gitattributes during rebase:
+          # In git rebase, %A is the target branch (upstream/main) and %B is the commit being replayed (our fork).
+          # - keep-fork: always preserve our fork's file (%B) over upstream (%A)
+          # - yusa-nb4a: take upstream's nb4a.properties (%A, e.g. new THRONE_CORE_REF), enforce PACKAGE_NAME=com.nb4a.throne.yusa,
+          #              and keep whichever of %A / %B has the higher VERSION_CODE & VERSION_NAME so version numbers never downgrade.
+          git config merge.keep-fork.name "Always keep the fork commit version during rebase"
+          git config merge.keep-fork.driver "cp %B %A"
+          git config merge.yusa-nb4a.name "Keep com.nb4a.throne.yusa package name and highest version with upstream core ref"
+          git config merge.yusa-nb4a.driver 'python3 -c "
+          import sys, re
+          def parse(p):
+              d = {}
+              for line in open(p, encoding=\"utf-8\"):
+                  if \"=\" in line and not line.lstrip().startswith(\"#\"):
+                      k, v = line.strip().split(\"=\", 1)
+                      d[k.strip()] = v.strip()
+              return d
+          a, b = parse(sys.argv[1]), parse(sys.argv[2])
+          code_a, code_b = int(a.get(\"VERSION_CODE\", 0)), int(b.get(\"VERSION_CODE\", 0))
+          ver_name = b.get(\"VERSION_NAME\", a.get(\"VERSION_NAME\", \"2.0.4\")) if code_b >= code_a else a.get(\"VERSION_NAME\")
+          ver_code = str(max(code_a, code_b))
+          text = open(sys.argv[1], encoding=\"utf-8\").read()
+          text = re.sub(r\"^PACKAGE_NAME=.*\", \"PACKAGE_NAME=com.nb4a.throne.yusa\", text, flags=re.M)
+          text = re.sub(r\"^VERSION_NAME=.*\", f\"VERSION_NAME={ver_name}\", text, flags=re.M)
+          text = re.sub(r\"^VERSION_CODE=.*\", f\"VERSION_CODE={ver_code}\", text, flags=re.M)
+          open(sys.argv[1], \"w\", encoding=\"utf-8\").write(text)
+          " %A %B'
+
+          # Point core.attributesFile at a copy outside the worktree so the merge drivers
+          # are active from the very first replayed commit (when HEAD is still upstream/main,
+          # before the commit that adds .gitattributes itself is replayed).
+          cat > /tmp/git-attributes <<'ATTR'
+          README.md merge=keep-fork
+          README.tr.md merge=keep-fork
+          .github/assets/lan-sharing.jpg merge=keep-fork
+          .gitattributes merge=keep-fork
+          .github/workflows/sync-upstream.yml merge=keep-fork
+          .github/workflows/release.yml merge=keep-fork
+          buildScript/auto_release_notes.sh merge=keep-fork
+          settings.gradle.kts merge=keep-fork
+          nb4a.properties merge=yusa-nb4a
+          ATTR
+          git config core.attributesFile /tmp/git-attributes
+
+          git remote add upstream https://github.com/throneproj/ThroneForAndroid.git || true
+          git fetch --no-tags upstream main
+          git fetch origin --tags
+
+          UPSTREAM_SHA="$(git rev-parse upstream/main)"
+          NEW_COUNT="$(git rev-list --count HEAD..upstream/main)"
+          echo "Upstream main SHA: $UPSTREAM_SHA (new commits: $NEW_COUNT)"
+
+          if [ "$NEW_COUNT" -eq 0 ]; then
+            echo "Already up to date with upstream/main."
+            echo "synced=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if git rebase --empty=drop upstream/main; then
+            echo "Rebase succeeded; pushing to origin/hotspot-gateway..."
+            git push --force-with-lease origin hotspot-gateway
+            echo "synced=true" >> "$GITHUB_OUTPUT"
+            echo "new_count=$NEW_COUNT" >> "$GITHUB_OUTPUT"
+            echo "upstream_sha=$UPSTREAM_SHA" >> "$GITHUB_OUTPUT"
+          else
+            git rebase --abort || true
+            echo "::error::Automatic rebase onto upstream/main ($UPSTREAM_SHA) failed due to a source conflict."
+            exit 1
+          fi
+
+      - name: Tag and trigger automated Release after upstream sync
+        if: steps.sync.outputs.synced == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git fetch origin --tags
+
+          VERSION_NAME="$(grep '^VERSION_NAME=' nb4a.properties | cut -d= -f2 | tr -d '[:space:]')"
+          VERSION_CODE="$(grep '^VERSION_CODE=' nb4a.properties | cut -d= -f2 | tr -d '[:space:]')"
+
+          # If v$VERSION_NAME was already released (e.g. via a manual release), advance to the next unused patch version
+          # so every upstream sync produces a fresh release instead of skipping.
+          BUMPED=false
+          while git rev-parse "v${VERSION_NAME}" >/dev/null 2>&1; do
+            MAJOR="$(echo "$VERSION_NAME" | cut -d. -f1)"
+            MINOR="$(echo "$VERSION_NAME" | cut -d. -f2)"
+            PATCH="$(echo "$VERSION_NAME" | cut -d. -f3 | sed 's/[^0-9].*//')"
+            VERSION_NAME="${MAJOR}.${MINOR}.$((PATCH + 1))"
+            VERSION_CODE="$((VERSION_CODE + 1))"
+            BUMPED=true
+          done
+
+          if [ "$BUMPED" = "true" ]; then
+            sed -i "s/^VERSION_NAME=.*/VERSION_NAME=${VERSION_NAME}/" nb4a.properties
+            sed -i "s/^VERSION_CODE=.*/VERSION_CODE=${VERSION_CODE}/" nb4a.properties
+            git add nb4a.properties
+            git commit -m "chore: bump version to ${VERSION_NAME}"
+            git push origin HEAD:hotspot-gateway
+          fi
+
+          TAG="v${VERSION_NAME}"
+          echo "Creating and pushing tag $TAG..."
+          git tag "$TAG"
+          git push origin "$TAG"
+
+          echo "Triggering Release workflow for $TAG..."
+          gh workflow run release.yml \
+            --repo "${{ github.repository }}" \
+            --ref hotspot-gateway \
+            -f tag="$TAG" \
+            -f publish=true
+
+      - name: Bump version for the next release cycle
+        if: steps.sync.outputs.synced == 'true'
+        run: |
+          set -euo pipefail
+          CURRENT_NAME="$(grep '^VERSION_NAME=' nb4a.properties | cut -d= -f2 | tr -d '[:space:]')"
+          CURRENT_CODE="$(grep '^VERSION_CODE=' nb4a.properties | cut -d= -f2 | tr -d '[:space:]')"
+
+          MAJOR="$(echo "$CURRENT_NAME" | cut -d. -f1)"
+          MINOR="$(echo "$CURRENT_NAME" | cut -d. -f2)"
+          PATCH="$(echo "$CURRENT_NAME" | cut -d. -f3 | sed 's/[^0-9].*//')"
+          NEXT_PATCH=$((PATCH + 1))
+          NEXT_NAME="${MAJOR}.${MINOR}.${NEXT_PATCH}"
+          NEXT_CODE=$((CURRENT_CODE + 1))
+
+          sed -i "s/^VERSION_NAME=.*/VERSION_NAME=${NEXT_NAME}/" nb4a.properties
+          sed -i "s/^VERSION_CODE=.*/VERSION_CODE=${NEXT_CODE}/" nb4a.properties
+
+          git add nb4a.properties
+          git commit -m "chore: bump version to ${NEXT_NAME} (post-release v${CURRENT_NAME})"
+          git push origin HEAD:hotspot-gateway
+          echo "Bumped version: ${CURRENT_NAME} (${CURRENT_CODE}) -> ${NEXT_NAME} (${NEXT_CODE})"
