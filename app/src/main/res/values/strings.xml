@@ -2720,4 +2720,13 @@
     <string name="lan_sharing_device_recent">Last: %1$s</string>
     <string name="lan_sharing_copied_ip">Copied IP: %1$s</string>
     <string name="lan_sharing_copied_port">Copied Port: %1$s</string>
+    <string name="lan_sharing_copied_link">Copied SOCKS5 link: %1$s</string>
+    <string name="lan_sharing_host_label">Server IP</string>
+    <string name="lan_sharing_socks_link_label">SOCKS5 Share Link</string>
+    <string name="lan_sharing_copy_ip_btn">Copy IP</string>
+    <string name="lan_sharing_copy_port_btn">Copy Port</string>
+    <string name="lan_sharing_copy_link_btn">Copy Link</string>
+    <string name="lan_sharing_share_link_btn">Share</string>
+    <string name="tools_tab_network">Network &amp; Tools</string>
+    <string name="tools_tab_backup">Backup</string>
 </resources>

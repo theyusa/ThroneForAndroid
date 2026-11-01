@@ -2504,4 +2504,13 @@
     <string name="lan_sharing_device_recent">Son: %1$s</string>
     <string name="lan_sharing_copied_ip">IP kopyalandı: %1$s</string>
     <string name="lan_sharing_copied_port">Port kopyalandı: %1$s</string>
+    <string name="lan_sharing_copied_link">SOCKS5 linki kopyalandı: %1$s</string>
+    <string name="lan_sharing_host_label">Sunucu IP</string>
+    <string name="lan_sharing_socks_link_label">SOCKS5 Paylaşım Linki</string>
+    <string name="lan_sharing_copy_ip_btn">IP Kopyala</string>
+    <string name="lan_sharing_copy_port_btn">Port Kopyala</string>
+    <string name="lan_sharing_copy_link_btn">Linki Kopyala</string>
+    <string name="lan_sharing_share_link_btn">Paylaş</string>
+    <string name="tools_tab_network">Ağ &amp; Araçlar</string>
+    <string name="tools_tab_backup">Yedekleme</string>
 </resources>
