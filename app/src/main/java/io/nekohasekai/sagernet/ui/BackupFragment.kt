@@ -43,6 +43,8 @@ import io.nekohasekai.sagernet.ktx.runOnDefaultDispatcher
 import io.nekohasekai.sagernet.ktx.snackbar
 import io.nekohasekai.sagernet.ktx.startFilesForResult
 import io.nekohasekai.sagernet.ktx.triggerFullRestart
+import io.nekohasekai.sagernet.utils.HotspotGatewayManager
+import io.nekohasekai.sagernet.utils.HotspotGatewayPolicy
 import io.nekohasekai.sagernet.widget.applyListInsets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -432,7 +434,11 @@ class BackupFragment : Fragment(R.layout.layout_backup) {
         runOnDefaultDispatcher {
             val result = runCatching {
                 stopService()
-                BackupRestore.restore(backup, choice)
+                val warnings = BackupRestore.restore(backup, choice)
+                if (HotspotGatewayPolicy.restoreRequiresSessionReset(choice.profiles, choice.settings)) {
+                    HotspotGatewayManager.onBackupRestored()
+                }
+                warnings
             }
             onMainDispatcher {
                 busy = false
