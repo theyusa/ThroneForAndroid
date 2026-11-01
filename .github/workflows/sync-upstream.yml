@@ -1,0 +1,115 @@
+name: Sync upstream
+
+on:
+  schedule:
+    # Daily at 03:00 UTC — rebase the single patch commit onto the latest upstream/main.
+    - cron: '0 3 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: hotspot-gateway
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync onto upstream/main
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          git remote add upstream https://github.com/throneproj/ThroneForAndroid.git
+          git fetch upstream main
+
+          if [ "$(git rev-list --count HEAD..upstream/main)" -eq 0 ]; then
+            echo "No new upstream commits; nothing to do."
+            exit 0
+          fi
+
+          # Configure the merge drivers used by .gitattributes (see that file).
+          # During a rebase the merge sides are swapped: %B is the fork commit being
+          # replayed, %A is the upstream base. keep-fork copies %B over %A (fork wins);
+          # yusa-nb4a forces our package name onto upstream's version/core.
+          git config merge.keep-fork.name "keep fork version"
+          git config merge.keep-fork.driver 'cp %B %A'
+          git config merge.yusa-nb4a.name "keep .yusa package, upstream version/core"
+          git config merge.yusa-nb4a.driver 'sed -i "s/^PACKAGE_NAME=.*/PACKAGE_NAME=com.nb4a.throne.yusa/" %A'
+          # Make the attributes effective from the FIRST replayed commit onward:
+          # .gitattributes itself sits in the last commit, but the conflict it prevents
+          # (e.g. nb4a.properties) appears in the first — write it to a temp file and
+          # point core.attributesFile at it so the drivers are active during the whole
+          # rebase regardless of commit order.
+          cat > /tmp/git-attributes <<'EOF'
+          README.md merge=keep-fork
+          README.tr.md merge=keep-fork
+          nb4a.properties merge=yusa-nb4a
+          .github/workflows/release.yml merge=keep-fork
+          .github/workflows/sync-upstream.yml merge=keep-fork
+          buildScript/auto_release_notes.sh merge=keep-fork
+          EOF
+          git config core.attributesFile /tmp/git-attributes
+          # The upstream commits newly merged (clean list, no patch commit noise).
+          NEW_COMMITS="$(git log --pretty=format:'%h %s' HEAD..upstream/main)"
+
+          if git rebase upstream/main; then
+            git push --force-with-lease origin hotspot-gateway
+
+            VERSION_NAME="$(sed -n 's/^VERSION_NAME=//p' nb4a.properties | tr -d '\r[:space:]')"
+            BASE_TAG="v${VERSION_NAME}"
+            TAG="$BASE_TAG"
+            if git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
+              TAG="${BASE_TAG}-$(date -u +%Y%m%d%H%M%S)"
+            fi
+
+            # Record the synced commits in the tag message; the Release workflow
+            # reads it back to build the release notes.
+            printf '%s\n' "$NEW_COMMITS" | git tag -a "$TAG" -F -
+            git push origin "refs/tags/$TAG"
+
+            # Trigger the Release workflow (build + publish). workflow_dispatch is
+            # exempt from the GITHUB_TOKEN re-trigger restriction.
+            gh workflow run release.yml -f tag="$TAG"
+
+            echo "Tagged $TAG and triggered the Release workflow."
+
+            # Post-release version bump: the next sync must never land on the
+            # same tag again, so raise VERSION_NAME (third component) and
+            # VERSION_CODE right after tagging and dispatching the release.
+            MAJOR="$(echo "$VERSION_NAME" | cut -d. -f1)"
+            MINOR="$(echo "$VERSION_NAME" | cut -d. -f2)"
+            PATCH="$(echo "$VERSION_NAME" | cut -d. -f3)"
+            VERSION_CODE="$(sed -n 's/^VERSION_CODE=//p' nb4a.properties | tr -d '\r[:space:]')"
+            if echo "$VERSION_NAME" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+              NEXT_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+              NEXT_CODE=$((VERSION_CODE + 1))
+              sed -i "s/^PACKAGE_NAME=.*/PACKAGE_NAME=com.nb4a.throne.yusa/" nb4a.properties
+              sed -i "s/^VERSION_NAME=.*/VERSION_NAME=${NEXT_VERSION}/" nb4a.properties
+              sed -i "s/^VERSION_CODE=.*/VERSION_CODE=${NEXT_CODE}/" nb4a.properties
+              git commit -am "chore: bump version to ${NEXT_VERSION}"
+              git push origin hotspot-gateway
+              echo "Bumped version to ${NEXT_VERSION} (VERSION_CODE ${NEXT_CODE})."
+            else
+              echo "VERSION_NAME '${VERSION_NAME}' is not a three-part number; skipping the bump."
+            fi
+          else
+            git rebase --abort
+            echo "Rebase of the Hotspot Gateway patch onto upstream/main failed."
+            echo "Identity files (README.md, README.tr.md, nb4a.properties, release.yml, sync-upstream.yml, buildScript/auto_release_notes.sh) resolve automatically via merge drivers."
+            echo "A remaining conflict means a feature file (e.g. BaseService.kt, SettingsRegistry.kt, DataStore.kt) was touched by both sides and needs manual resolution: resolve it, then 'git rebase --continue' and force-push."
+            # Fork has issues disabled; a failed (red) run is the notification.
+            exit 1
+          fi

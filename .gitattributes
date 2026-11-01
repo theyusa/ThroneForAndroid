@@ -1,0 +1,15 @@
+# Merge drivers for the upstream sync workflow (see .github/workflows/sync-upstream.yml).
+#
+# Two custom drivers are configured there and referenced here:
+#   keep-fork  — always keep the fork's version of these identity files.
+#   yusa-nb4a  — keep the fork's package name (com.nb4a.throne.yusa) but take
+#                upstream's VERSION_NAME / VERSION_CODE / THRONE_CORE_REF.
+#
+# Note: `git rebase` swaps the merge sides, so the drivers are written for the
+# rebase direction (%B = the fork commit being replayed, %A = the upstream base).
+README.md merge=keep-fork
+README.tr.md merge=keep-fork
+nb4a.properties merge=yusa-nb4a
+.github/workflows/release.yml merge=keep-fork
+.github/workflows/sync-upstream.yml merge=keep-fork
+buildScript/auto_release_notes.sh merge=keep-fork
