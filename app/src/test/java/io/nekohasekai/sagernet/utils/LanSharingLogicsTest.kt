@@ -130,4 +130,40 @@ class LanSharingLogicsTest {
         )
         assertEquals("DISABLED", disabledKey)
     }
+
+    @Test
+    fun buildSocks5ShareLinkEncodesCredentialsUotAndParsesBack() {
+        // Anonymous link without UoT or remark
+        val plain = LanSharingLogics.buildSocks5ShareLink(
+            host = "192.168.43.1",
+            port = 2080,
+            username = "",
+            password = "",
+            uot = false,
+            remark = "",
+        )
+        assertEquals("socks5://192.168.43.1:2080", plain)
+
+        // With credentials (special characters in password preserved verbatim, username trimmed) + UoT + remark
+        val withAuth = LanSharingLogics.buildSocks5ShareLink(
+            host = "192.168.43.1",
+            port = 2080,
+            username = " yusa ",
+            password = " p@ss:1#2 ",
+            uot = true,
+            remark = "Hotspot Gateway",
+        )
+        val parsed = io.nekohasekai.sagernet.outbound.types.Socks()
+        assertTrue(parsed.parseFromLink(withAuth))
+        assertEquals("192.168.43.1", parsed.server)
+        assertEquals(2080, parsed.serverPort)
+        assertEquals("yusa", parsed.username)
+        assertEquals(" p@ss:1#2 ", parsed.password)
+        assertTrue(parsed.uot)
+        assertEquals("Hotspot Gateway", parsed.name)
+
+        // Blank host or invalid port returns empty string
+        assertEquals("", LanSharingLogics.buildSocks5ShareLink("", 2080, "u", "p", false, ""))
+        assertEquals("", LanSharingLogics.buildSocks5ShareLink("192.168.43.1", 0, "u", "p", false, ""))
+    }
 }

@@ -1,6 +1,7 @@
 package io.nekohasekai.sagernet.utils
 
 import io.nekohasekai.sagernet.database.SettingValidators
+import io.nekohasekai.sagernet.outbound.link.LinkBuilder
 import kotlin.math.abs
 import org.json.JSONObject
 
@@ -146,5 +147,32 @@ object LanSharingLogics {
     fun statusSummaryKind(enabled: Boolean, snapshot: HotspotGatewaySnapshot): String {
         if (!enabled) return "DISABLED"
         return snapshot.status.name
+    }
+
+    /**
+     * Builds a shareable `socks5://[user[:pass]@]host:port[?uot=1][#remark]` URI compatible with
+     * [io.nekohasekai.sagernet.outbound.types.Socks.parseFromLink]. Username is trimmed once; password is kept
+     * verbatim. Returns an empty string when [host] is blank or [port] is invalid.
+     */
+    fun buildSocks5ShareLink(
+        host: String,
+        port: Int,
+        username: String,
+        password: String,
+        uot: Boolean,
+        remark: String = "",
+    ): String {
+        val cleanHost = host.trim()
+        if (cleanHost.isEmpty() || !SettingValidators.isPort(port)) return ""
+        val url = LinkBuilder("socks5")
+        url.host = cleanHost
+        url.port = port
+        val cleanUser = username.trim()
+        if (cleanUser.isNotEmpty()) url.setUserName(cleanUser)
+        if (password.isNotEmpty()) url.setPassword(password)
+        if (uot) url.addQueryItem("uot", "1")
+        val cleanRemark = remark.trim()
+        if (cleanRemark.isNotEmpty()) url.fragment = cleanRemark
+        return url.build()
     }
 }
