@@ -13,109 +13,24 @@
         android:layout_height="wrap_content" />
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tools_tab_layout"
+        android:id="@+id/tools_tab"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="?attr/colorPrimary"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="?attr/tabIndicatorColor"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        app:tabIndicatorColor="?attr/primaryOrTextPrimary"
         app:tabIndicatorFullWidth="false"
+        app:tabIndicatorHeight="3dp"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="?attr/tabSelectedTextColor"
+        app:tabPaddingEnd="16dp"
+        app:tabPaddingStart="16dp"
+        app:tabSelectedTextColor="?attr/primaryOrTextPrimary"
         app:tabTextAppearance="@style/TextAppearance.SagerNet.Tab"
-        app:tabTextColor="?attr/tabTextColor">
+        app:tabTextColor="?android:attr/textColorSecondary"
+        app:tabUnboundedRipple="false" />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tools_tab_network" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tools_tab_backup" />
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <FrameLayout
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/tools_pager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <!-- Tab 0: Ağ & Paylaşım (ileride yeni araç kartları buraya eklenecek) -->
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/tools_tab_network"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingVertical="8dp">
-
-            <LinearLayout
-                android:id="@+id/tools_network_cards_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/lan_sharing_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_marginEnd="16dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_communication_phonelink_ring"
-                            app:tint="?attr/primaryOrTextPrimary" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/lan_sharing"
-                                android:textAppearance="?attr/textAppearanceHeadline6" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="@string/lan_sharing_tools_summary"
-                                android:textAppearance="?attr/textAppearanceBody2"
-                                android:textColor="?android:attr/textColorSecondary" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <!-- Tab 1: Yedekleme (BackupFragment — Yerel Yedekleme + WebDAV Yedekleme) -->
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/tools_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

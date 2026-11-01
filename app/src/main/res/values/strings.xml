@@ -2729,4 +2729,5 @@
     <string name="lan_sharing_share_link_btn">Share</string>
     <string name="tools_tab_network">Network &amp; Tools</string>
     <string name="tools_tab_backup">Backup</string>
+    <string name="lan_sharing_open_btn">Start</string>
 </resources>

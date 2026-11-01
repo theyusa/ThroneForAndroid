@@ -2513,4 +2513,5 @@
     <string name="lan_sharing_share_link_btn">Paylaş</string>
     <string name="tools_tab_network">Ağ &amp; Araçlar</string>
     <string name="tools_tab_backup">Yedekleme</string>
+    <string name="lan_sharing_open_btn">Başlat</string>
 </resources>
