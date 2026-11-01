@@ -3,6 +3,7 @@ package io.nekohasekai.sagernet.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import com.google.android.material.tabs.TabLayout
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.database.backup.BackupEntry
@@ -15,10 +16,6 @@ class ToolsFragment : ToolbarFragment(R.layout.layout_tools) {
         super.onViewCreated(view, savedInstanceState)
         toolbar?.setTitle(R.string.menu_tools)
 
-        val networkTabContent = view.findViewById<View>(R.id.tools_tab_network)
-        val backupTabContent = view.findViewById<View>(R.id.tools_content)
-        val tabLayout = view.findViewById<TabLayout>(R.id.tools_tab_layout)
-
         view.findViewById<View>(R.id.lan_sharing_card)?.setOnClickListener {
             startActivity(Intent(requireContext(), LanSharingActivity::class.java))
         }
@@ -30,14 +27,21 @@ class ToolsFragment : ToolbarFragment(R.layout.layout_tools) {
                 .commitAllowingStateLoss()
         }
 
-        fun showTab(index: Int) {
-            selectedTabIndex = index
-            if (index == 1) {
-                networkTabContent?.visibility = View.GONE
-                backupTabContent?.visibility = View.VISIBLE
-            } else {
-                networkTabContent?.visibility = View.VISIBLE
-                backupTabContent?.visibility = View.GONE
+        val tabLayout = view.findViewById<TabLayout>(R.id.tools_tab_layout)
+        val networkContainer = view.findViewById<View>(R.id.tools_tab_network)
+        val backupContainer = view.findViewById<View>(R.id.tools_content)
+
+        if (tabLayout != null && tabLayout.tabCount == 0) {
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.tools_tab_network))
+            tabLayout.addTab(tabLayout.newTab().setText(R.string.tools_tab_backup))
+        }
+
+        fun selectTab(index: Int) {
+            selectedTabIndex = index.coerceIn(0, 1)
+            networkContainer?.isVisible = selectedTabIndex == 0
+            backupContainer?.isVisible = selectedTabIndex == 1
+            if (tabLayout != null && tabLayout.selectedTabPosition != selectedTabIndex) {
+                tabLayout.getTabAt(selectedTabIndex)?.select()
             }
         }
 
@@ -46,13 +50,11 @@ class ToolsFragment : ToolbarFragment(R.layout.layout_tools) {
             savedInstanceState != null -> savedInstanceState.getInt(KEY_SELECTED_TAB, 0)
             else -> 0
         }
-
-        tabLayout?.getTabAt(initialTab)?.select()
-        showTab(initialTab)
+        selectTab(initialTab)
 
         tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                showTab(tab.position)
+                selectTab(tab.position)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
