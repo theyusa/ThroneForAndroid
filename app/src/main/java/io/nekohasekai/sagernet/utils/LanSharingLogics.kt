@@ -1,5 +1,7 @@
 package io.nekohasekai.sagernet.utils
 
+import io.nekohasekai.sagernet.database.SettingValidators
+import kotlin.math.abs
 import org.json.JSONObject
 
 /**
@@ -114,5 +116,35 @@ object LanSharingLogics {
             .filter { nowMs - it.lastSeenMs < IDLE_MS || it.activeConnections > 0 }
             .sortedWith(compareByDescending<LanClientDevice> { it.activeConnections > 0 }
                 .thenByDescending { it.lastSeenMs })
+    }
+
+    data class ClashApiAutoEnable(val newRawPort: Int, val changed: Boolean)
+
+    /**
+     * When LAN Sharing turns on and Clash API is off (`<= 0`), flips the sign-encoded port positive so
+     * `/connections` becomes reachable after a service reload.
+     */
+    fun ensureClashApiEnabledPort(rawPort: Int): ClashApiAutoEnable {
+        if (rawPort > 0) return ClashApiAutoEnable(rawPort, changed = false)
+        val positive = abs(rawPort).takeIf { it in 1..65535 } ?: 9090
+        return ClashApiAutoEnable(positive, changed = true)
+    }
+
+    /**
+     * Validates the user-entered port string in the Hotspot Gateway configuration dialog.
+     * Blank or out-of-range strings return null and never fall back to a default port.
+     */
+    fun validateDialogPort(rawInput: String): Int? {
+        val port = rawInput.trim().toIntOrNull() ?: return null
+        return port.takeIf { SettingValidators.isPort(it) }
+    }
+
+    /**
+     * Pure status classifier used by the LAN Sharing hero/summary view so any persisted [HotspotGatewaySnapshot]
+     * (including a stale PROBING record after process restart) maps cleanly without throwing.
+     */
+    fun statusSummaryKind(enabled: Boolean, snapshot: HotspotGatewaySnapshot): String {
+        if (!enabled) return "DISABLED"
+        return snapshot.status.name
     }
 }

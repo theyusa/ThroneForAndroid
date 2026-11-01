@@ -89,4 +89,45 @@ class LanSharingLogicsTest {
         assertTrue(merged.first { it.ip == "192.168.43.52" }.isHotspot)
         assertFalse(merged.first { it.ip == "192.168.43.71" }.isHotspot)
     }
+
+    @Test
+    fun switchOnEnablesClashApiWhenOff() {
+        // Negative sign-encoded port means Clash API is off: enabling LAN sharing flips it positive and requests reload.
+        val fromNegative = LanSharingLogics.ensureClashApiEnabledPort(-9090)
+        assertEquals(9090, fromNegative.newRawPort)
+        assertTrue(fromNegative.changed)
+
+        val fromZero = LanSharingLogics.ensureClashApiEnabledPort(0)
+        assertEquals(9090, fromZero.newRawPort)
+        assertTrue(fromZero.changed)
+
+        // Already positive: kept untouched, no extra reload.
+        val alreadyOn = LanSharingLogics.ensureClashApiEnabledPort(9091)
+        assertEquals(9091, alreadyOn.newRawPort)
+        assertFalse(alreadyOn.changed)
+    }
+
+    @Test
+    fun firstEnableWithoutConfigRefusesInvalidOrBlankPort() {
+        assertEquals(null, LanSharingLogics.validateDialogPort(""))
+        assertEquals(null, LanSharingLogics.validateDialogPort("   "))
+        assertEquals(null, LanSharingLogics.validateDialogPort("0"))
+        assertEquals(null, LanSharingLogics.validateDialogPort("70000"))
+        assertEquals(null, LanSharingLogics.validateDialogPort("abc"))
+        assertEquals(1080, LanSharingLogics.validateDialogPort(" 1080 "))
+    }
+
+    @Test
+    fun staleSnapshotRendersWithoutCrashForEveryStatus() {
+        for (status in HotspotGatewayStatus.entries) {
+            val snap = HotspotGatewaySnapshot(status = status, gateway = "", port = 0, updatedAt = 0L)
+            val key = LanSharingLogics.statusSummaryKind(enabled = true, snapshot = snap)
+            assertTrue(key.isNotEmpty())
+        }
+        val disabledKey = LanSharingLogics.statusSummaryKind(
+            enabled = false,
+            snapshot = HotspotGatewaySnapshot(HotspotGatewayStatus.PROBING, "", 0, 0L),
+        )
+        assertEquals("DISABLED", disabledKey)
+    }
 }
