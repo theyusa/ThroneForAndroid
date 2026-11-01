@@ -46,7 +46,7 @@
                         android:layout_gravity="center"
                         android:importantForAccessibility="no"
                         android:src="@drawable/ic_communication_phonelink_ring"
-                        app:tint="?attr/colorPrimary" />
+                        app:tint="?attr/primaryOrTextPrimary" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -172,7 +172,7 @@
                             android:layout_height="22dp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_hardware_router"
-                            app:tint="?attr/colorPrimary" />
+                            app:tint="?attr/primaryOrTextPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -236,7 +236,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnCopyHotspotIp"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            style="@style/Widget.SagerNet.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:minHeight="36dp"
@@ -280,7 +280,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnCopyHotspotPort"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            style="@style/Widget.SagerNet.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:minHeight="36dp"
@@ -325,7 +325,7 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnCopyHotspotLink"
-                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                style="@style/Widget.SagerNet.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -337,16 +337,18 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnShareHotspotLink"
-                                style="@style/Widget.Material3.Button.TonalButton"
+                                style="@style/Widget.SagerNet.Button"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:minHeight="38dp"
                                 android:text="@string/lan_sharing_share_link_btn"
+                                android:textColor="?whiteOrTextPrimary"
                                 android:textSize="12sp"
                                 app:icon="@drawable/ic_social_share"
-                                app:iconSize="16dp" />
+                                app:iconSize="16dp"
+                                app:iconTint="?whiteOrTextPrimary" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -382,7 +384,7 @@
                             android:layout_height="22dp"
                             android:importantForAccessibility="no"
                             android:src="@drawable/ic_baseline_link_24"
-                            app:tint="?attr/colorPrimary" />
+                            app:tint="?attr/primaryOrTextPrimary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -445,7 +447,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnCopyWifiIp"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            style="@style/Widget.SagerNet.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:minHeight="36dp"
@@ -489,7 +491,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnCopyWifiPort"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            style="@style/Widget.SagerNet.Button.OutlinedButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:minHeight="36dp"
@@ -533,7 +535,7 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnCopyWifiLink"
-                                style="@style/Widget.Material3.Button.OutlinedButton"
+                                style="@style/Widget.SagerNet.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -545,16 +547,18 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnShareWifiLink"
-                                style="@style/Widget.Material3.Button.TonalButton"
+                                style="@style/Widget.SagerNet.Button"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:minHeight="38dp"
                                 android:text="@string/lan_sharing_share_link_btn"
+                                android:textColor="?whiteOrTextPrimary"
                                 android:textSize="12sp"
                                 app:icon="@drawable/ic_social_share"
-                                app:iconSize="16dp" />
+                                app:iconSize="16dp"
+                                app:iconTint="?whiteOrTextPrimary" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -596,9 +600,9 @@
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="13sp" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAuthAction"
-                        style="?attr/borderlessButtonStyle"
+                        style="@style/Widget.SagerNet.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="0dp"

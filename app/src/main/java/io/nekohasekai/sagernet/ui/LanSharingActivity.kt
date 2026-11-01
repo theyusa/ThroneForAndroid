@@ -275,7 +275,7 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         val summaryText = statusSummaryText(enabled, snapshot)
         binding.textSwitchSummary.text = summaryText
 
-        val primaryColor = getColorAttr(androidx.appcompat.R.attr.colorPrimary)
+        val primaryColor = getColorAttr(R.attr.primaryOrTextPrimary)
         val secondaryColor = getColorAttr(android.R.attr.textColorSecondary)
 
         val port = currentConfiguredPort()

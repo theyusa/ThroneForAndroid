@@ -29,7 +29,7 @@
                 android:layout_height="36dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_communication_phonelink_ring"
-                app:tint="?attr/colorPrimary" />
+                app:tint="?attr/primaryOrTextPrimary" />
 
             <View
                 android:id="@+id/dot_device_status"
