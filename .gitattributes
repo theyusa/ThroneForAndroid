@@ -1,0 +1,11 @@
+# Keep our fork's identity, documentation, and CI files when rebasing onto upstream/main.
+# In a rebase, %A ("ours") is upstream/main and %B ("theirs") is the fork commit being replayed.
+README.md merge=keep-fork
+README.tr.md merge=keep-fork
+.github/assets/lan-sharing.jpg merge=keep-fork
+.gitattributes merge=keep-fork
+.github/workflows/sync-upstream.yml merge=keep-fork
+.github/workflows/release.yml merge=keep-fork
+buildScript/auto_release_notes.sh merge=keep-fork
+settings.gradle.kts merge=keep-fork
+nb4a.properties merge=yusa-nb4a
