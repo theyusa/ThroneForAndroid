@@ -35,16 +35,21 @@ jobs:
       # nb4a.properties and refuses to overwrite an existing tag.
       - name: Version
         id: version
+        # Workflow inputs are passed through step env instead of raw ${{ inputs.* }} script expansion:
+        # a crafted input value cannot become code inside the run block.
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_PUBLISH: ${{ inputs.publish }}
         run: |
           set -euo pipefail
           VERSION_NAME=$(sed -n 's/^VERSION_NAME=//p' nb4a.properties | tr -d '\r[:space:]')
           test -n "$VERSION_NAME"
-          if [ -n "${{ inputs.tag }}" ]; then
-            TAG="${{ inputs.tag }}"
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
             PUBLISH="true"
           else
             TAG="v$VERSION_NAME"
-            PUBLISH="${{ inputs.publish }}"
+            PUBLISH="$INPUT_PUBLISH"
             if [ "$PUBLISH" = "true" ] && git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
               echo "::error::$TAG already exists: raise VERSION_NAME in nb4a.properties for a new release"
               exit 1

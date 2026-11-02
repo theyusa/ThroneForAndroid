@@ -85,8 +85,7 @@ jobs:
           fi
 
           if git rebase --empty=drop upstream/main; then
-            echo "Rebase succeeded; pushing to origin/hotspot-gateway..."
-            git push --force-with-lease origin hotspot-gateway
+            echo "Rebase succeeded; the branch is unit-tested before it is force-pushed."
             echo "synced=true" >> "$GITHUB_OUTPUT"
             echo "new_count=$NEW_COUNT" >> "$GITHUB_OUTPUT"
             echo "upstream_sha=$UPSTREAM_SHA" >> "$GITHUB_OUTPUT"
@@ -95,6 +94,33 @@ jobs:
             echo "::error::Automatic rebase onto upstream/main ($UPSTREAM_SHA) failed due to a source conflict."
             exit 1
           fi
+
+      # The rebased branch must build its unit tests before it reaches origin: a red compile/test means
+      # no force-push, no tag, no release - the branch on origin keeps its last good commit.
+      - name: Test the rebased branch before force-pushing
+        if: steps.sync.outputs.synced == 'true'
+        uses: ./.github/actions/android-build
+        with:
+          tasks: app:testOssDebugUnitTest
+          channel: stable
+
+      - name: Open an issue when the rebased branch fails its tests
+        if: failure() && steps.sync.outputs.synced == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_TITLE: "Upstream sync blocked: unit tests failed after rebase to ${{ steps.sync.outputs.upstream_sha }}"
+          ISSUE_BODY: "The daily upstream sync rebased the fork commits onto ${{ steps.sync.outputs.upstream_sha }} successfully, but `./gradlew :app:testOssDebugUnitTest` failed in [run ${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}). The rebase was NOT force-pushed, no tag or release was created, and origin/hotspot-gateway still points at the last good commit. Fix the tests, then re-run the sync workflow."
+        run: |
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "$ISSUE_TITLE" \
+            --body "$ISSUE_BODY" || true
+
+      - name: Force-push the tested branch
+        if: steps.sync.outputs.synced == 'true'
+        run: |
+          set -euo pipefail
+          git push --force-with-lease origin hotspot-gateway
 
       - name: Tag and trigger automated Release after upstream sync
         if: steps.sync.outputs.synced == 'true'
