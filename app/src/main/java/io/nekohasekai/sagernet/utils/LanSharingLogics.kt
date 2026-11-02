@@ -4,6 +4,7 @@ import io.nekohasekai.sagernet.database.SettingValidators
 import io.nekohasekai.sagernet.outbound.link.LinkBuilder
 import kotlin.math.abs
 import org.json.JSONObject
+import java.security.SecureRandom
 
 /**
  * One row of the LAN Sharing device list; entries are keyed by IP.
@@ -188,6 +189,29 @@ object LanSharingLogics {
         if (!enabled) return "DISABLED"
         return snapshot.status.name
     }
+
+    /**
+     * Pure decision: a blank Clash API secret needs a fresh one. An existing, non-blank secret is
+     * never overwritten - it is the key the running core already answers with.
+     */
+    fun clashApiSecretShouldBeGenerated(currentSecret: String): Boolean = currentSecret.isBlank()
+
+    /**
+     * Fresh 64-character lowercase hex (32 SecureRandom bytes) for the core's Clash API secret.
+     * Pure JVM (SecureRandom has no Android dependency), so the size and alphabet are unit-testable.
+     */
+    fun generateClashApiSecret(): String {
+        val bytes = ByteArray(32)
+        SecureRandom().nextBytes(bytes)
+        val sb = StringBuilder(bytes.size * 2)
+        for (b in bytes) {
+            sb.append(HEX_DIGITS[(b.toInt() shr 4) and 0xF]).append(HEX_DIGITS[b.toInt() and 0xF])
+        }
+        return sb.toString()
+    }
+
+    // The same lowercase hex alphabet the config fingerprint uses.
+    private val HEX_DIGITS = "0123456789abcdef"
 
     /**
      * Builds a shareable `socks5://[user[:pass]@]host:port[?uot=1][#remark]` URI compatible with

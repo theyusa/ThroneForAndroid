@@ -2,6 +2,7 @@ package io.nekohasekai.sagernet.utils
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -158,6 +159,21 @@ class LanSharingLogicsTest {
         // Any device on the hotspot subnet counts as a hotspot client, not just the interface IP itself.
         assertTrue(merged.first { it.ip == "192.168.43.52" }.isHotspot)
         assertTrue(merged.first { it.ip == "192.168.43.90" }.isHotspot)
+    }
+
+    @Test
+    fun clashApiSecretGeneratedOnlyWhenBlank() {
+        // Blank: a secret must be generated; an existing one is never overwritten.
+        assertTrue(LanSharingLogics.clashApiSecretShouldBeGenerated(""))
+        assertTrue(LanSharingLogics.clashApiSecretShouldBeGenerated("   "))
+        assertFalse(LanSharingLogics.clashApiSecretShouldBeGenerated("FixedSecret"))
+
+        val first = LanSharingLogics.generateClashApiSecret()
+        val second = LanSharingLogics.generateClashApiSecret()
+        assertEquals(64, first.length)
+        assertTrue(first.matches(Regex("[0-9a-f]{64}")))
+        // Two generations are independent fresh randomness.
+        assertNotEquals(first, second)
     }
 
     @Test

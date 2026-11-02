@@ -140,7 +140,12 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
             DataStore.inboundAddress =
                 if (isChecked) SettingsRegistry.LAN_ADDRESS else SettingsRegistry.LOOPBACK_ADDRESS
             if (isChecked) {
-                // The live client list reads the Clash API /connections endpoint: make sure it is on after the reload.
+                // The live client list reads the Clash API /connections endpoint: make sure the API
+                // is switched on, and that a secret exists. An existing secret is never overwritten;
+                // the needReload() below makes the core pick up both values.
+                if (LanSharingLogics.clashApiSecretShouldBeGenerated(DataStore.coreBoxClashApiSecret)) {
+                    DataStore.coreBoxClashApiSecret = LanSharingLogics.generateClashApiSecret()
+                }
                 val clashDecision = LanSharingLogics.ensureClashApiEnabledPort(DataStore.coreBoxClashApi)
                 if (clashDecision.changed) {
                     DataStore.coreBoxClashApi = clashDecision.newRawPort
