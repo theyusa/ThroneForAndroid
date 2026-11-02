@@ -464,12 +464,13 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
                 secret = DataStore.coreBoxClashApiSecret,
             )
             val clashList = if (body != null) LanSharingLogics.parseConnections(body) else emptyList()
-            val hotspotIp = detectedHotspotIp ?: HotspotGatewayState.snapshot().gateway.takeIf { it.isNotBlank() }
+            val hotspotIp = detectedHotspotIp
             val result = LanSharingLogics.mergeDevices(
                 history = clientHistory.toMap(),
                 arpIps = arp,
                 clash = clashList,
                 hotspotIp = hotspotIp,
+                localIps = setOfNotNull(detectedHotspotIp, detectedWifiIp),
                 nowMs = now,
             )
             clientHistory.clear()
