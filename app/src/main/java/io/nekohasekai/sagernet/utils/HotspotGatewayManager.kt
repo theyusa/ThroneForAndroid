@@ -215,9 +215,9 @@ object HotspotGatewayManager {
 
         var fresh = ProfileManager.getProfile(profileId)
         val pairing = HotspotGatewayState.pairing()
-        val candidate = getWifiGateway()
-        // The start verifies with one quick probe; without a pairing or a gateway there is nothing to verify against,
-        // and the start must not silently fall back to the old profile.
+        val candidate = pollForWifiGatewaySinceStart()
+        // The start verifies with one quick probe; without a pairing or a gateway there is nothing to verify
+        // against, and the start must not silently fall back to the old profile.
         if (pairing == null || candidate == null) {
             throw HotspotGatewayAuthException(Socks5AuthFailure.NOT_FOUND)
         }
@@ -306,6 +306,25 @@ object HotspotGatewayManager {
      * Whether [profile]'s SOCKS bean already points at the verified [gateway] and [pairing] ([HotspotGatewayPolicy.profileMatches]).
      * A null profile or a non-Socks outbound never matches (fail closed).
      */
+    /**
+     * The start-time gateway lookup with its bounded retry: the Wi-Fi network can register a beat after the core
+     * start begins, so a null first [getWifiGateway] is polled again every
+     * [HotspotGatewayPolicy.BEFORE_CORE_CONNECT_POLL_MS] for at most [HotspotGatewayPolicy.BEFORE_CORE_CONNECT_MAX_WAIT_MS].
+     * The retry lives only in this start-time path; [checkAndUpdate] keeps its NO_GATEWAY / loss-grace flow.
+     * The stop condition is pure ([HotspotGatewayPolicy.shouldPollGateway]).
+     */
+    private suspend fun pollForWifiGatewaySinceStart(): Pair<Network, String>? {
+        var candidate = getWifiGateway()
+        if (candidate != null) return candidate
+        val firstMissAt = System.currentTimeMillis()
+        while (HotspotGatewayPolicy.shouldPollGateway(System.currentTimeMillis() - firstMissAt)) {
+            delay(HotspotGatewayPolicy.BEFORE_CORE_CONNECT_POLL_MS)
+            candidate = getWifiGateway()
+            if (candidate != null) return candidate
+        }
+        return null
+    }
+
     private fun profileMatchesVerified(profile: ProxyEntity?, gateway: String, pairing: HotspotPairing): Boolean {
         val socks = profile?.outbound as? Socks ?: return false
         return HotspotGatewayPolicy.profileMatches(

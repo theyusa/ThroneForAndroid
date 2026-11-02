@@ -23,6 +23,17 @@ class HotspotGatewayPolicyTest {
     }
 
     @Test
+    fun startGatewayPollIsBounded() {
+        // The start retries the gateway lookup for at most 1500 ms and stops for good afterwards.
+        assertEquals(150L, HotspotGatewayPolicy.BEFORE_CORE_CONNECT_POLL_MS)
+        assertEquals(1500L, HotspotGatewayPolicy.BEFORE_CORE_CONNECT_MAX_WAIT_MS)
+        assertTrue(HotspotGatewayPolicy.shouldPollGateway(0L))
+        assertTrue(HotspotGatewayPolicy.shouldPollGateway(1499L))
+        assertFalse(HotspotGatewayPolicy.shouldPollGateway(1500L))
+        assertFalse(HotspotGatewayPolicy.shouldPollGateway(1501L))
+    }
+
+    @Test
     fun vpnTransportIsRejectedEvenWithWifi() {
         assertFalse(HotspotGatewayPolicy.isGatewayNetwork(hasWifiTransport = true, hasVpnTransport = true))
         assertTrue(HotspotGatewayPolicy.isGatewayNetwork(hasWifiTransport = true, hasVpnTransport = false))
