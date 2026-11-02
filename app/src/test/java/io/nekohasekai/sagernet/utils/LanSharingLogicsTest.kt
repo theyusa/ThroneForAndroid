@@ -74,7 +74,14 @@ class LanSharingLogicsTest {
         )
         val arp = listOf("192.168.43.52", "192.168.43.54")
 
-        val merged = LanSharingLogics.mergeDevices(history, arp, clash, hotspotIp = "192.168.43.52", nowMs = now)
+        val merged = LanSharingLogics.mergeDevices(
+            history = history,
+            arpIps = arp,
+            clash = clash,
+            hotspotIp = "192.168.43.52",
+            localIps = emptySet(),
+            nowMs = now,
+        )
 
         val ips = merged.map { it.ip }
         // No duplicates; history entry with no fresh signal is retained once; expired entry is gone.
@@ -87,7 +94,70 @@ class LanSharingLogicsTest {
         assertEquals("192.168.43.52", merged[0].ip)
         // isHotspot comes from the hotspot ip alone.
         assertTrue(merged.first { it.ip == "192.168.43.52" }.isHotspot)
-        assertFalse(merged.first { it.ip == "192.168.43.71" }.isHotspot)
+        // Item 3: sharing the hotspot's /24 prefix makes a device a hotspot client, not only the exact interface IP.
+        assertTrue(merged.first { it.ip == "192.168.43.90" }.isHotspot)
+        assertTrue(merged.first { it.ip == "192.168.43.71" }.isHotspot)
+    }
+
+    @Test
+    fun connectionsFilterLocalSources() {
+        val json = """
+            {
+              "connections": [
+                {"metadata": {"sourceIP": "192.168.43.52", "host": "example.com:443"},
+                 "upload": 10, "download": 20},
+                {"metadata": {"sourceIP": "127.0.0.5"}, "upload": 1, "download": 1},
+                {"metadata": {"sourceIP": "::1"}, "upload": 1, "download": 1},
+                {"metadata": {"sourceIP": "172.19.0.9"}, "upload": 1, "download": 1},
+                {"metadata": {"sourceIP": ""}, "upload": 1, "download": 1}
+              ]
+            }
+        """.trimIndent()
+        val devices = LanSharingLogics.parseConnections(json)
+        assertEquals(1, devices.size)
+        assertEquals("192.168.43.52", devices[0].ip)
+    }
+
+    @Test
+    fun sameSubnet24Matches() {
+        assertTrue(LanSharingLogics.isSameSubnet24("192.168.43.1", "192.168.43.222"))
+        assertFalse(LanSharingLogics.isSameSubnet24("192.168.43.1", "192.168.9.222"))
+        assertFalse(LanSharingLogics.isSameSubnet24("::1", "192.168.43.1"))
+        assertFalse(LanSharingLogics.isSameSubnet24("not-an-ip", "192.168.43.1"))
+        assertFalse(LanSharingLogics.isSameSubnet24("0.0.0.0", "192.168.43.1"))
+    }
+
+    @Test
+    fun localSourcesNeverBecomeDevices() {
+        val now = 10_000_000L
+        val arp = listOf("192.168.43.52", "172.19.0.9")
+        val clash = listOf(
+            LanClientDevice("127.0.0.9", 1, 1L, 1L, "x.example.com:80", now, false),
+            LanClientDevice("192.168.43.90", 1, 1L, 2L, null, now, false),
+        )
+        val history = mapOf(
+            // The phone's own hotspot address (detectedHotspotIp) fed back through history.
+            "192.168.43.1" to LanClientDevice(
+                "192.168.43.1", 0, 0L, 0L, null, lastSeenMs = now, isHotspot = false
+            ),
+        )
+        val merged = LanSharingLogics.mergeDevices(
+            history = history,
+            arpIps = arp,
+            clash = clash,
+            hotspotIp = "192.168.43.1",
+            localIps = setOf("192.168.43.1", "192.168.43.7"),
+            nowMs = now,
+        )
+        val ips = merged.map { it.ip }
+        assertFalse(ips.contains("172.19.0.9"))
+        assertFalse(ips.contains("127.0.0.9"))
+        assertFalse(ips.contains("192.168.43.1"))
+        assertTrue(ips.contains("192.168.43.52"))
+        assertTrue(ips.contains("192.168.43.90"))
+        // Any device on the hotspot subnet counts as a hotspot client, not just the interface IP itself.
+        assertTrue(merged.first { it.ip == "192.168.43.52" }.isHotspot)
+        assertTrue(merged.first { it.ip == "192.168.43.90" }.isHotspot)
     }
 
     @Test
