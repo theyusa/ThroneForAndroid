@@ -80,6 +80,7 @@ class LanSharingLogicsTest {
             arpIps = arp,
             clash = clash,
             hotspotIp = "192.168.43.52",
+            hotspotPrefix = null,
             localIps = emptySet(),
             nowMs = now,
         )
@@ -129,6 +130,46 @@ class LanSharingLogicsTest {
     }
 
     @Test
+    fun sameSubnetHonorsPrefixAndFallsBackTo24() {
+        // Same /30 network (10.125.69.72..75) but the /24s agree; with /30 they do not.
+        assertTrue(LanSharingLogics.isSameSubnet("10.125.69.74", "10.125.69.75", 30))
+        assertFalse(LanSharingLogics.isSameSubnet("10.125.69.74", "10.125.69.77", 30))
+        assertTrue(LanSharingLogics.isSameSubnet("10.125.69.74", "10.125.69.77", 24))
+        // A null prefix falls back to the /24 default.
+        assertTrue(LanSharingLogics.isSameSubnet("192.168.43.1", "192.168.43.222", null))
+        assertFalse(LanSharingLogics.isSameSubnet("192.168.43.1", "192.168.9.222", null))
+        // Out-of-range prefixes are clamped; /32 means exact address equality.
+        assertTrue(LanSharingLogics.isSameSubnet("10.0.0.1", "10.0.0.1", 32))
+        assertFalse(LanSharingLogics.isSameSubnet("10.0.0.1", "10.0.0.2", 32))
+        // Garbage and the all-zero address never share a subnet.
+        assertFalse(LanSharingLogics.isSameSubnet("::1", "192.168.43.1", null))
+        assertFalse(LanSharingLogics.isSameSubnet("not-an-ip", "192.168.43.1", null))
+        assertFalse(LanSharingLogics.isSameSubnet("0.0.0.0", "192.168.43.1", null))
+    }
+
+    @Test
+    fun mergeDevicesUsesReportedHotspotPrefixNotTheDefault() {
+        val now = 10_000_000L
+        val clash = listOf(
+            // Same /30 as the hotspot IP 10.125.69.74 (network .72..75).
+            LanClientDevice("10.125.69.75", 1, 1L, 1L, null, now, false),
+            // Same /24 but a different /30: only the /24 default would mark it a hotspot client.
+            LanClientDevice("10.125.69.77", 1, 2L, 2L, null, now, false),
+        )
+        val merged = LanSharingLogics.mergeDevices(
+            history = emptyMap(),
+            arpIps = emptyList(),
+            clash = clash,
+            hotspotIp = "10.125.69.74",
+            hotspotPrefix = 30,
+            localIps = emptySet(),
+            nowMs = now,
+        )
+        assertTrue(merged.first { it.ip == "10.125.69.75" }.isHotspot)
+        assertFalse(merged.first { it.ip == "10.125.69.77" }.isHotspot)
+    }
+
+    @Test
     fun localSourcesNeverBecomeDevices() {
         val now = 10_000_000L
         val arp = listOf("192.168.43.52", "172.19.0.9")
@@ -147,6 +188,7 @@ class LanSharingLogicsTest {
             arpIps = arp,
             clash = clash,
             hotspotIp = "192.168.43.1",
+            hotspotPrefix = null,
             localIps = setOf("192.168.43.1", "192.168.43.7"),
             nowMs = now,
         )
