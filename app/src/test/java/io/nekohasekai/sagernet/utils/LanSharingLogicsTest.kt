@@ -177,6 +177,29 @@ class LanSharingLogicsTest {
     }
 
     @Test
+    fun maskSocks5LinkHidesPasswordOnly() {
+        // user:pass@ is masked; the host, port and remark stay readable.
+        assertEquals(
+            "socks5://yusa:\u2022\u2022\u2022\u2022@192.168.43.1:2080#LAN",
+            LanSharingLogics.maskSocks5Link("socks5://yusa:secretPw@192.168.43.1:2080#LAN"),
+        )
+        // A password containing @ is masked to its first user:pass pair boundary (last @ wins: the authority
+        // boundary is the last one before the host).
+        assertEquals(
+            "socks5://yusa:\u2022\u2022\u2022\u2022@192.168.43.1:2080",
+            LanSharingLogics.maskSocks5Link("socks5://yusa:pw@with@it@192.168.43.1:2080"),
+        )
+        // A link without credentials is unchanged.
+        assertEquals(
+            "socks5://192.168.43.1:2080",
+            LanSharingLogics.maskSocks5Link("socks5://192.168.43.1:2080"),
+        )
+        // Garbage in, unchanged out: never throws.
+        assertEquals("", LanSharingLogics.maskSocks5Link(""))
+        assertEquals("socks5://host:2080#x", LanSharingLogics.maskSocks5Link("socks5://host:2080#x"))
+    }
+
+    @Test
     fun switchOnEnablesClashApiWhenOff() {
         // Negative sign-encoded port means Clash API is off: enabling LAN sharing flips it positive and requests reload.
         val fromNegative = LanSharingLogics.ensureClashApiEnabledPort(-9090)
