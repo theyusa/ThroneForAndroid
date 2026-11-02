@@ -2731,5 +2731,13 @@
     <string name="lan_sharing_share_link_btn">Share</string>
     <string name="tools_tab_network">Network &amp; Tools</string>
     <string name="tools_tab_backup">Backup</string>
+    <!-- LAN Sharing: the Share (X) section binds the real inbound settings; the Auto Connect (Y) section
+         carries the Wi-Fi gateway auto-connect feature. -->
+    <string name="lan_sharing_section_share">Share over LAN</string>
+    <string name="lan_sharing_section_auto">Auto Connect (Hotspot Gateway)</string>
+    <string name="lan_sharing_x_on">VPN is shared over the LAN inbound</string>
+    <string name="lan_sharing_x_off">Sharing is off; only this device uses the proxy</string>
+    <string name="lan_sharing_x_auth_warn">No authentication: everyone on this network can use this proxy</string>
+    <string name="lan_sharing_y_configure">Configure</string>
     <string name="lan_sharing_open_btn">Start</string>
 </resources>

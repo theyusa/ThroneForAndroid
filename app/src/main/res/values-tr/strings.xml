@@ -2516,4 +2516,13 @@
     <string name="tools_tab_network">Ağ &amp; Araçlar</string>
     <string name="tools_tab_backup">Yedekleme</string>
     <string name="lan_sharing_open_btn">Başlat</string>
+
+    <!-- LAN Sharing: Paylaş (X) bölümü gerçek inbound ayarlarını; Otomatik Bağlan (Y) bölümü
+         Wi-Fi ağ geçidi otomatik bağlanma özelliğini taşır. -->
+    <string name="lan_sharing_section_share">LAN üzerinde Paylaş</string>
+    <string name="lan_sharing_section_auto">Otomatik Bağlan (Hotspot Ağ Geçidi)</string>
+    <string name="lan_sharing_x_on">VPN, LAN girişi üzerinden paylaşılıyor</string>
+    <string name="lan_sharing_x_off">Paylaşım kapalı; proxy yalnızca bu cihaz tarafından kullanılır</string>
+    <string name="lan_sharing_x_auth_warn">Şifresiz: ağdaki herkes bu proxy\'yi kullanabilir</string>
+    <string name="lan_sharing_y_configure">Yapılandır</string>
 </resources>
