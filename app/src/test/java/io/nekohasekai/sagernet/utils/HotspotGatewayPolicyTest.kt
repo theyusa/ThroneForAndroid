@@ -438,6 +438,13 @@ class HotspotGatewayPolicyTest {
         // The value travels through logs and the shared record: it must not carry the credential itself.
         assertFalse(base.contains("secret-pass"))
         assertFalse(base.contains("user"))
+
+        // Item 8: length-prefixed field boundaries. A field split across two fields ("a b"+"c" vs "a"+"b c"
+        // in the gateway/username slots) must produce different digests.
+        assertNotEquals(
+            fp("a b", 2080, "c", "p", false),
+            fp("a", 2080, "b c", "p", false),
+        )
     }
 
     @Test

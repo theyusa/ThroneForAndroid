@@ -225,10 +225,15 @@ object HotspotGatewayPolicy {
 
     /**
      * The fingerprint of the applied config: gateway, port, username, password and UoT, hashed so the value can be
-     * stored and compared without carrying the credential itself. Never logged with its input.
+     * stored and compared without carrying the credential itself. String fields are length-prefixed
+     * (`"${s.length}:$s|"`) so boundaries are unambiguous: `"a b"+"c"` and `"a"+"b c"` must not collapse into
+     * the same digest as they would with a flat separator. Never logged with its input.
      */
     fun configFingerprint(gateway: String, port: Int, username: String, password: String, uot: Boolean): String =
-        sha256Hex("$gateway $port $username $password $uot")
+        sha256Hex(
+            "${gateway.length}:$gateway|$port|${username.length}:$username|" +
+                "${password.length}:$password|$uot",
+        )
 
     /**
      * Whether a stored SOCKS5 profile already points at the gateway and pairing just verified: server, port, username,
