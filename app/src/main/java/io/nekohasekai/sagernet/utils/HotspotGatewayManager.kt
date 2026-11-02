@@ -231,7 +231,9 @@ object HotspotGatewayManager {
         HotspotGatewayState.publish(status, gateway = gateway, port = pairing.port)
         if (status != HotspotGatewayStatus.FOUND) {
             Logs.w("hotspot gateway start probe failed $gateway:${pairing.port} $status")
-            throw HotspotGatewayAuthException(Socks5AuthFailure.NOT_FOUND)
+            // Item 9: the wording is specific - a credential demand is INVALID_CREDENTIALS, an unsupported
+            // method UNSUPPORTED_AUTH - and any other non-FOUND status stays NOT_FOUND.
+            throw HotspotGatewayAuthException(HotspotGatewayPolicy.startFailureFor(status))
         }
 
         // The profile on disk must already point at the verified gateway+pairing. If the gateway IP (or the pairing)
