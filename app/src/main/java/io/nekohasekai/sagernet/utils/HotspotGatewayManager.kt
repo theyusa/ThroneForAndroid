@@ -246,10 +246,9 @@ object HotspotGatewayManager {
             fresh = rewritten
         }
 
-        // Without a credential there is no RFC1929 exchange to run (and nothing to reject): the anonymous probe above
-        // already confirmed the no-auth SOCKS5.
-        if (!HotspotGatewayPolicy.hasCredentials(pairing)) return fresh
-
+        // The config fingerprint is computed before the credential branch: both the credential-less path and
+        // the credential-carrying success path record the applied config, so a later check must not reload
+        // a config the core already started.
         val fingerprint = HotspotGatewayPolicy.configFingerprint(
             gateway = gateway,
             port = pairing.port,
@@ -257,6 +256,14 @@ object HotspotGatewayManager {
             password = pairing.pass,
             uot = pairing.uot,
         )
+
+        // Without a credential there is no RFC1929 exchange to run (and nothing to reject): the anonymous probe
+        // above already confirmed the no-auth SOCKS5. The start applied this config itself, so record it -
+        // a later check must not reload the same config again.
+        if (!HotspotGatewayPolicy.hasCredentials(pairing)) {
+            HotspotGatewayProfiles.recordAppliedConfig(fingerprint)
+            return fresh
+        }
         // 2) Negative control: a random, certainly-wrong credential must be refused. A server that accepts it does
         // not enforce the configured credential - refuse it before the real check runs.
         val negative = withContext(Dispatchers.IO) {
