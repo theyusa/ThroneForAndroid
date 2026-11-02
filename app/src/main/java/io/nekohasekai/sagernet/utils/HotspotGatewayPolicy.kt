@@ -22,6 +22,19 @@ object HotspotGatewayPolicy {
     /** The floor between two reloads of *different* configs; the trailing check applies the last change after it. */
     const val MIN_RELOAD_MS: Long = 5000L
 
+    // ------------------------------------------------------------------------------- start-time gateway poll
+
+    /**
+     * beforeCoreConnect gives a late Wi-Fi network a bounded chance to appear: a new [getWifiGateway] attempt
+     * every [BEFORE_CORE_CONNECT_POLL_MS], at most [BEFORE_CORE_CONNECT_MAX_WAIT_MS] after the first miss. Only
+     * the start does this - [HotspotGatewayManager.checkAndUpdate] keeps its own loss-grace semantics untouched.
+     */
+    const val BEFORE_CORE_CONNECT_POLL_MS: Long = 150L
+    const val BEFORE_CORE_CONNECT_MAX_WAIT_MS: Long = 1500L
+
+    /** Pure: whether another gateway poll may run after [waitedMs] of waiting since the first miss. */
+    fun shouldPollGateway(waitedMs: Long): Boolean = waitedMs < BEFORE_CORE_CONNECT_MAX_WAIT_MS
+
     /**
      * The wait after [attempt] (1-based), or null when the fourth attempt has just run: there is no fifth one.
      */
