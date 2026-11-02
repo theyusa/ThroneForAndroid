@@ -60,6 +60,11 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
     private var detectedWifiIp: String? = null
     private var hotspotActive: Boolean = false
 
+    private companion object {
+        /** The classic Android hotspot gateway address; the only fallback when detection fails on an active hotspot. */
+        const val HOTSPOT_DEFAULT_IP = "192.168.43.1"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLanSharingBinding.inflate(layoutInflater)
@@ -188,19 +193,22 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         }
 
         binding.btnCopyHotspotIp.setOnClickListener {
-            val ip = currentHotspotHostIp()
-            copyToClipboard(ip, getString(R.string.lan_sharing_copied_ip, ip))
+            currentHotspotHostIp()?.let { ip ->
+                copyToClipboard(ip, getString(R.string.lan_sharing_copied_ip, ip))
+            }
         }
         binding.btnCopyHotspotPort.setOnClickListener {
             val port = currentConfiguredPort()
             copyToClipboard(port.toString(), getString(R.string.lan_sharing_copied_port, port))
         }
         binding.btnCopyHotspotLink.setOnClickListener {
-            val link = buildSocksLinkForHost(currentHotspotHostIp())
-            copyToClipboard(link, getString(R.string.lan_sharing_copied_link))
+            currentHotspotHostIp()?.let { ip ->
+                val link = buildSocksLinkForHost(ip)
+                copyToClipboard(link, getString(R.string.lan_sharing_copied_link))
+            }
         }
         binding.btnShareHotspotLink.setOnClickListener {
-            shareSocksLink(buildSocksLinkForHost(currentHotspotHostIp()))
+            currentHotspotHostIp()?.let { ip -> shareSocksLink(buildSocksLinkForHost(ip)) }
         }
 
         binding.btnCopyWifiIp.setOnClickListener {
@@ -324,13 +332,15 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         binding.textShareWarn.visibility = if (shareOn && !hasAuth) View.VISIBLE else View.GONE
         binding.textAuthStatus.text = authShort
 
-        // Hotspot card
-        val gatewayOrHotspotIp = snapshot.gateway.takeIf { it.isNotBlank() } ?: detectedHotspotIp
-        val hotspotIp = gatewayOrHotspotIp ?: "192.168.43.1"
-        binding.textHotspotIp.text = hotspotIp
+        // Hotspot card. The share card advertises this phone's own hotspot address:
+        // LanSharingNetwork.findHotspotIp() is authoritative; 192.168.43.1 is the classic hotspot
+        // default and only a backup while the hotspot is actually active. HotspotGatewayState's
+        // gateway is the peer gateway discovered by Auto Connect (Y), never X's own IP.
+        val hotspotIp = detectedHotspotIp ?: (if (hotspotActive) HOTSPOT_DEFAULT_IP else null)
+        binding.textHotspotIp.text = hotspotIp ?: HOTSPOT_DEFAULT_IP
         binding.textHotspotPort.text = port.toString()
-        binding.textHotspotSocksLink.text = buildSocksLinkForHost(hotspotIp)
-        if (hotspotActive || !gatewayOrHotspotIp.isNullOrBlank()) {
+        binding.textHotspotSocksLink.text = if (hotspotIp != null) buildSocksLinkForHost(hotspotIp) else ""
+        if (hotspotActive || detectedHotspotIp != null) {
             binding.badgeHotspotStatus.text = getString(R.string.lan_sharing_hotspot_detected)
             binding.badgeHotspotStatus.setTextColor(primaryColor)
             binding.textHotspotDesc.text = getString(R.string.lan_sharing_hotspot_desc)
@@ -339,6 +349,9 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
             binding.badgeHotspotStatus.setTextColor(secondaryColor)
             binding.textHotspotDesc.text = getString(R.string.lan_sharing_hotspot_hint_off)
         }
+        binding.btnCopyHotspotIp.isEnabled = hotspotIp != null
+        binding.btnCopyHotspotLink.isEnabled = hotspotIp != null
+        binding.btnShareHotspotLink.isEnabled = hotspotIp != null
 
         // Wi-Fi card
         val wifiIp = detectedWifiIp
@@ -524,9 +537,9 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         }
     }
 
-    private fun currentHotspotHostIp(): String {
-        val snap = HotspotGatewayState.snapshot()
-        return snap.gateway.takeIf { it.isNotBlank() } ?: detectedHotspotIp ?: "192.168.43.1"
+    /** The Share (X) hotspot address to advertise: detected first, the classic default only on an active hotspot. */
+    private fun currentHotspotHostIp(): String? {
+        return detectedHotspotIp ?: (if (hotspotActive) HOTSPOT_DEFAULT_IP else null)
     }
 
     private fun buildSocksLinkForHost(host: String): String {
