@@ -15,6 +15,30 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 /**
+ * One IPv4 address on an interface snapshot: the dotted-quad string and, when the OS reports it,
+ * the interface's prefix length (0..32).
+ */
+data class LanSharingAddress(val ip: String, val prefixLength: Int?)
+
+/** One network interface snapshot: its name, up/loopback state and the IPv4 addresses it holds. */
+data class LanSharingIface(
+    val name: String,
+    val up: Boolean,
+    val loopback: Boolean,
+    val ipv4: List<LanSharingAddress>,
+)
+
+/**
+ * A detected hotspot interface: its name, the IPv4 gateway address clients reach this phone on and,
+ * when reported, the interface's prefix length for exact subnet matching.
+ */
+data class HotspotCandidate(
+    val interfaceName: String,
+    val ip: String,
+    val prefixLength: Int?,
+)
+
+/**
  * Android network sniffing (hotspot / Wi-Fi local IPs, `/proc/net/arp`) and the Clash API
  * `/connections` poller that feeds [LanSharingLogics].
  */
@@ -69,12 +93,21 @@ object LanSharingNetwork {
             n.contains("rndis")
     }
 
-    fun isHotspotIpPattern(ip: String): Boolean {
-        return ip.startsWith("192.168.43.") ||
-            ip.startsWith("192.168.44.") ||
-            ip.startsWith("192.168.49.") ||
-            ip.startsWith("192.168.50.") ||
-            ip.startsWith("172.20.10.")
+    /**
+     * RFC 1918 private IPv4 (10/8, 172.16/12, 192.168/16). The hotspot gateway side always lives in
+     * a private range; CGNAT (`100.64/10`) and anything else does not count. Pure and unit-testable.
+     */
+    fun isPrivateIpv4(ip: String): Boolean {
+        val parts = ip.trim().split(".")
+        if (parts.size != 4) return false
+        val octets = parts.map { it.toIntOrNull() ?: return false }
+        if (octets.any { it !in 0..255 }) return false
+        return when {
+            octets[0] == 10 -> true
+            octets[0] == 172 && octets[1] in 16..31 -> true
+            octets[0] == 192 && octets[1] == 168 -> true
+            else -> false
+        }
     }
 
     fun isValidHotspotIp(ip: String): Boolean {
@@ -114,54 +147,88 @@ object LanSharingNetwork {
         return findHotspotIp(context) != null
     }
 
-    fun findHotspotIp(context: Context): String? {
+    fun findHotspotIp(context: Context): String? = findHotspotCandidates(context).firstOrNull()?.ip
+
+    /**
+     * Finds every interface that looks like the hotspot side. Pure and unit-testable via
+     * [hotspotCandidates]; the Android layer only collects the input snapshots.
+     */
+    fun findHotspotCandidates(context: Context): List<HotspotCandidate> {
         val appCtx = context.applicationContext
         val cm = appCtx.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+
         val tetheredIfaces = runCatching {
             val method = cm?.javaClass?.getDeclaredMethod("getTetheredIfaces")
             method?.isAccessible = true
             (method?.invoke(cm) as? Array<*>)?.filterIsInstance<String>().orEmpty()
         }.getOrDefault(emptyList())
 
+        // Every interface ConnectivityManager itself knows about (Wi-Fi client, cellular, VPN,
+        // Ethernet): they belong to other networks and are never the hotspot side.
+        val knownIfaces = runCatching {
+            cm?.allNetworks?.toList().orEmpty()
+                .mapNotNull { network -> cm?.getLinkProperties(network)?.interfaceName }
+                .map { it.lowercase() }
+                .toSet()
+        }.getOrDefault(emptySet())
+
         val interfaces = runCatching {
             NetworkInterface.getNetworkInterfaces()?.toList().orEmpty()
+                .map { intf ->
+                    LanSharingIface(
+                        intf.name,
+                        runCatching { intf.isUp }.getOrDefault(false),
+                        runCatching { intf.isLoopback }.getOrDefault(false),
+                        runCatching { intf.interfaceAddresses }.getOrDefault(emptyList())
+                            .filter { it.address is Inet4Address }
+                            .mapNotNull { address ->
+                                val ip = address.address.hostAddress ?: return@mapNotNull null
+                                val prefix = runCatching { address.networkPrefixLength }.getOrNull()
+                                    ?.toInt()?.takeIf { it in 0..32 }
+                                LanSharingAddress(ip, prefix)
+                            },
+                    )
+                }
         }.getOrDefault(emptyList())
 
-        // 1. Check explicitly tethered interfaces first.
-        for (tetherName in tetheredIfaces) {
-            val intf = interfaces.firstOrNull { it.name.equals(tetherName, ignoreCase = true) } ?: continue
-            val ips = intf.inetAddresses.toList()
-                .filterIsInstance<Inet4Address>()
-                .mapNotNull { it.hostAddress }
-                .filter { isValidHotspotIp(it) }
-            val matched = ips.firstOrNull { isHotspotIpPattern(it) } ?: ips.firstOrNull()
-            if (matched != null) return matched
-        }
-
-        // 2. Check interfaces matching known hotspot interface names.
         val wifiIp = findWifiIp(context)
-        for (intf in interfaces) {
-            val isUp = runCatching { intf.isUp && !intf.isLoopback }.getOrDefault(false)
-            if (!isUp || !isHotspotInterfaceName(intf.name)) continue
-            val ips = intf.inetAddresses.toList()
-                .filterIsInstance<Inet4Address>()
-                .mapNotNull { it.hostAddress }
-                .filter { isValidHotspotIp(it) && it != wifiIp }
-            val matched = ips.firstOrNull { isHotspotIpPattern(it) } ?: ips.firstOrNull()
-            if (matched != null) return matched
-        }
+        return hotspotCandidates(interfaces, tetheredIfaces, knownIfaces, wifiIp)
+    }
 
-        // 3. Fallback: non-cellular interface holding a classic hotspot subnet IP.
-        for (intf in interfaces) {
-            val isUp = runCatching { intf.isUp && !intf.isLoopback }.getOrDefault(false)
-            if (!isUp || isCellularOrVirtualInterface(intf.name)) continue
-            val matched = intf.inetAddresses.toList()
-                .filterIsInstance<Inet4Address>()
-                .mapNotNull { it.hostAddress }
-                .firstOrNull { isValidHotspotIp(it) && it != wifiIp && isHotspotIpPattern(it) }
-            if (matched != null) return matched
+    /**
+     * The hotspot-candidate decision, pure and unit-testable. An interface is a candidate when it
+     * is up and not loopback, not a cellular/virtual helper ([isCellularOrVirtualInterface]), not
+     * an interface ConnectivityManager lists for its own networks ([knownIfaces]) — the Wi-Fi
+     * client, cellular and VPN sides — and when it carries a private IPv4 ([isPrivateIpv4]) that is
+     * not the Wi-Fi client address. Interfaces that are explicitly tethered (getTetheredIfaces)
+     * lead the result; then the remaining interfaces follow in OS order. No IP pattern and no
+     * default address is ever guessed.
+     */
+    fun hotspotCandidates(
+        interfaces: List<LanSharingIface>,
+        tetheredIfaces: List<String>,
+        knownIfaces: Set<String>,
+        wifiIp: String?,
+    ): List<HotspotCandidate> {
+        val picked = LinkedHashMap<String, HotspotCandidate>()
+        val tethered = tetheredIfaces.map { it.lowercase() }.toSet()
+        fun consider(iface: LanSharingIface) {
+            if (!iface.up || iface.loopback) return
+            val key = iface.name.lowercase()
+            if (key in picked) return
+            if (isCellularOrVirtualInterface(iface.name)) return
+            if (key in knownIfaces) return
+            val address = iface.ipv4.firstOrNull { candidate ->
+                candidate.ip.isNotBlank() &&
+                    isValidHotspotIp(candidate.ip) &&
+                    isPrivateIpv4(candidate.ip) &&
+                    candidate.ip != wifiIp
+            } ?: return
+            picked[key] = HotspotCandidate(iface.name, address.ip, address.prefixLength)
         }
-        return null
+        interfaces.filter { it.name.lowercase() in tethered }.forEach(::consider)
+        interfaces.forEach(::consider)
+        return picked.values.toList()
     }
 
     fun findWifiIp(context: Context): String? {

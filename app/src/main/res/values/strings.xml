@@ -2831,7 +2831,7 @@
     <string name="lan_sharing_status_stopped">Stopped</string>
     <string name="lan_sharing_hotspot_ip">Phone Hotspot</string>
     <string name="lan_sharing_hotspot_desc">Gateway IP detected on the phone hotspot interface</string>
-    <string name="lan_sharing_hotspot_hint_off">Hotspot is not active (default 192.168.43.1)</string>
+    <string name="lan_sharing_hotspot_hint_off">Hotspot is not active</string>
     <string name="lan_sharing_hotspot_detected">Hotspot Active</string>
     <string name="lan_sharing_hotspot_not_active">Inactive</string>
     <string name="lan_sharing_wifi_ip">Wi-Fi LAN</string>
