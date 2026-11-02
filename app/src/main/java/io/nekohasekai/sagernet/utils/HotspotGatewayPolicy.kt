@@ -89,6 +89,20 @@ object HotspotGatewayPolicy {
     fun writesProfile(result: Socks5ProbeResult, pairing: HotspotPairing?): Boolean =
         statusFor(result, pairing) == HotspotGatewayStatus.FOUND
 
+    // ------------------------------------------------------------------------------- start failure wording
+
+    /**
+     * What the core start throws for the first probe's non-FOUND status ([HotspotGatewayAuthException]):
+     * a demanded credential is worded as invalid credentials, an unsupported method keeps its own class,
+     * and everything else (no gateway, refused, not SOCKS5, `00`-with-credential, …) stays a plain
+     * NOT_FOUND. Pure and unit-testable.
+     */
+    fun startFailureFor(status: HotspotGatewayStatus): Socks5AuthFailure = when (status) {
+        HotspotGatewayStatus.AUTH_REQUIRED -> Socks5AuthFailure.INVALID_CREDENTIALS
+        HotspotGatewayStatus.UNSUPPORTED_AUTH -> Socks5AuthFailure.UNSUPPORTED_AUTH
+        else -> Socks5AuthFailure.NOT_FOUND
+    }
+
     /**
      * The status to publish when the current gateway is already the stored, verified one and no re-check was asked
      * for. A [currentGateway] equal to [lastGateway] proves a previous [HotspotGatewayStatus.FOUND] (only that
