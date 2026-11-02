@@ -49,6 +49,7 @@ object LanSharingLogics {
     /**
      * Parses the Clash API `/connections` body: per source IP the number of open connections, summed traffic
      * and the most recent destination host. Empty, malformed or connection-less bodies yield an empty list.
+     * Local sources (loopback, the tun range and, at merge time, the phone's own addresses) are never devices.
      */
     fun parseConnections(json: String): List<LanClientDevice> {
         val root = runCatching { JSONObject().put("body", json) }.getOrNull()
@@ -66,7 +67,7 @@ object LanSharingLogics {
             val item = connections.getJSONObject(i)
             val meta = item.optJSONObject("metadata") ?: continue
             val ip = meta.optString("sourceIP")
-            if (ip.isNullOrEmpty()) continue
+            if (ip.isNullOrEmpty() || isLocalSource(ip)) continue
             val entry = acc.getOrPut(ip) { Acc(0, 0L, 0L, null) }
             entry.active += 1
             entry.up += item.optLong("upload", 0L)
@@ -80,19 +81,52 @@ object LanSharingLogics {
     }
 
     /**
+     * Sources that are not LAN clients: loopback (`127.*`, `::1`), the VPN/tun range (`172.19.*`) and,
+     * via [localIps], the phone's own hotspot / Wi-Fi addresses. Pure and unit-testable.
+     */
+    fun isLocalSource(ip: String, localIps: Set<String> = emptySet()): Boolean =
+        ip in localIps || ip.startsWith("127.") || ip == "::1" || ip.startsWith("172.19.")
+
+    /**
+     * Whether both IPv4 addresses share the same /24 prefix. Anything that is not a dotted IPv4 address
+     * never shares a subnet. Pure and unit-testable.
+     */
+    fun isSameSubnet24(first: String, second: String): Boolean {
+        val a = ipv4ToInt(first) ?: return false
+        val b = ipv4ToInt(second) ?: return false
+        return a > 0L && (a ushr 8) == (b ushr 8)
+    }
+
+    /** Packs a dotted-quad IPv4 string into a Long (0..255 per octet), or null when it is not an IPv4 address. */
+    private fun ipv4ToInt(ip: String): Long? {
+        val parts = ip.trim().split(".")
+        if (parts.size != 4) return null
+        var value = 0L
+        for (part in parts) {
+            val octet = part.toIntOrNull() ?: return null
+            if (octet !in 0..255) return null
+            value = value shl 8 or octet.toLong()
+        }
+        return value
+    }
+
+    /**
      * Merges a history map (rows the caller kept from earlier polls) with a fresh ARP table and fresh Clash
      * entries, deduplicating by IP with Clash winning over ARP. Rows past [IDLE_MS] are dropped; the rest are
-     * shown with active connections first and the most recently seen afterwards.
+     * shown with active connections first and the most recently seen afterwards. Local sources ([localIps]
+     * plus the static loopback and tun ranges) never become devices.
      */
     fun mergeDevices(
         history: Map<String, LanClientDevice>,
         arpIps: List<String>,
         clash: List<LanClientDevice>,
         hotspotIp: String?,
+        localIps: Set<String>,
         nowMs: Long,
     ): List<LanClientDevice> {
         val byIp = LinkedHashMap<String, LanClientDevice>()
         arpIps.forEach { ip ->
+            if (isLocalSource(ip, localIps)) return@forEach
             val historyRow = history[ip]
             byIp[ip] = LanClientDevice(
                 ip,
@@ -101,16 +135,18 @@ object LanSharingLogics {
                 0L,
                 lastHost = null,
                 lastSeenMs = historyRow?.lastSeenMs ?: nowMs,
-                isHotspot = ip == hotspotIp,
+                isHotspot = isHotspotClient(ip, hotspotIp),
             )
         }
         history.forEach { (ip, row) ->
+            if (isLocalSource(ip, localIps)) return@forEach
             if (row.lastSeenMs >= nowMs - IDLE_MS) byIp.putIfAbsent(ip, row)
         }
         clash.forEach { entry ->
+            if (isLocalSource(entry.ip, localIps)) return@forEach
             byIp[entry.ip] = entry.copy(
                 lastSeenMs = entry.lastSeenMs.takeIf { it > 0L } ?: nowMs,
-                isHotspot = entry.ip == hotspotIp,
+                isHotspot = isHotspotClient(entry.ip, hotspotIp),
             )
         }
         return byIp.values
@@ -118,6 +154,10 @@ object LanSharingLogics {
             .sortedWith(compareByDescending<LanClientDevice> { it.activeConnections > 0 }
                 .thenByDescending { it.lastSeenMs })
     }
+
+    /** A hotspot client is any IPv4 device that shares the hotspot interface's /24 prefix. */
+    private fun isHotspotClient(ip: String, hotspotIp: String?): Boolean =
+        hotspotIp != null && isSameSubnet24(ip, hotspotIp)
 
     data class ClashApiAutoEnable(val newRawPort: Int, val changed: Boolean)
 
