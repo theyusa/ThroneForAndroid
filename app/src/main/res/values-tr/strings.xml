@@ -2481,7 +2481,7 @@
     <string name="lan_sharing_status_stopped">Durduruldu</string>
     <string name="lan_sharing_hotspot_ip">Telefon Hotspot</string>
     <string name="lan_sharing_hotspot_desc">Hotspot arayüzünde algılanan ağ geçidi adresi</string>
-    <string name="lan_sharing_hotspot_hint_off">Hotspot etkin değil (varsayılan 192.168.43.1)</string>
+    <string name="lan_sharing_hotspot_hint_off">Hotspot etkin değil</string>
     <string name="lan_sharing_hotspot_detected">Hotspot Etkin</string>
     <string name="lan_sharing_hotspot_not_active">Kapalı</string>
     <string name="lan_sharing_wifi_ip">Wi-Fi LAN</string>
