@@ -85,7 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/lan_sharing_service_category"
+                    android:text="@string/lan_sharing_section_share"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -131,7 +131,7 @@
                             android:id="@+id/textSwitchSummary"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/hotspot_gateway_sum" />
+                            android:text="@string/lan_sharing_x_off" />
                     </LinearLayout>
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -139,6 +139,82 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <!-- Share (X) warning: shown when the mixed inbound has no RFC1929 authentication. -->
+                <TextView
+                    android:id="@+id/textShareWarn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="12dp"
+                    android:text="@string/lan_sharing_x_auth_warn"
+                    android:textColor="@color/material_amber_500"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Auto Connect (Y) card: the Wi-Fi gateway auto-connect feature -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardGateway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/rowGatewaySwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/lan_sharing_section_auto"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textGatewaySummary"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/hotspot_gateway_sum"
+                                android:textColor="?android:attr/textColorSecondary" />
+                        </LinearLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchGatewaySwitch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnGatewayConfigure"
+                        style="@style/Widget.SagerNet.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:minWidth="0dp"
+                        android:text="@string/lan_sharing_y_configure" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
