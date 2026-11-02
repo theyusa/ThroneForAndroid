@@ -344,7 +344,10 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         val hotspotIp = detectedHotspotIp ?: (if (hotspotActive) HOTSPOT_DEFAULT_IP else null)
         binding.textHotspotIp.text = hotspotIp ?: HOTSPOT_DEFAULT_IP
         binding.textHotspotPort.text = port.toString()
-        binding.textHotspotSocksLink.text = if (hotspotIp != null) buildSocksLinkForHost(hotspotIp) else ""
+        binding.textHotspotSocksLink.text = if (hotspotIp != null) {
+            // Displayed masked; copy/share buttons below send the full link.
+            LanSharingLogics.maskSocks5Link(buildSocksLinkForHost(hotspotIp))
+        } else ""
         if (hotspotActive || detectedHotspotIp != null) {
             binding.badgeHotspotStatus.text = getString(R.string.lan_sharing_hotspot_detected)
             binding.badgeHotspotStatus.setTextColor(primaryColor)
@@ -363,7 +366,7 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
         binding.textWifiPort.text = port.toString()
         if (!wifiIp.isNullOrBlank()) {
             binding.textWifiIp.text = wifiIp
-            binding.textWifiSocksLink.text = buildSocksLinkForHost(wifiIp)
+            binding.textWifiSocksLink.text = LanSharingLogics.maskSocks5Link(buildSocksLinkForHost(wifiIp))
             binding.badgeWifiStatus.text = getString(R.string.lan_sharing_wifi_detected)
             binding.badgeWifiStatus.setTextColor(primaryColor)
             binding.textWifiDesc.text = getString(R.string.lan_sharing_wifi_desc)
@@ -372,7 +375,7 @@ class LanSharingActivity : ThemedActivity(), SagerConnection.Callback {
             binding.btnShareWifiLink.isEnabled = true
         } else {
             binding.textWifiIp.text = getString(R.string.lan_sharing_not_detected)
-            binding.textWifiSocksLink.text = buildSocksLinkForHost("0.0.0.0")
+            binding.textWifiSocksLink.text = LanSharingLogics.maskSocks5Link(buildSocksLinkForHost("0.0.0.0"))
             binding.badgeWifiStatus.text = getString(R.string.lan_sharing_wifi_not_connected)
             binding.badgeWifiStatus.setTextColor(secondaryColor)
             binding.textWifiDesc.text = getString(R.string.lan_sharing_wifi_hint_off)

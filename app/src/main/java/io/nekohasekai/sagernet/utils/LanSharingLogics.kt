@@ -214,6 +214,22 @@ object LanSharingLogics {
     private val HEX_DIGITS = "0123456789abcdef"
 
     /**
+     * The display form of a socks5:// link: the password half of a user:pass@ authority becomes
+     * "••••" so the screen never shows the credential. Copy and share must keep sending the full
+     * link (the [buildSocks5ShareLink] output). Links without credentials, garbage and empty input
+     * are returned unchanged. Pure and unit-testable.
+     */
+    fun maskSocks5Link(link: String): String {
+        val authorityStart = link.indexOf("://")
+        val at = link.lastIndexOf('@')
+        if (authorityStart < 0 || at < authorityStart + 3) return link
+        val auth = link.substring(authorityStart + 3, at)
+        val colon = auth.indexOf(':')
+        if (colon < 0) return link
+        return link.substring(0, authorityStart + 3) + auth.substring(0, colon) + ":\u2022\u2022\u2022\u2022" + link.substring(at)
+    }
+
+    /**
      * Builds a shareable `socks5://[user[:pass]@]host:port[?uot=1][#remark]` URI compatible with
      * [io.nekohasekai.sagernet.outbound.types.Socks.parseFromLink]. Username is trimmed once; password is kept
      * verbatim. Returns an empty string when [host] is blank or [port] is invalid.
