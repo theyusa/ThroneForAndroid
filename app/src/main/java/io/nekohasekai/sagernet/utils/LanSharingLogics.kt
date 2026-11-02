@@ -88,15 +88,30 @@ object LanSharingLogics {
     fun isLocalSource(ip: String, localIps: Set<String> = emptySet()): Boolean =
         ip in localIps || ip.startsWith("127.") || ip == "::1" || ip.startsWith("172.19.")
 
+    /** The /24 default when the OS does not report a hotspot prefix length. */
+    private const val DEFAULT_PREFIX_BITS = 24
+
+    /**
+     * Whether both IPv4 addresses share one subnet masked to [prefixLength] bits. A null or
+     * out-of-range prefix falls back to the /24 default ([DEFAULT_PREFIX_BITS]); `0..32` is the
+     * accepted range. Anything that is not a dotted IPv4 address never shares a subnet. Pure and
+     * unit-testable.
+     */
+    fun isSameSubnet(first: String, second: String, prefixLength: Int?): Boolean {
+        val a = ipv4ToInt(first) ?: return false
+        val b = ipv4ToInt(second) ?: return false
+        if (a == 0L) return false
+        val prefix = (prefixLength ?: DEFAULT_PREFIX_BITS).coerceIn(0, 32)
+        val mask = (-1L shl (32 - prefix)) and 0xFFFF_FFFFL
+        return (a and mask) == (b and mask)
+    }
+
     /**
      * Whether both IPv4 addresses share the same /24 prefix. Anything that is not a dotted IPv4 address
      * never shares a subnet. Pure and unit-testable.
      */
-    fun isSameSubnet24(first: String, second: String): Boolean {
-        val a = ipv4ToInt(first) ?: return false
-        val b = ipv4ToInt(second) ?: return false
-        return a > 0L && (a ushr 8) == (b ushr 8)
-    }
+    fun isSameSubnet24(first: String, second: String): Boolean =
+        isSameSubnet(first, second, DEFAULT_PREFIX_BITS)
 
     /** Packs a dotted-quad IPv4 string into a Long (0..255 per octet), or null when it is not an IPv4 address. */
     private fun ipv4ToInt(ip: String): Long? {
@@ -122,6 +137,7 @@ object LanSharingLogics {
         arpIps: List<String>,
         clash: List<LanClientDevice>,
         hotspotIp: String?,
+        hotspotPrefix: Int?,
         localIps: Set<String>,
         nowMs: Long,
     ): List<LanClientDevice> {
@@ -136,18 +152,22 @@ object LanSharingLogics {
                 0L,
                 lastHost = null,
                 lastSeenMs = historyRow?.lastSeenMs ?: nowMs,
-                isHotspot = isHotspotClient(ip, hotspotIp),
+                isHotspot = isHotspotClient(ip, hotspotIp, hotspotPrefix),
             )
         }
         history.forEach { (ip, row) ->
             if (isLocalSource(ip, localIps)) return@forEach
-            if (row.lastSeenMs >= nowMs - IDLE_MS) byIp.putIfAbsent(ip, row)
+            if (row.lastSeenMs >= nowMs - IDLE_MS) {
+                // Idle rows are re-classified against the current hotspot subnet: the hotspot
+                // interface (and the whole subnet) changes between openings.
+                byIp.putIfAbsent(ip, row.copy(isHotspot = isHotspotClient(ip, hotspotIp, hotspotPrefix)))
+            }
         }
         clash.forEach { entry ->
             if (isLocalSource(entry.ip, localIps)) return@forEach
             byIp[entry.ip] = entry.copy(
                 lastSeenMs = entry.lastSeenMs.takeIf { it > 0L } ?: nowMs,
-                isHotspot = isHotspotClient(entry.ip, hotspotIp),
+                isHotspot = isHotspotClient(entry.ip, hotspotIp, hotspotPrefix),
             )
         }
         return byIp.values
@@ -156,9 +176,13 @@ object LanSharingLogics {
                 .thenByDescending { it.lastSeenMs })
     }
 
-    /** A hotspot client is any IPv4 device that shares the hotspot interface's /24 prefix. */
-    private fun isHotspotClient(ip: String, hotspotIp: String?): Boolean =
-        hotspotIp != null && isSameSubnet24(ip, hotspotIp)
+    /**
+     * A hotspot client is any IPv4 device that shares the hotspot interface's subnet. The subnet is
+     * the interface's own reported prefix length when the OS gives one; unknown prefixes fall back
+     * to the /24 default inside [isSameSubnet].
+     */
+    private fun isHotspotClient(ip: String, hotspotIp: String?, hotspotPrefix: Int?): Boolean =
+        hotspotIp != null && isSameSubnet(ip, hotspotIp, hotspotPrefix)
 
     data class ClashApiAutoEnable(val newRawPort: Int, val changed: Boolean)
 
