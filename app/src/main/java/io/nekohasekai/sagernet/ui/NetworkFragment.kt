@@ -31,5 +31,26 @@ class NetworkFragment : Fragment(R.layout.layout_network) {
         }
         binding.lanSharingCard.setOnClickListener(openLanSharing)
         binding.lanSharingBtn.setOnClickListener(openLanSharing)
+
+        val openNatDiscovery = View.OnClickListener {
+            val ctx = context ?: return@OnClickListener
+            startActivity(Intent(ctx, StunActivity::class.java))
+        }
+        binding.natDiscoveryCard.setOnClickListener(openNatDiscovery)
+        binding.natDiscoveryBtn.setOnClickListener(openNatDiscovery)
+
+        val openCellularNetwork = View.OnClickListener {
+            val ctx = context ?: return@OnClickListener
+            startActivity(Intent(ctx, CellularNetworkActivity::class.java))
+        }
+        binding.cellularNetworkCard.setOnClickListener(openCellularNetwork)
+        binding.cellularNetworkBtn.setOnClickListener(openCellularNetwork)
+
+        val openNetworkInterfaces = View.OnClickListener {
+            val ctx = context ?: return@OnClickListener
+            startActivity(Intent(ctx, NetworkInterfacesActivity::class.java))
+        }
+        binding.networkInterfacesCard.setOnClickListener(openNetworkInterfaces)
+        binding.networkInterfacesBtn.setOnClickListener(openNetworkInterfaces)
     }
 }

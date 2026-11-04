@@ -77,6 +77,21 @@
             android:name="io.nekohasekai.sagernet.ui.LanSharingActivity"
             android:configChanges="uiMode"
             android:label="@string/lan_sharing" />
+        <activity
+            android:name="io.nekohasekai.sagernet.ui.StunActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:label="@string/stun_test" />
+        <activity
+            android:name="io.nekohasekai.sagernet.ui.CellularNetworkActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:label="@string/cellular_network_title" />
+        <activity
+            android:name="io.nekohasekai.sagernet.ui.NetworkInterfacesActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:label="@string/network_interfaces_title" />
 
         <activity
             android:name="io.nekohasekai.sagernet.ui.MainActivity"
