@@ -231,6 +231,8 @@
     <string name="use_system_theme_summary">Sistem Monet renklerini kullan (Android 12+)</string>
     <string name="amoled_theme">OLED siyah tema</string>
     <string name="amoled_theme_summary">Gece modunda saf siyah arka plan kullan</string>
+    <string name="tint_preference_icons">Ayar simgelerini renklendir</string>
+    <string name="tint_preference_icons_summary">Ayar simgelerine tema vurgu rengini uygula</string>
     <string name="menu_dashboard">sing-box paneli</string>
     <string name="action_copy">Kopyala</string>
     <string name="update_all_subscription">Tüm abonelikleri güncelle</string>

@@ -147,6 +147,10 @@ class AppearanceSettingsFragment : SettingsScreenFragment(R.xml.settings_appeara
             applyThemeInstantly()
             true
         }
+        pref<SwitchPreference>(Key.TINT_PREFERENCE_ICONS).setOnPreferenceChangeListener { _, _ ->
+            applyThemeInstantly()
+            true
+        }
         pref<SimpleMenuPreference>(Key.APP_LANGUAGE).setOnPreferenceChangeListener { _, newValue ->
             AppLocale.apply(newValue as String)
             true

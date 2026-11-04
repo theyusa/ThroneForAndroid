@@ -9,6 +9,7 @@ import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.ktx.FixedLinearLayoutManager
 import io.nekohasekai.sagernet.ktx.confirmAction
 import io.nekohasekai.sagernet.ktx.triggerFullRestart
+import io.nekohasekai.sagernet.ui.settings.applyPreferenceIconTint
 
 /**
  * The settings root: one entry per sub-screen (io.nekohasekai.sagernet.ui.settings, opened by [SettingsFragment]),
@@ -20,6 +21,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         super.onViewCreated(view, savedInstanceState)
 
         listView.layoutManager = FixedLinearLayoutManager(listView)
+        applyPreferenceIconTint()
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {

@@ -15,6 +15,8 @@
     <string name="use_system_theme_summary">Use system Monet colors (Android 12+)</string>
     <string name="amoled_theme">OLED black theme</string>
     <string name="amoled_theme_summary">Use pure black background in night mode</string>
+    <string name="tint_preference_icons">Tint preference icons</string>
+    <string name="tint_preference_icons_summary">Apply theme accent color to setting icons</string>
     <string name="document">Documentation</string>
     <string name="quick_toggle">Toggle</string>
     <string name="quick_enable">Enable</string>

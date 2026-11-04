@@ -18,6 +18,8 @@ import io.nekohasekai.sagernet.ktx.needReload
 import io.nekohasekai.sagernet.ui.ValidationForm
 import io.nekohasekai.sagernet.validation.Rule
 import moe.matsuri.nb4a.ui.EditConfigPreference
+import androidx.core.graphics.drawable.DrawableCompat
+import io.nekohasekai.sagernet.ktx.getColorAttr
 
 /**
  * One settings sub-screen bound to the configuration store. Sub-classes wire their preferences in [bind]; values
@@ -28,6 +30,7 @@ abstract class SettingsScreenFragment(@XmlRes private val preferences: Int) : Pr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listView.layoutManager = FixedLinearLayoutManager(listView)
+        applyPreferenceIconTint()
     }
 
     private var form: ValidationForm? = null
@@ -173,4 +176,28 @@ abstract class SettingsScreenFragment(@XmlRes private val preferences: Int) : Pr
     companion object {
         const val ARG_TITLE = "title"
     }
+}
+
+fun Preference.tintPreferenceIcon(color: Int?) {
+    if (this is PreferenceGroup) {
+        for (i in 0 until preferenceCount) {
+            getPreference(i).tintPreferenceIcon(color)
+        }
+    }
+    icon?.let { d ->
+        val wrapped = DrawableCompat.wrap(d.mutate())
+        if (color != null) {
+            DrawableCompat.setTint(wrapped, color)
+        } else {
+            DrawableCompat.setTintList(wrapped, null)
+        }
+        icon = wrapped
+    }
+}
+
+fun PreferenceFragmentCompat.applyPreferenceIconTint() {
+    val color = if (DataStore.tintPreferenceIcons) {
+        context?.getColorAttr(R.attr.colorPrimary)
+    } else null
+    preferenceScreen?.tintPreferenceIcon(color)
 }

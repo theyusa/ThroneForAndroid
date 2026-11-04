@@ -4,6 +4,7 @@
     <string-array name="language_entries">
         <item>@string/follow_system</item>
         <item>English</item>
+        <item>Türkçe</item>
         <item>日本語</item>
         <item>한국어</item>
         <item>فارسی</item>
@@ -14,6 +15,7 @@
     <string-array name="language_values">
         <item></item>
         <item>en</item>
+        <item>tr</item>
         <item>ja</item>
         <item>ko</item>
         <item>fa</item>
