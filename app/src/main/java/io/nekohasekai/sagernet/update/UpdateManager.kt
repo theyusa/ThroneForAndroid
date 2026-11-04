@@ -69,7 +69,27 @@ object UpdateManager {
     /** Main-process start: leftovers of a finished or interrupted update. */
     fun onAppStart(context: Context) {
         scope.launch { updateDir(context).deleteRecursively() }
-        if (BuildConfig.IN_APP_UPDATER) UpdateScheduler.schedule(keepExisting = true)
+        if (BuildConfig.IN_APP_UPDATER) {
+            UpdateScheduler.schedule(keepExisting = true)
+            checkAutoOnStart(context)
+        }
+    }
+
+    private fun checkAutoOnStart(context: Context) {
+        if (!DataStore.updateCheckAuto) return
+        val now = System.currentTimeMillis()
+        val lastCheck = DataStore.lastAutoUpdateCheck
+        if (now - lastCheck < java.util.concurrent.TimeUnit.HOURS.toMillis(1)) return
+        DataStore.lastAutoUpdateCheck = now
+        scope.launch {
+            val result = UpdateChecker.check(context)
+            if (result is UpdateChecker.Result.Available) {
+                val offer = result.offer
+                if (offer.versionCode == 0L || offer.versionCode != DataStore.updateSkippedVersionCode) {
+                    UpdateNotifications.available(context, offer)
+                }
+            }
+        }
     }
 
     @Synchronized

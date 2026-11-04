@@ -1096,6 +1096,8 @@
     <string name="grp_skip_auto_update">Skip automatic update</string>
     <string name="grp_import_sub_route">Use the subscription\'s routing profile</string>
     <string name="grp_import_sub_route_tip">Each update saves the routing profile the subscription provides (Happ format) as this group\'s own routing profile. DNS settings from the subscription are never used.</string>
+    <string name="grp_custom_sni">Custom / Auto SNI</string>
+    <string name="grp_custom_sni_tip">Overrides the SNI / Server Name of all TLS proxies in this group on each update.</string>
     <string name="grp_no_auto_selector">An auto selector moves server on its own, so it cannot hold a fixed front/landing slot.</string>
 
     <!-- Advanced Subscription Settings (dialog_edit_group_advanced) -->

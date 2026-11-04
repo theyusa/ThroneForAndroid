@@ -29,6 +29,13 @@ object CoreConfigs {
     private class DatabaseProfiles : ProfileProvider {
         private val cache = HashMap<Long, Outbound?>()
         override fun get(id: Long): Outbound? = cache.getOrPut(id) { SagerDatabase.proxyDao.getById(id)?.outbound }
+
+        private val groupCache = HashMap<Long, Triple<Long, Long, String>>()
+        override fun groupProxies(profileId: Long): Triple<Long, Long, String> {
+            val groupId = SagerDatabase.proxyDao.getById(profileId)?.groupId ?: -1L
+            if (groupId <= 0) return Triple(-1L, -1L, "")
+            return groupCache.getOrPut(groupId) { CoreConfigs.groupProxies(groupId) }
+        }
     }
 
     /** [dns]: the routing profile's own DNS, null for the global one; [settings] must be mapped with the same. */
@@ -75,7 +82,7 @@ object CoreConfigs {
     }
 
     /** (landing_proxy_id, front_proxy_id, name) of a group, -1 when unset (any id <= 0 is "none"). */
-    private fun groupProxies(groupId: Long): Triple<Long, Long, String> {
+    internal fun groupProxies(groupId: Long): Triple<Long, Long, String> {
         val group: ProxyGroup = (if (groupId > 0) SagerDatabase.groupDao.getById(groupId) else null) ?: return Triple(-1L, -1L, "")
         val landing = group.landingProxyId.takeIf { it > 0 } ?: -1L
         val front = group.frontProxyId.takeIf { it > 0 } ?: -1L

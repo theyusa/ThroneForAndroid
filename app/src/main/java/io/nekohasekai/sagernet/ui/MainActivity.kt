@@ -397,7 +397,12 @@ class MainActivity : ThemedActivity(),
         binding.stats.onListScrolled(scrollDy)
     }
 
-    fun displayFragmentWithId(@IdRes id: Int): Boolean {
+    fun displayTools(tab: Int = ToolsFragment.TAB_NETWORK) {
+        displayFragment(ToolsFragment.newInstance(tab))
+        navigation.menu.findItem(R.id.nav_tools)?.isChecked = true
+    }
+
+    fun displayFragmentWithId(@IdRes id: Int, tab: Int = -1): Boolean {
         when (id) {
             R.id.nav_configuration -> {
                 displayFragment(ConfigurationFragment())
@@ -407,7 +412,7 @@ class MainActivity : ThemedActivity(),
             R.id.nav_route -> displayFragment(RouteFragment())
             R.id.nav_settings -> displayFragment(SettingsFragment())
             R.id.nav_traffic -> displayFragment(DashboardFragment())
-            R.id.nav_tools -> displayFragment(ToolsFragment())
+            R.id.nav_tools -> displayFragment(if (tab >= 0) ToolsFragment.newInstance(tab) else ToolsFragment())
             R.id.nav_logcat -> displayFragment(LogcatFragment())
             R.id.nav_live_graphs -> displayFragment(LiveGraphsFragment())
             R.id.nav_faq -> {

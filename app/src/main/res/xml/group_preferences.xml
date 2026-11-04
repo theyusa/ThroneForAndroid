@@ -71,6 +71,13 @@
             app:summary="@string/grp_show_info_card_tip"
             app:title="@string/grp_show_info_card" />
 
+        <EditTextPreference
+            app:dialogMessage="@string/grp_custom_sni_tip"
+            app:icon="@drawable/ic_baseline_vpn_key_24"
+            app:key="groupSubCustomSni"
+            app:title="@string/grp_custom_sni"
+            app:useSimpleSummaryProvider="true" />
+
         <Preference
             app:icon="@drawable/ic_baseline_expand_more_24"
             app:key="groupAdvancedToggle"

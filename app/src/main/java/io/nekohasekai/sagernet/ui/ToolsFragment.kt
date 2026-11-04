@@ -11,6 +11,20 @@ import io.nekohasekai.sagernet.databinding.LayoutToolsBinding
 
 class ToolsFragment : ToolbarFragment(R.layout.layout_tools) {
 
+    companion object {
+        const val ARG_TAB = "initial_tab"
+        const val TAB_NETWORK = 0
+        const val TAB_BACKUP = 1
+
+        fun newInstance(tab: Int = TAB_NETWORK): ToolsFragment {
+            return ToolsFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_TAB, tab)
+                }
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar?.setTitle(R.string.menu_tools)
@@ -33,8 +47,11 @@ class ToolsFragment : ToolbarFragment(R.layout.layout_tools) {
             tab.view.setOnLongClickListener { true }
         }.attach()
 
-        if (pendingBackup != null) {
-            binding.toolsPager.setCurrentItem(1, false)
+        val initialTab = arguments?.getInt(ARG_TAB, -1) ?: -1
+        if (pendingBackup != null || initialTab == TAB_BACKUP) {
+            binding.toolsPager.setCurrentItem(TAB_BACKUP, false)
+        } else if (initialTab in 0 until tools.size) {
+            binding.toolsPager.setCurrentItem(initialTab, false)
         }
     }
 

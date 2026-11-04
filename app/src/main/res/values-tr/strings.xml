@@ -968,6 +968,8 @@
     <string name="grp_skip_auto_update">Otomatik güncellemeyi atla</string>
     <string name="grp_import_sub_route">Aboneliğin rota profilini kullan</string>
     <string name="grp_import_sub_route_tip">Her güncelleme, aboneliğin sağladığı rota profilini (Happ biçiminde) bu grubun kendi rota profili olarak kaydeder. Abonelikteki DNS ayarları hiçbir zaman kullanılmaz.</string>
+    <string name="grp_custom_sni">Özel / Otomatik SNI</string>
+    <string name="grp_custom_sni_tip">Her güncellemede bu gruptaki tüm TLS proxy\'lerinin SNI / Sunucu Adını geçersiz kılar ve bu değeri atar.</string>
     <string name="grp_no_auto_selector">Otomatik seçici sunucuyu kendisi taşıdığı için sabit bir ön/iniş yuvası tutamaz.</string>
     <string name="grp_advanced">Gelişmiş</string>
     <string name="grp_advanced_count">Gelişmiş (%d ayarlı)</string>
