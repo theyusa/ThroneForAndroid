@@ -85,7 +85,7 @@ Share your active VPN connection across devices over **Phone Hotspot** or **Loca
 | 🦋 NaïveProxy | 🍹 Juicity | 🚇 TrustTunnel | 🎭 ShadowTLS |
 | 🔐 WireGuard | 🔐 AmneziaWG | 🎭 MASQUE | 🔑 SSH |
 | 🔒 OpenVPN | 🔓 OpenConnect | ➡️ Direct | ⛓️ Chain |
-| 🧩 Custom Outbound | ✨ Auto Selector | | |
+| 🧩 Custom Outbound | ✨ Auto Selector | 📡 DNSTT / VayDNS | 🎯 MasterDNS |
 
 ---
 
