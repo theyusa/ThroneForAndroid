@@ -113,6 +113,7 @@ Built upon the remarkable work of the open-source community:
 - **Upstream:** [throneproj/ThroneForAndroid](https://github.com/throneproj/ThroneForAndroid)
 - **Cores:** [throneproj/sing-box](https://github.com/throneproj/sing-box) and [throneproj/Xray-core](https://github.com/throneproj/Xray-core)
 - **GUI Roots:** [MatsuriDayo/NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid), [SagerNet/SagerNet](https://github.com/SagerNet/SagerNet), and [shadowsocks/shadowsocks-android](https://github.com/shadowsocks/shadowsocks-android)
+- **Network Tools & NAT Testing:** [eleutherifer/NekoBoxPlus](https://github.com/eleutherifer/NekoBoxPlus) & [ccding/go-stun](https://github.com/ccding/go-stun) (Apache-2.0)
 - **Desktop Companion:** [theyusa/Throne](https://github.com/theyusa/Throne) & [throneproj/Throne](https://github.com/throneproj/Throne)
 
 ---

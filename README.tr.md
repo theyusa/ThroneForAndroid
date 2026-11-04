@@ -113,6 +113,7 @@ Açık kaynak dünyasının katkılarıyla inşa edilmiştir:
 - **Upstream:** [throneproj/ThroneForAndroid](https://github.com/throneproj/ThroneForAndroid)
 - **Çekirdekler:** [throneproj/sing-box](https://github.com/throneproj/sing-box) ve [throneproj/Xray-core](https://github.com/throneproj/Xray-core)
 - **GUI Kökleri:** [MatsuriDayo/NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid), [SagerNet/SagerNet](https://github.com/SagerNet/SagerNet) ve [shadowsocks/shadowsocks-android](https://github.com/shadowsocks/shadowsocks-android)
+- **Ağ Araçları ve NAT Testi:** [eleutherifer/NekoBoxPlus](https://github.com/eleutherifer/NekoBoxPlus) & [ccding/go-stun](https://github.com/ccding/go-stun) (Apache-2.0)
 - **Masaüstü Eşi:** [theyusa/Throne](https://github.com/theyusa/Throne) & [throneproj/Throne](https://github.com/throneproj/Throne)
 
 ---
