@@ -85,7 +85,7 @@ Telefonunuzun bağlı olduğu VPN tünelini, **Root yetkisi gerektirmeden** mobi
 | 🦋 NaïveProxy | 🍹 Juicity | 🚇 TrustTunnel | 🎭 ShadowTLS |
 | 🔐 WireGuard | 🔐 AmneziaWG | 🎭 MASQUE | 🔑 SSH |
 | 🔒 OpenVPN | 🔓 OpenConnect | ➡️ Direct | ⛓️ Chain |
-| 🧩 Özel Çıkış (Custom) | ✨ Otomatik Seçici | | |
+| 🧩 Özel Çıkış (Custom) | ✨ Otomatik Seçici | 📡 DNSTT / VayDNS | 🎯 MasterDNS |
 
 ---
 
