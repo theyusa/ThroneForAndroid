@@ -40,45 +40,54 @@ class StunNatTester(
     suspend fun test(
         servers: List<String>,
         ipv6Mode: Int = 0,
+        onServerProgress: ((StunServerUiResult) -> Unit)? = null,
     ): List<StunServerUiResult> = withContext(Dispatchers.IO) {
-        isCancelled = false
+        if (isCancelled) {
+            val cancelledList = servers.map { server ->
+                StunServerUiResult(
+                    server = server,
+                    status = StunServerStatus.CANCELLED,
+                    errorCode = "cancelled",
+                    errorMessage = "Test cancelled",
+                )
+            }
+            cancelledList.forEach { onServerProgress?.invoke(it) }
+            return@withContext cancelledList
+        }
         coroutineScope {
             servers.map { server ->
                 async {
-                    testServer(server, ipv6Mode)
+                    testServer(server, ipv6Mode, onServerProgress)
                 }
             }.map { it.await() }
         }
     }
 
-    private fun testServer(address: String, ipv6Mode: Int): StunServerUiResult {
+    private fun testServer(
+        address: String,
+        ipv6Mode: Int,
+        onProgress: ((StunServerUiResult) -> Unit)? = null,
+    ): StunServerUiResult {
         val started = System.currentTimeMillis()
         var socket: DatagramSocket? = null
+        var rttMs = 0L
 
-        val resultBuilder = StunServerUiResult(
+        var currentResult = StunServerUiResult(
             server = address,
-            bindingSuccess = false,
-            behaviorSupported = false,
-            behaviorComplete = false,
-            natType = StunProtocolCodes.NAT_UNKNOWN,
-            mappingBehavior = StunProtocolCodes.BEHAVIOR_UNKNOWN,
-            filteringBehavior = StunProtocolCodes.BEHAVIOR_UNKNOWN,
-            externalAddress = "",
-            externalPort = 0,
-            ipFamily = 0,
-            durationMilliseconds = 0,
-            errorCode = "",
-            errorMessage = "",
-            warningCode = "",
+            status = StunServerStatus.RUNNING,
         )
+        onProgress?.invoke(currentResult)
 
         try {
             if (isCancelled) {
-                return resultBuilder.copy(
+                val res = currentResult.copy(
+                    status = StunServerStatus.CANCELLED,
                     durationMilliseconds = System.currentTimeMillis() - started,
                     errorCode = "cancelled",
                     errorMessage = "Test cancelled",
                 )
+                onProgress?.invoke(res)
+                return res
             }
 
             val target = resolveServer(address, ipv6Mode)
@@ -87,29 +96,45 @@ class StunNatTester(
 
             if (isCancelled) {
                 socket.close()
-                return resultBuilder.copy(
+                val res = currentResult.copy(
+                    status = StunServerStatus.CANCELLED,
                     durationMilliseconds = System.currentTimeMillis() - started,
                     errorCode = "cancelled",
                     errorMessage = "Test cancelled",
                 )
+                onProgress?.invoke(res)
+                return res
             }
 
             // Step 1: Binding Test 1 to primary target
+            val bindingStart = System.currentTimeMillis()
             val resp1 = sendBindingRequest(socket, target, changeIp = false, changePort = false)
-                ?: return resultBuilder.copy(
+            rttMs = if (resp1 != null) (System.currentTimeMillis() - bindingStart).coerceAtLeast(1) else 0L
+
+            if (resp1 == null) {
+                val res = currentResult.copy(
+                    status = StunServerStatus.FAILED,
                     durationMilliseconds = System.currentTimeMillis() - started,
                     natType = StunProtocolCodes.NAT_BLOCKED,
                     errorCode = "timeout",
                     errorMessage = "Response timed out",
                 )
+                onProgress?.invoke(res)
+                return res
+            }
 
             val mappedAddr = resp1.preferredMappedAddress()
-                ?: return resultBuilder.copy(
+            if (mappedAddr == null) {
+                val res = currentResult.copy(
+                    status = StunServerStatus.FAILED,
                     durationMilliseconds = System.currentTimeMillis() - started,
                     natType = StunProtocolCodes.NAT_ERROR,
                     errorCode = "configuration",
                     errorMessage = "Server response has no mapped address",
                 )
+                onProgress?.invoke(res)
+                return res
+            }
 
             val otherAddr = resp1.preferredOtherAddress()
             val warningCode = if (resp1.getResponseOrigin()?.let {
@@ -124,22 +149,30 @@ class StunNatTester(
                 otherAddr.address != target.address &&
                 otherAddr.port != target.port
 
+            currentResult = currentResult.copy(
+                rttMs = rttMs,
+                bindingSuccess = true,
+                externalAddress = mappedAddr.address.hostAddress ?: "",
+                externalPort = mappedAddr.port,
+                ipFamily = if (mappedAddr.isIpv6) 2 else 1,
+            )
+            onProgress?.invoke(currentResult)
+
             if (!isUsableAlternate) {
-                return resultBuilder.copy(
-                    bindingSuccess = true,
+                val res = currentResult.copy(
+                    status = StunServerStatus.PARTIAL,
                     behaviorSupported = false,
                     behaviorComplete = false,
                     natType = StunProtocolCodes.NAT_UNKNOWN,
                     mappingBehavior = StunProtocolCodes.BEHAVIOR_UNKNOWN,
                     filteringBehavior = StunProtocolCodes.BEHAVIOR_UNKNOWN,
-                    externalAddress = mappedAddr.address.hostAddress ?: "",
-                    externalPort = mappedAddr.port,
-                    ipFamily = if (mappedAddr.isIpv6) 2 else 1,
                     durationMilliseconds = System.currentTimeMillis() - started,
                     errorCode = "behavior_unsupported",
                     errorMessage = "Server does not support RFC 5780 behavior discovery",
                     warningCode = warningCode,
                 )
+                onProgress?.invoke(res)
+                return res
             }
 
             val altTarget = InetSocketAddress(otherAddr.address, otherAddr.port)
@@ -199,56 +232,74 @@ class StunNatTester(
                 if (altMapped != null && altMapped.address == mappedAddr.address && altMapped.port == mappedAddr.port) {
                     // Send Test 3 (change port) to alternate target
                     val respAlt3 = sendBindingRequest(socket, altTarget, changeIp = false, changePort = true)
-                    if (respAlt3 != null) StunProtocolCodes.NAT_RESTRICTED else StunProtocolCodes.NAT_PORT_RESTRICTED
+                    if (respAlt3 != null) {
+                        StunProtocolCodes.NAT_RESTRICTED
+                    } else {
+                        StunProtocolCodes.NAT_PORT_RESTRICTED
+                    }
                 } else {
                     StunProtocolCodes.NAT_SYMMETRIC
                 }
             }
 
-            return resultBuilder.copy(
-                bindingSuccess = true,
+            val finalResult = currentResult.copy(
+                status = StunServerStatus.COMPLETED,
                 behaviorSupported = true,
                 behaviorComplete = true,
                 natType = natType,
                 mappingBehavior = mappingBehavior,
                 filteringBehavior = filteringBehavior,
-                externalAddress = mappedAddr.address.hostAddress ?: "",
-                externalPort = mappedAddr.port,
-                ipFamily = if (mappedAddr.isIpv6) 2 else 1,
                 durationMilliseconds = System.currentTimeMillis() - started,
                 warningCode = warningCode,
             )
+            onProgress?.invoke(finalResult)
+            return finalResult
         } catch (e: CancellationException) {
-            return resultBuilder.copy(
+            val res = currentResult.copy(
+                status = StunServerStatus.CANCELLED,
                 durationMilliseconds = System.currentTimeMillis() - started,
                 errorCode = "cancelled",
                 errorMessage = "Test cancelled",
             )
+            onProgress?.invoke(res)
+            return res
         } catch (e: UnknownHostException) {
-            return resultBuilder.copy(
+            val res = currentResult.copy(
+                status = StunServerStatus.FAILED,
                 durationMilliseconds = System.currentTimeMillis() - started,
                 errorCode = "dns",
                 errorMessage = e.message ?: "DNS resolution failed",
             )
+            onProgress?.invoke(res)
+            return res
         } catch (e: SocketTimeoutException) {
-            return resultBuilder.copy(
+            val res = currentResult.copy(
+                status = StunServerStatus.FAILED,
                 durationMilliseconds = System.currentTimeMillis() - started,
                 errorCode = "timeout",
                 errorMessage = "Timeout",
             )
+            onProgress?.invoke(res)
+            return res
         } catch (e: Exception) {
             if (isCancelled || socket?.isClosed == true) {
-                return resultBuilder.copy(
+                val res = currentResult.copy(
+                    status = StunServerStatus.CANCELLED,
                     durationMilliseconds = System.currentTimeMillis() - started,
                     errorCode = "cancelled",
                     errorMessage = "Test cancelled",
                 )
+                onProgress?.invoke(res)
+                return res
             }
-            return resultBuilder.copy(
+            val res = currentResult.copy(
+                status = StunServerStatus.FAILED,
                 durationMilliseconds = System.currentTimeMillis() - started,
                 errorCode = "network",
                 errorMessage = e.message ?: "Network error",
             )
+            onProgress?.invoke(res)
+            return res
         } finally {
             socket?.let {
                 activeSockets.remove(it)

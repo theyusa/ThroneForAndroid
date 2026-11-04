@@ -102,20 +102,31 @@ object StunServerListParser {
     }
 }
 
+enum class StunServerStatus {
+    PENDING,
+    RUNNING,
+    COMPLETED,
+    PARTIAL,
+    FAILED,
+    CANCELLED,
+}
+
 data class StunServerUiResult(
     val server: String,
-    val bindingSuccess: Boolean,
-    val behaviorSupported: Boolean,
-    val behaviorComplete: Boolean,
-    val natType: Int,
-    val mappingBehavior: Int,
-    val filteringBehavior: Int,
-    val externalAddress: String,
-    val externalPort: Int,
-    val ipFamily: Int,
-    val durationMilliseconds: Long,
-    val errorCode: String,
-    val errorMessage: String,
+    val status: StunServerStatus = StunServerStatus.PENDING,
+    val rttMs: Long = 0,
+    val bindingSuccess: Boolean = false,
+    val behaviorSupported: Boolean = false,
+    val behaviorComplete: Boolean = false,
+    val natType: Int = StunProtocolCodes.NAT_UNKNOWN,
+    val mappingBehavior: Int = StunProtocolCodes.BEHAVIOR_UNKNOWN,
+    val filteringBehavior: Int = StunProtocolCodes.BEHAVIOR_UNKNOWN,
+    val externalAddress: String = "",
+    val externalPort: Int = 0,
+    val ipFamily: Int = 0,
+    val durationMilliseconds: Long = 0,
+    val errorCode: String = "",
+    val errorMessage: String = "",
     val warningCode: String = "",
 )
 

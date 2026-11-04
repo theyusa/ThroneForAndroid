@@ -8,6 +8,7 @@ import io.nekohasekai.sagernet.utils.stun.StunAssessment
 import io.nekohasekai.sagernet.utils.stun.StunAssessmentKind
 import io.nekohasekai.sagernet.utils.stun.StunAssessmentPolicy
 import io.nekohasekai.sagernet.utils.stun.StunNatTester
+import io.nekohasekai.sagernet.utils.stun.StunServerStatus
 import io.nekohasekai.sagernet.utils.stun.StunServerUiResult
 import io.nekohasekai.sagernet.utils.stun.StunSocketFactory
 import kotlinx.coroutines.Job
@@ -33,24 +34,38 @@ class StunTestViewModel : ViewModel() {
 
     fun start(
         servers: List<String>,
-        ipv6Mode: Int,
+        ipv6Mode: Int = 0,
         socketFactory: StunSocketFactory = DefaultStunSocketFactory(),
     ) {
         cancel()
         val natTester = StunNatTester(socketFactory)
         tester = natTester
 
+        val initialResults = servers.map { server ->
+            StunServerUiResult(
+                server = server,
+                status = StunServerStatus.PENDING,
+            )
+        }
+
         _uiState.update {
             it.copy(
                 isRunning = true,
-                results = emptyList(),
+                results = initialResults,
                 assessment = null,
                 totalServers = servers.size,
             )
         }
 
         testJob = viewModelScope.launch {
-            val results = natTester.test(servers, ipv6Mode)
+            val results = natTester.test(servers, ipv6Mode) { updatedResult ->
+                _uiState.update { current ->
+                    val updatedList = current.results.map {
+                        if (it.server == updatedResult.server) updatedResult else it
+                    }
+                    current.copy(results = updatedList)
+                }
+            }
             _uiState.update {
                 it.copy(
                     isRunning = false,
@@ -68,10 +83,20 @@ class StunTestViewModel : ViewModel() {
         testJob?.cancel()
         testJob = null
         if (_uiState.value.isRunning) {
-            _uiState.update {
-                it.copy(
+            _uiState.update { current ->
+                val cancelledResults = current.results.map {
+                    if (it.status == StunServerStatus.RUNNING || it.status == StunServerStatus.PENDING) {
+                        it.copy(
+                            status = StunServerStatus.CANCELLED,
+                            errorCode = "cancelled",
+                            errorMessage = "Test cancelled",
+                        )
+                    } else it
+                }
+                current.copy(
                     isRunning = false,
-                    assessment = StunAssessment(StunAssessmentKind.CANCELLED),
+                    results = cancelledResults,
+                    assessment = StunAssessmentPolicy.assess(cancelledResults),
                 )
             }
         }

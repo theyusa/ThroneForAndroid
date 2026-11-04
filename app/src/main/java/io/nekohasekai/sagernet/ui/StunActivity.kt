@@ -36,6 +36,10 @@ import io.nekohasekai.sagernet.utils.stun.StunServerListParser
 import io.nekohasekai.sagernet.utils.stun.StunServerParseResult
 import io.nekohasekai.sagernet.utils.stun.StunServerUiResult
 import kotlinx.coroutines.launch
+import io.nekohasekai.sagernet.utils.stun.StunServerStatus
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.core.content.ContextCompat
 
 class StunActivity : ThemedActivity() {
 
@@ -183,7 +187,7 @@ class StunActivity : ThemedActivity() {
         }
 
         binding.cardResult.visibility = View.GONE
-        viewModel.start(servers, DataStore.ipv6Mode, socketFactory)
+        viewModel.start(servers, if (DataStore.vpnIpv6) 1 else 0, socketFactory)
     }
 
     private fun findPhysicalNetwork(): Network? {
@@ -211,12 +215,34 @@ class StunActivity : ThemedActivity() {
             binding.btnAction.setText(R.string.stun_action_cancel)
             binding.progressBarStun.visibility = View.VISIBLE
             binding.textProgress.visibility = View.VISIBLE
+            val completedCount = state.results.count {
+                it.status == StunServerStatus.COMPLETED ||
+                    it.status == StunServerStatus.PARTIAL ||
+                    it.status == StunServerStatus.FAILED
+            }
             binding.textProgress.text = resources.getQuantityString(
                 R.plurals.stun_testing_servers,
                 state.totalServers,
                 state.totalServers,
             )
             setInputsEnabled(false)
+
+            if (state.results.isNotEmpty()) {
+                binding.cardResult.visibility = View.VISIBLE
+                if (state.assessment != null) {
+                    binding.textAssessmentTitle.setText(assessmentTitleRes(state.assessment.kind))
+                    binding.textAssessmentImpact.setText(assessmentImpactRes(state.assessment.kind))
+                } else {
+                    binding.textAssessmentTitle.setText(R.string.stun_attest_loading)
+                    binding.textAssessmentImpact.text = getString(
+                        R.string.stun_successful_servers_value,
+                        completedCount,
+                        state.totalServers,
+                    )
+                }
+                binding.textTechnicalSummary.text = buildTechnicalSummary(state.results, state.assessment)
+                serverResultsAdapter.submitList(state.results)
+            }
         } else {
             binding.btnAction.setText(R.string.stun_action_start)
             binding.progressBarStun.visibility = View.GONE
@@ -247,9 +273,9 @@ class StunActivity : ThemedActivity() {
         serverResultsAdapter.submitList(results)
     }
 
-    private fun buildTechnicalSummary(results: List<StunServerUiResult>, assessment: StunAssessment): String {
+    private fun buildTechnicalSummary(results: List<StunServerUiResult>, assessment: StunAssessment?): String {
         val lines = mutableListOf<String>()
-        assessment.representative?.let { rep ->
+        assessment?.representative?.let { rep ->
             lines += getString(R.string.stun_mapping_value, behaviorLabel(rep.mappingBehavior))
             lines += getString(R.string.stun_filtering_value, behaviorLabel(rep.filteringBehavior))
             lines += getString(R.string.stun_nat_type_value, natLabel(rep.natType))
@@ -321,24 +347,23 @@ class StunActivity : ThemedActivity() {
         Toast.makeText(this, R.string.network_interfaces_copied, Toast.LENGTH_SHORT).show()
     }
 
-    private inner class ServerResultsAdapter : RecyclerView.Adapter<ServerResultViewHolder>() {
-        private var list: List<StunServerUiResult> = emptyList()
+    private inner class ServerResultsAdapter : ListAdapter<StunServerUiResult, ServerResultViewHolder>(
+        object : DiffUtil.ItemCallback<StunServerUiResult>() {
+            override fun areItemsTheSame(oldItem: StunServerUiResult, newItem: StunServerUiResult): Boolean =
+                oldItem.server == newItem.server
 
-        fun submitList(newList: List<StunServerUiResult>) {
-            list = newList
-            notifyDataSetChanged()
-        }
-
+            override fun areContentsTheSame(oldItem: StunServerUiResult, newItem: StunServerUiResult): Boolean =
+                oldItem == newItem
+        },
+    ) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServerResultViewHolder {
             val itemBinding = ItemStunServerResultBinding.inflate(layoutInflater, parent, false)
             return ServerResultViewHolder(itemBinding)
         }
 
         override fun onBindViewHolder(holder: ServerResultViewHolder, position: Int) {
-            holder.bind(list[position])
+            holder.bind(getItem(position))
         }
-
-        override fun getItemCount(): Int = list.size
     }
 
     private inner class ServerResultViewHolder(
@@ -348,15 +373,65 @@ class StunActivity : ThemedActivity() {
         fun bind(item: StunServerUiResult) {
             itemBinding.textServerName.text = item.server.ifBlank { getString(R.string.stun_unknown_server) }
 
-            val statusText = when {
-                item.behaviorComplete -> getString(R.string.stun_server_status_complete)
-                item.bindingSuccess -> getString(R.string.stun_server_status_partial)
-                item.errorCode == "cancelled" -> getString(R.string.stun_server_status_cancelled)
-                else -> getString(R.string.stun_server_status_failed)
+            // RTT Ping indicator
+            if (item.rttMs > 0) {
+                itemBinding.badgeServerRtt.visibility = View.VISIBLE
+                itemBinding.badgeServerRtt.text = getString(R.string.stun_rtt_value, item.rttMs)
+            } else {
+                itemBinding.badgeServerRtt.visibility = View.GONE
             }
-            itemBinding.badgeServerStatus.text = statusText
 
-            itemBinding.textServerDuration.text = getString(R.string.stun_duration_value, item.durationMilliseconds)
+            // Status & Progress spinner
+            when (item.status) {
+                StunServerStatus.PENDING -> {
+                    itemBinding.progressServer.visibility = View.GONE
+                    itemBinding.badgeServerStatus.text = getString(R.string.stun_server_status_pending)
+                    itemBinding.badgeServerStatus.setTextColor(ContextCompat.getColor(this@StunActivity, R.color.material_grey_500))
+                    itemBinding.textServerDuration.visibility = View.GONE
+                    itemBinding.textServerDetails.text = getString(R.string.stun_server_pending_details)
+                    return
+                }
+                StunServerStatus.RUNNING -> {
+                    itemBinding.progressServer.visibility = View.VISIBLE
+                    itemBinding.badgeServerStatus.text = getString(R.string.stun_server_status_running)
+                    itemBinding.badgeServerStatus.setTextColor(ContextCompat.getColor(this@StunActivity, R.color.material_blue_500))
+                    itemBinding.textServerDuration.visibility = View.GONE
+                    if (item.bindingSuccess) {
+                        val ep = if (item.externalAddress.contains(':')) "[${item.externalAddress}]:${item.externalPort}" else "${item.externalAddress}:${item.externalPort}"
+                        itemBinding.textServerDetails.text = getString(R.string.stun_external_address_value, ep, if (item.ipFamily == 2) "IPv6" else "IPv4") + "\n" + getString(R.string.stun_server_testing_details)
+                    } else {
+                        itemBinding.textServerDetails.text = getString(R.string.stun_server_testing_details)
+                    }
+                    return
+                }
+                StunServerStatus.COMPLETED -> {
+                    itemBinding.progressServer.visibility = View.GONE
+                    itemBinding.badgeServerStatus.text = getString(R.string.stun_server_status_complete)
+                    itemBinding.badgeServerStatus.setTextColor(ContextCompat.getColor(this@StunActivity, R.color.material_green_500))
+                }
+                StunServerStatus.PARTIAL -> {
+                    itemBinding.progressServer.visibility = View.GONE
+                    itemBinding.badgeServerStatus.text = getString(R.string.stun_server_status_partial)
+                    itemBinding.badgeServerStatus.setTextColor(ContextCompat.getColor(this@StunActivity, R.color.material_amber_500))
+                }
+                StunServerStatus.CANCELLED -> {
+                    itemBinding.progressServer.visibility = View.GONE
+                    itemBinding.badgeServerStatus.text = getString(R.string.stun_server_status_cancelled)
+                    itemBinding.badgeServerStatus.setTextColor(ContextCompat.getColor(this@StunActivity, R.color.material_grey_500))
+                }
+                StunServerStatus.FAILED -> {
+                    itemBinding.progressServer.visibility = View.GONE
+                    itemBinding.badgeServerStatus.text = getString(R.string.stun_server_status_failed)
+                    itemBinding.badgeServerStatus.setTextColor(ContextCompat.getColor(this@StunActivity, R.color.color_route_block))
+                }
+            }
+
+            if (item.durationMilliseconds > 0) {
+                itemBinding.textServerDuration.visibility = View.VISIBLE
+                itemBinding.textServerDuration.text = getString(R.string.stun_duration_value, item.durationMilliseconds)
+            } else {
+                itemBinding.textServerDuration.visibility = View.GONE
+            }
 
             val details = mutableListOf<String>()
             if (item.bindingSuccess) {
