@@ -45,7 +45,7 @@ class StunMessageTest {
             // Attribute: XOR-MAPPED-ADDRESS (0x0020), Length: 8
             0x00.toByte(), 0x20.toByte(), 0x00.toByte(), 0x08.toByte(),
             0x00.toByte(), 0x01.toByte(), // Family: IPv4 (0x01)
-            0xe1.toByte(), 0xba.toByte(), // Port: 32853 ^ 0x2112
+            0xa1.toByte(), 0x47.toByte(), // Port: 32853 ^ 0x2112
             0xe1.toByte(), 0x12.toByte(), 0xa6.toByte(), 0x43.toByte(), // IPv4: 192.0.2.1 ^ 0x2112A442
         )
 
@@ -73,11 +73,11 @@ class StunMessageTest {
             // Attribute: XOR-MAPPED-ADDRESS (0x0020), Length: 20
             0x00.toByte(), 0x20.toByte(), 0x00.toByte(), 0x14.toByte(),
             0x00.toByte(), 0x02.toByte(), // Family: IPv6 (0x02)
-            0xe1.toByte(), 0xba.toByte(), // Port: 32853 ^ 0x2112
+            0xa1.toByte(), 0x47.toByte(), // Port: 32853 ^ 0x2112
             0x01.toByte(), 0x13.toByte(), 0xa9.toByte(), 0xfa.toByte(),
-            0xa5.toByte(), 0x61.toByte(), 0x97.toByte(), 0x83.toByte(),
-            0xa0.toByte(), 0x3c.toByte(), 0xaa.toByte(), 0xb1.toByte(),
-            0xbe.toByte(), 0xd2.toByte(), 0x9b.toByte(), 0xd9.toByte(),
+            0xa5.toByte(), 0xd3.toByte(), 0xf1.toByte(), 0x79.toByte(),
+            0xbc.toByte(), 0x25.toByte(), 0xf4.toByte(), 0xb5.toByte(),
+            0xbe.toByte(), 0xd2.toByte(), 0xb9.toByte(), 0xd9.toByte(),
         )
 
         val msg = StunMessage.decode(responseBytes)
