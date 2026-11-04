@@ -137,15 +137,17 @@ object LanSharingNetwork {
         if (apState == 12 || apState == 13) return true
 
         val cm = appCtx.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-        val tethered = runCatching {
-            val method = cm?.javaClass?.getDeclaredMethod("getTetheredIfaces")
-            method?.isAccessible = true
-            (method?.invoke(cm) as? Array<*>)?.filterIsInstance<String>().orEmpty()
-        }.getOrDefault(emptyList())
+        val tethered = getTetheredIfaces(cm)
         if (tethered.isNotEmpty()) return true
 
         return findHotspotIp(context) != null
     }
+
+    fun getTetheredIfaces(cm: ConnectivityManager?): List<String> = runCatching {
+        val method = cm?.javaClass?.getDeclaredMethod("getTetheredIfaces")
+        method?.isAccessible = true
+        (method?.invoke(cm) as? Array<*>)?.filterIsInstance<String>().orEmpty()
+    }.getOrDefault(emptyList())
 
     fun findHotspotIp(context: Context): String? = findHotspotCandidates(context).firstOrNull()?.ip
 
@@ -157,11 +159,7 @@ object LanSharingNetwork {
         val appCtx = context.applicationContext
         val cm = appCtx.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
 
-        val tetheredIfaces = runCatching {
-            val method = cm?.javaClass?.getDeclaredMethod("getTetheredIfaces")
-            method?.isAccessible = true
-            (method?.invoke(cm) as? Array<*>)?.filterIsInstance<String>().orEmpty()
-        }.getOrDefault(emptyList())
+        val tetheredIfaces = getTetheredIfaces(cm)
 
         // Every interface ConnectivityManager itself knows about (Wi-Fi client, cellular, VPN,
         // Ethernet): they belong to other networks and are never the hotspot side.

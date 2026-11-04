@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/card_stroke"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textInterfaceName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:textStyle="bold"
+                tools:text="wlan0" />
+
+            <!-- Kind Badge -->
+            <TextView
+                android:id="@+id/badgeKind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_badge_soft"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                tools:text="Wi-Fi" />
+
+            <!-- Status Badge (Up / Down) -->
+            <TextView
+                android:id="@+id/badgeStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_badge_soft"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                tools:text="Up" />
+        </LinearLayout>
+
+        <!-- Hotspot badge if applicable -->
+        <TextView
+            android:id="@+id/badgeHotspot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/bg_badge_soft"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="?attr/colorPrimary"
+            android:visibility="gone"
+            tools:text="Tethered interface"
+            tools:visibility="visible" />
+
+        <!-- Meta / Properties (MTU, MAC, Flags) -->
+        <TextView
+            android:id="@+id/textInterfaceMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="?android:attr/textColorSecondary"
+            tools:text="MTU: 1500 · MAC: 00:1a:2b:3c:4d:5e · Flags: Multicast" />
+
+        <!-- IP Addresses Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/network_interfaces_addresses"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layoutAddresses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical" />
+
+        <!-- Routes Section -->
+        <LinearLayout
+            android:id="@+id/layoutRoutesSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/network_interfaces_routes"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textRoutes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="0.0.0.0/0 -> 192.168.1.1" />
+        </LinearLayout>
+
+        <!-- DNS Section -->
+        <LinearLayout
+            android:id="@+id/layoutDnsSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/network_interfaces_dns"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textDns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceBody2"
+                android:textColor="?android:attr/textColorSecondary"
+                tools:text="192.168.1.1, 8.8.8.8" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
