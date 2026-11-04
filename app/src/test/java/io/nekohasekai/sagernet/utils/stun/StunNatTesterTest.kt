@@ -217,7 +217,14 @@ class StunNatTesterTest {
             respOriginPort: Int,
             isAlternateQuery: Boolean,
         ) {
-            val mappedPort = if (simulateSymmetric && isAlternateQuery) clientPort + 100 else clientPort
+            val mappedPort = if (simulateSymmetric) {
+                when (sendSocket) {
+                    socket1A -> clientPort
+                    socket2A -> clientPort + 100
+                    socket2B -> clientPort + 200
+                    else -> clientPort + 300
+                }
+            } else clientPort
             val mapped = StunAttribute.MappedAddress(
                 StunMessage.ATTR_XOR_MAPPED_ADDRESS,
                 StunEndpoint(clientAddr, mappedPort),

@@ -39,10 +39,15 @@
     <string name="stun_technical_summary">Teknik özet</string>
     <string name="stun_server_results">Sunucu sonuçları</string>
     <string name="stun_unknown_server">Bilinmeyen sunucu</string>
+    <string name="stun_server_status_pending">Bekliyor</string>
+    <string name="stun_server_status_running">Test ediliyor…</string>
     <string name="stun_server_status_complete">Tam davranış testi tamamlandı</string>
     <string name="stun_server_status_partial">Genel eşleme bulundu; tam analiz desteklenmiyor</string>
     <string name="stun_server_status_failed">Test başarısız</string>
     <string name="stun_server_status_cancelled">İptal edildi</string>
+    <string name="stun_rtt_value">Ping: %1$d ms</string>
+    <string name="stun_server_testing_details">STUN uç noktası ve eşleme davranışı sorgulanıyor…</string>
+    <string name="stun_server_pending_details">Test sırasına alındı…</string>
     <string name="stun_mapping_value">Eşleme (Mapping): %1$s</string>
     <string name="stun_filtering_value">Filtreleme (Filtering): %1$s</string>
     <string name="stun_nat_type_value">Klasik NAT türü: %1$s</string>
@@ -144,4 +149,6 @@
     <string name="network_interfaces_gateway">Ağ geçidi</string>
     <string name="network_interfaces_dns">DNS sunucuları</string>
     <string name="network_interfaces_copy_hint">Kopyalamak için uzun basın</string>
+    <string name="network_interfaces_live_active">Canlı izleme etkin</string>
+    <string name="network_interfaces_live_desc">Ağ bağlantıları değiştikçe arayüz listesi anlık olarak güncellenir.</string>
 </resources>

@@ -39,10 +39,15 @@
     <string name="stun_technical_summary">Technical summary</string>
     <string name="stun_server_results">Server results</string>
     <string name="stun_unknown_server">Unknown server</string>
+    <string name="stun_server_status_pending">Pending</string>
+    <string name="stun_server_status_running">Testing…</string>
     <string name="stun_server_status_complete">Full behaviour test completed</string>
     <string name="stun_server_status_partial">Public mapping found; full analysis unavailable</string>
     <string name="stun_server_status_failed">Test failed</string>
     <string name="stun_server_status_cancelled">Cancelled</string>
+    <string name="stun_rtt_value">Ping: %1$d ms</string>
+    <string name="stun_server_testing_details">Probing STUN endpoint and mapping behavior…</string>
+    <string name="stun_server_pending_details">Queued for testing…</string>
     <string name="stun_mapping_value">Mapping: %1$s</string>
     <string name="stun_filtering_value">Filtering: %1$s</string>
     <string name="stun_nat_type_value">Classic NAT type: %1$s</string>
@@ -144,4 +149,6 @@
     <string name="network_interfaces_gateway">Gateway</string>
     <string name="network_interfaces_dns">DNS servers</string>
     <string name="network_interfaces_copy_hint">Long-press to copy</string>
+    <string name="network_interfaces_live_active">Live monitoring active</string>
+    <string name="network_interfaces_live_desc">Interface list updates automatically as network connections change.</string>
 </resources>

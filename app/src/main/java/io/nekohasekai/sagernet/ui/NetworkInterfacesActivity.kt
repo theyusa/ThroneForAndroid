@@ -29,6 +29,14 @@ import io.nekohasekai.sagernet.utils.NetworkInterfacesSnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import android.net.NetworkRequest
+import android.net.NetworkCapabilities
+import android.net.Network
+import android.net.LinkProperties
 
 class NetworkInterfacesActivity : ThemedActivity() {
 
@@ -57,11 +65,8 @@ class NetworkInterfacesActivity : ThemedActivity() {
             adapter = interfacesAdapter
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                refresh()
-            }
-        }
+        // onStart triggers live monitoring and initial refresh
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,14 +88,70 @@ class NetworkInterfacesActivity : ThemedActivity() {
         }
     }
 
-    private fun refresh() {
+    private var refreshJob: Job? = null
+    private var networkCallback: ConnectivityManager.NetworkCallback? = null
+
+    override fun onStart() {
+        super.onStart()
+        requestRefresh()
+        registerLiveMonitoring()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterLiveMonitoring()
+    }
+
+    private fun registerLiveMonitoring() {
+        if (networkCallback != null) return
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                requestRefresh(debounceMs = 300)
+            }
+
+            override fun onLost(network: Network) {
+                requestRefresh(debounceMs = 300)
+            }
+
+            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+                requestRefresh(debounceMs = 300)
+            }
+
+            override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
+                requestRefresh(debounceMs = 300)
+            }
+        }
+        networkCallback = callback
+        runCatching {
+            val request = NetworkRequest.Builder().build()
+            cm.registerNetworkCallback(request, callback)
+        }
+    }
+
+    private fun unregisterLiveMonitoring() {
+        val callback = networkCallback ?: return
+        networkCallback = null
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
+        runCatching {
+            cm.unregisterNetworkCallback(callback)
+        }
+    }
+
+    private fun requestRefresh(debounceMs: Long = 0L) {
         binding.progressBarLoading.visibility = View.VISIBLE
-        lifecycleScope.launch {
+        refreshJob?.cancel()
+        refreshJob = lifecycleScope.launch {
+            if (debounceMs > 0) delay(debounceMs)
             val snapshot = withContext(Dispatchers.IO) {
                 repository.collect()
             }
             renderSnapshot(snapshot)
         }
+    }
+
+    private fun refresh() {
+        requestRefresh(debounceMs = 0L)
     }
 
     private fun renderSnapshot(snapshot: NetworkInterfacesSnapshot) {
@@ -106,24 +167,23 @@ class NetworkInterfacesActivity : ThemedActivity() {
         Toast.makeText(this, R.string.network_interfaces_copied, Toast.LENGTH_SHORT).show()
     }
 
-    private inner class InterfacesAdapter : RecyclerView.Adapter<InterfaceViewHolder>() {
-        private var list: List<NetworkInterfaceInfo> = emptyList()
+    private inner class InterfacesAdapter : ListAdapter<NetworkInterfaceInfo, InterfaceViewHolder>(
+        object : DiffUtil.ItemCallback<NetworkInterfaceInfo>() {
+            override fun areItemsTheSame(oldItem: NetworkInterfaceInfo, newItem: NetworkInterfaceInfo): Boolean =
+                oldItem.name == newItem.name
 
-        fun submitList(newList: List<NetworkInterfaceInfo>) {
-            list = newList
-            notifyDataSetChanged()
-        }
-
+            override fun areContentsTheSame(oldItem: NetworkInterfaceInfo, newItem: NetworkInterfaceInfo): Boolean =
+                oldItem == newItem
+        },
+    ) {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InterfaceViewHolder {
             val itemBinding = ItemNetworkInterfaceBinding.inflate(layoutInflater, parent, false)
             return InterfaceViewHolder(itemBinding)
         }
 
         override fun onBindViewHolder(holder: InterfaceViewHolder, position: Int) {
-            holder.bind(list[position])
+            holder.bind(getItem(position))
         }
-
-        override fun getItemCount(): Int = list.size
     }
 
     private inner class InterfaceViewHolder(
