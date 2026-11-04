@@ -10,4 +10,5 @@ import io.nekohasekai.sagernet.outbound.Outbound
  */
 fun interface ProfileProvider {
     fun get(id: Long): Outbound?
+    fun groupProxies(profileId: Long): Triple<Long, Long, String> = Triple(-1L, -1L, "")
 }

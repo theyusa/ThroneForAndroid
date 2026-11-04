@@ -167,6 +167,8 @@ class ConfigGenerator @JvmOverloads constructor(
                 state.error = "Outbounds used in routing profile cannot use an extra core or be a custom full config"
                 return
             }
+            val (grpLanding, grpFront, _) = reads.groupProxies(id)
+            val fullHops = ArrayList<Long>()
             if (needed.type == "chain") {
                 val hops = TypeAccess.chainHops(needed)
                 if (hops.isEmpty()) {
@@ -185,14 +187,52 @@ class ConfigGenerator @JvmOverloads constructor(
                     }
                     if (chains.usesXrayCore(hop)) state.proxyUsesXray = true
                 }
-                pre.outboundMap[id] = hopTag(Tags.ROUTE_CHAIN_PREFIX, suffix)
-                pre.routeOutboundGroups.add(hops.asReversed().toList())
-                suffix += hops.size
+                val exitLanding = if (hops.isNotEmpty()) reads.groupProxies(hops.last()).first else -1L
+                val entryFront = if (hops.isNotEmpty()) reads.groupProxies(hops.first()).second else -1L
+                val landing = if (grpLanding > 0 && grpLanding != id) grpLanding else if (exitLanding > 0 && !hops.contains(exitLanding)) exitLanding else -1L
+                val front = if (grpFront > 0 && grpFront != id) grpFront else if (entryFront > 0 && !hops.contains(entryFront)) entryFront else if (frontProxyId > 0 && !hops.contains(frontProxyId)) frontProxyId else -1L
+
+                if (landing > 0) {
+                    val lHop = reads.get(landing)
+                    if (lHop != null) {
+                        if (chains.usesXrayCore(lHop)) state.proxyUsesXray = true
+                        fullHops.add(landing)
+                    }
+                }
+                fullHops.addAll(hops.asReversed())
+                if (front > 0) {
+                    val fHop = reads.get(front)
+                    if (fHop != null) {
+                        if (chains.usesXrayCore(fHop)) state.proxyUsesXray = true
+                        fullHops.add(front)
+                    }
+                }
+
+
             } else {
                 if (chains.usesXrayCore(needed)) state.proxyUsesXray = true
-                pre.outboundMap[id] = hopTag(Tags.ROUTE_CHAIN_PREFIX, suffix++)
-                pre.routeOutboundGroups.add(listOf(id))
+                val landing = if (grpLanding > 0 && grpLanding != id) grpLanding else -1L
+                val front = if (grpFront > 0 && grpFront != id) grpFront else if (frontProxyId > 0 && frontProxyId != id) frontProxyId else -1L
+
+                if (landing > 0) {
+                    val lHop = reads.get(landing)
+                    if (lHop != null) {
+                        if (chains.usesXrayCore(lHop)) state.proxyUsesXray = true
+                        fullHops.add(landing)
+                    }
+                }
+                fullHops.add(id)
+                if (front > 0) {
+                    val fHop = reads.get(front)
+                    if (fHop != null) {
+                        if (chains.usesXrayCore(fHop)) state.proxyUsesXray = true
+                        fullHops.add(front)
+                    }
+                }
             }
+            pre.outboundMap[id] = hopTag(Tags.ROUTE_CHAIN_PREFIX, suffix)
+            pre.routeOutboundGroups.add(fullHops)
+            suffix += fullHops.size
         }
 
         collectRuleSets(state, route)
@@ -1324,4 +1364,5 @@ private class RecordingProfiles(private val inner: ProfileProvider) : ProfilePro
     val ids = LinkedHashSet<Long>()
 
     override fun get(id: Long): Outbound? = inner.get(id)?.also { ids.add(id) }
+    override fun groupProxies(profileId: Long): Triple<Long, Long, String> = inner.groupProxies(profileId)
 }

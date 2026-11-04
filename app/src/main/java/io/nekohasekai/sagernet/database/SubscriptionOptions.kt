@@ -109,6 +109,7 @@ data class SubscriptionOptions(
     /** Android-only (#53): name filters applied on every update; desktop's codec drops these keys. */
     var nameInclude: String = "",
     var nameExclude: String = "",
+    var customSni: String = "",
     /** Android-only: the subscription info card above the profiles; stored only when off. */
     var showInfoCard: Boolean = true,
 ) : Parcelable {
@@ -134,6 +135,7 @@ data class SubscriptionOptions(
         if (sortByLatency) json["sort_by_latency"] = true
         if (nameInclude.isNotEmpty()) json["name_include"] = nameInclude
         if (nameExclude.isNotEmpty()) json["name_exclude"] = nameExclude
+        if (customSni.isNotEmpty()) json["custom_sni"] = customSni
         if (!showInfoCard) json["show_info_card"] = false
         return json
     }
@@ -167,6 +169,7 @@ data class SubscriptionOptions(
                 sortByLatency = json.bool("sort_by_latency"),
                 nameInclude = json.string("name_include"),
                 nameExclude = json.string("name_exclude"),
+                customSni = json.string("custom_sni"),
                 showInfoCard = !json.isBool("show_info_card") || json.bool("show_info_card"),
             )
         }

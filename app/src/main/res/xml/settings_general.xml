@@ -75,6 +75,7 @@
             app:title="@string/allow_beta_update" />
         <SwitchPreference
             app:icon="@drawable/ic_baseline_download_24"
+            app:defaultValue="true"
             app:key="updateCheckAuto"
             app:summary="@string/update_check_auto_sum"
             app:title="@string/update_check_auto" />

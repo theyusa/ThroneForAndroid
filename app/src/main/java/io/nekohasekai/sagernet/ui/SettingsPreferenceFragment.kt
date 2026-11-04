@@ -27,7 +27,7 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.global_preferences)
 
         findPreference<Preference>(KEY_BACKUP)!!.setOnPreferenceClickListener {
-            (activity as? MainActivity)?.displayFragmentWithId(R.id.nav_tools)
+            (activity as? MainActivity)?.displayTools(ToolsFragment.TAB_BACKUP)
             true
         }
 

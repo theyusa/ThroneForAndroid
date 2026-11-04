@@ -16,15 +16,16 @@ import io.nekohasekai.sagernet.R
 @SuppressLint("MissingPermission")
 object UpdateNotifications {
 
-    private const val CHANNEL = "app-update"
+    private const val CHANNEL = "app-updates"
     private const val ID_AVAILABLE = 0x75_01
     private const val ID_PROGRESS = 0x75_02
 
     private fun ensureChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= 26) {
+            runCatching { context.getSystemService(NotificationManager::class.java).deleteNotificationChannel("app-update") }
             context.getSystemService(NotificationManager::class.java).createNotificationChannel(
                 NotificationChannel(
-                    CHANNEL, context.getString(R.string.update_notification_channel), NotificationManager.IMPORTANCE_LOW
+                    CHANNEL, context.getString(R.string.update_notification_channel), NotificationManager.IMPORTANCE_DEFAULT
                 )
             )
         }
@@ -58,6 +59,7 @@ object UpdateNotifications {
             .setContentTitle(context.getString(R.string.update_notification_available, offer.versionName))
             .setContentText(context.getString(R.string.update_notification_available_text))
             .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         if (offer.versionCode > 0) {
             builder.addAction(
                 0, context.getString(R.string.update_action_skip),
@@ -99,6 +101,7 @@ object UpdateNotifications {
                 .setContentText(context.getString(R.string.update_notification_tap_install))
                 .setContentIntent(tap)
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         )
     }
 
@@ -110,6 +113,7 @@ object UpdateNotifications {
                 .setContentText(message)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(message))
                 .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         )
     }
 
