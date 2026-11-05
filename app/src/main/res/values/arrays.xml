@@ -136,11 +136,24 @@
         <item>UDP</item>
     </string-array>
 
+    <string-array name="night_mode_entries">
+        <item>@string/follow_system</item>
+        <item>@string/night_mode_dark</item>
+        <item>@string/night_mode_light</item>
+        <item>@string/night_mode_amoled</item>
+    </string-array>
+    <string-array name="night_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <string-array name="night_mode">
         <item>@string/follow_system</item>
-        <item>@string/enable</item>
-        <item>@string/disable</item>
-        <item>@string/follow_battery_saver</item>
+        <item>@string/night_mode_dark</item>
+        <item>@string/night_mode_light</item>
+        <item>@string/night_mode_amoled</item>
     </string-array>
 
     <string-array name="group_types">

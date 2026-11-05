@@ -84,7 +84,6 @@ class ColorPickerPreference @JvmOverloads constructor(
 
     private fun getThemeName(themeId: Int, isTr: Boolean): String {
         return when (themeId) {
-            Theme.BLACK -> if (isTr) "AMOLED Siyah" else "AMOLED Black"
             Theme.WHITE -> if (isTr) "Saf Beyaz" else "Pure White"
             Theme.LIGHT_GRAY -> if (isTr) "Açık Gri" else "Light Gray"
             Theme.MONET -> "Material You"
@@ -178,9 +177,6 @@ class ColorPickerPreference @JvmOverloads constructor(
             if (themeId in setOf(Theme.WHITE, Theme.LIGHT_GRAY) && Theme.usingNightMode(context)) {
                 DataStore.nightTheme = 2
                 Theme.currentNightMode = 2
-            } else if (themeId == Theme.BLACK) {
-                DataStore.nightTheme = 1
-                Theme.currentNightMode = 1
             }
             Theme.applyNightTheme()
             dialog.dismiss()
@@ -202,7 +198,6 @@ class ColorPickerPreference @JvmOverloads constructor(
 
         seedThemes.addAll(
             listOf(
-                PresetTheme(Theme.BLACK, if (isTr) "AMOLED Siyah" else "AMOLED Black", Color.BLACK),
                 PresetTheme(Theme.WHITE, if (isTr) "Saf Beyaz" else "Pure White", Color.WHITE),
                 PresetTheme(Theme.LIGHT_GRAY, if (isTr) "Açık Gri" else "Light Gray", Color.parseColor("#F5F5F7")),
                 PresetTheme(Theme.VERDANT_MINT, if (isTr) "Nane Yeşili" else "Verdant Mint", resolveSwatchColor(Theme.VERDANT_MINT)),

@@ -94,7 +94,7 @@ class MainActivity : ThemedActivity(),
         binding.fab.initProgress(binding.fabProgress)
 
         val isNight = Theme.usingNightMode(this)
-        val isAmoled = isNight && DataStore.amoledTheme
+        val isAmoled = isNight && (DataStore.amoledTheme || DataStore.nightTheme == 3)
         val isBlackTheme = Theme.isBlackTheme(this)
 
         val fabBgColor = when {

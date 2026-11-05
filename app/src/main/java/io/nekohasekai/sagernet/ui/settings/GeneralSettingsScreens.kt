@@ -121,6 +121,15 @@ class GeneralSettingsFragment : SettingsScreenFragment(R.xml.settings_general) {
 class AppearanceSettingsFragment : SettingsScreenFragment(R.xml.settings_appearance) {
 
     override fun bind() {
+        if (DataStore.nightTheme == 1 && DataStore.amoledTheme) {
+            DataStore.nightTheme = 3
+        }
+        if (DataStore.appTheme == Theme.BLACK) {
+            DataStore.appTheme = Theme.VERDANT_MINT
+            DataStore.nightTheme = 3
+            DataStore.amoledTheme = true
+        }
+
         val appTheme = pref<ColorPickerPreference>(Key.APP_THEME)
         appTheme.setOnPreferenceChangeListener { _, _ ->
             applyThemeInstantly()
@@ -130,12 +139,12 @@ class AppearanceSettingsFragment : SettingsScreenFragment(R.xml.settings_appeara
             val mode = (newTheme as String).toInt()
             DataStore.nightTheme = mode
             Theme.currentNightMode = mode
+            if (mode == 3) {
+                DataStore.amoledTheme = true
+            } else if (mode in setOf(0, 1, 2)) {
+                DataStore.amoledTheme = false
+            }
             Theme.applyNightTheme()
-            applyThemeInstantly()
-            true
-        }
-        pref<SwitchPreference>(Key.AMOLED_THEME).setOnPreferenceChangeListener { _, newValue ->
-            DataStore.amoledTheme = newValue as Boolean
             applyPreferenceIconTint()
             applyThemeInstantly()
             true

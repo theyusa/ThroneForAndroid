@@ -131,7 +131,7 @@ object Theme {
         if (usingNightMode(ctx) && themeId in setOf(WHITE, LIGHT_GRAY)) {
             return R.style.Theme_SagerNet_Black
         }
-        if (usingNightMode(ctx) && DataStore.amoledTheme) {
+        if (usingNightMode(ctx) && (DataStore.amoledTheme || DataStore.nightTheme == 3)) {
             return getAmoledTheme(themeId)
         }
         return getTheme(themeId, ctx)
@@ -150,7 +150,7 @@ object Theme {
         if (usingNightMode(ctx) && themeId in setOf(WHITE, LIGHT_GRAY)) {
             return R.style.Theme_SagerNet_Dialog_Black
         }
-        if (usingNightMode(ctx) && DataStore.amoledTheme) {
+        if (usingNightMode(ctx) && (DataStore.amoledTheme || DataStore.nightTheme == 3)) {
             return getAmoledDialogTheme(themeId)
         }
         return getDialogTheme(themeId, ctx)
@@ -272,7 +272,7 @@ object Theme {
 
     fun isBlackTheme(context: Context? = null): Boolean {
         val ctx = context ?: app
-        return DataStore.appTheme == BLACK || (usingNightMode(ctx) && (DataStore.amoledTheme || DataStore.appTheme in setOf(WHITE, LIGHT_GRAY)))
+        return DataStore.appTheme == BLACK || (usingNightMode(ctx) && (DataStore.amoledTheme || DataStore.nightTheme == 3 || DataStore.appTheme in setOf(WHITE, LIGHT_GRAY)))
     }
 
     fun getPrimaryColor(context: Context): Int {
@@ -305,9 +305,9 @@ object Theme {
     fun getNightMode(mode: Int): Int {
         return when (mode) {
             0 -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-            1 -> AppCompatDelegate.MODE_NIGHT_YES
+            1, 3 -> AppCompatDelegate.MODE_NIGHT_YES
             2 -> AppCompatDelegate.MODE_NIGHT_NO
-            else -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+            else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         }
     }
 
@@ -316,22 +316,36 @@ object Theme {
         if (DataStore.appTheme == BLACK) return true
         val mode = if (currentNightMode != -1) currentNightMode else DataStore.nightTheme
         return when (mode) {
-            1 -> true
+            1, 3 -> true
             2 -> false
             else -> isSystemNight(ctx)
         }
     }
 
     fun applyNightTheme() {
+        if (DataStore.nightTheme == 1 && DataStore.amoledTheme) {
+            DataStore.nightTheme = 3
+        }
         if (DataStore.appTheme == BLACK) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            return
+            DataStore.appTheme = VERDANT_MINT
+            DataStore.nightTheme = 3
+            DataStore.amoledTheme = true
         }
         when (DataStore.nightTheme) {
             0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY)
+            1 -> {
+                DataStore.amoledTheme = false
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            2 -> {
+                DataStore.amoledTheme = false
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            3 -> {
+                DataStore.amoledTheme = true
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
 
