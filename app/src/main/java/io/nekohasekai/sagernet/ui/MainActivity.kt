@@ -15,6 +15,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import android.content.res.ColorStateList
+import android.graphics.Color
+import androidx.core.graphics.ColorUtils
+import com.google.android.material.color.MaterialColors
 import androidx.annotation.IdRes
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -88,12 +92,43 @@ class MainActivity : ThemedActivity(),
 
         binding = LayoutMainBinding.inflate(layoutInflater)
         binding.fab.initProgress(binding.fabProgress)
-        // White theme: a dark FAB with a light icon (white on white is unreadable)
-        if (Theme.isWhiteTheme()) {
-            binding.fab.backgroundTintList = android.content.res.ColorStateList.valueOf(
-                ContextCompat.getColor(this, R.color.color_white_theme_fab)
-            )
+
+        val isNight = Theme.usingNightMode(this)
+        val isAmoled = isNight && DataStore.amoledTheme
+        val isBlackTheme = Theme.isBlackTheme(this)
+
+        val fabBgColor = when {
+            Theme.isWhiteTheme(this) -> ContextCompat.getColor(this, R.color.color_white_theme_fab)
+            Theme.isLightGrayTheme(this) -> Color.parseColor("#1F2937")
+            isBlackTheme || isAmoled -> {
+                val hasSeed = DataStore.appTheme !in setOf(Theme.BLACK, Theme.WHITE, Theme.LIGHT_GRAY)
+                if (hasSeed) {
+                    val seedColor = MaterialColors.getColor(binding.root, R.attr.fabColorBackground, Color.BLACK)
+                    if (ColorUtils.calculateLuminance(seedColor) > 0.85) {
+                        ContextCompat.getColor(this, R.color.color_black_theme_fab)
+                    } else {
+                        seedColor
+                    }
+                } else {
+                    ContextCompat.getColor(this, R.color.color_black_theme_fab)
+                }
+            }
+            else -> {
+                val bg = MaterialColors.getColor(binding.root, R.attr.fabColorBackground, Color.BLACK)
+                if (isNight && ColorUtils.calculateLuminance(bg) > 0.75) {
+                    val primary = MaterialColors.getColor(binding.root, R.attr.colorPrimary, bg)
+                    if (ColorUtils.calculateLuminance(primary) > 0.75) {
+                        ContextCompat.getColor(this, R.color.color_black_theme_fab)
+                    } else {
+                        primary
+                    }
+                } else {
+                    bg
+                }
+            }
         }
+        binding.fab.backgroundTintList = ColorStateList.valueOf(fabBgColor)
+        binding.fab.imageTintList = ColorStateList.valueOf(Color.WHITE)
         if (themeResId !in intArrayOf(
                 R.style.Theme_SagerNet_Black,
                 // The White theme and its night fallback read ?itemShapeFillColor too, so the selection stays visible

@@ -1,6 +1,10 @@
 package io.nekohasekai.sagernet.widget
 
 import android.annotation.SuppressLint
+import android.graphics.Color
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
+import io.nekohasekai.sagernet.utils.Theme
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
@@ -144,10 +148,79 @@ class StatsBar @JvmOverloads constructor(
         if (drawable === background) foreground?.invalidateSelf()
     }
 
+    private fun ensureViews() {
+        if (!this::statusText.isInitialized) {
+            statusText = findViewById(R.id.status) ?: return
+            txText = findViewById(R.id.tx) ?: return
+            rxText = findViewById(R.id.rx) ?: return
+            exitText = findViewById(R.id.exit_country)
+        }
+    }
+
+    fun updateThemeColors() {
+        ensureViews()
+        if (!this::statusText.isInitialized) return
+        val currentContext = context ?: return
+
+        val isBlack = Theme.isBlackTheme(currentContext) ||
+            (Theme.usingNightMode(currentContext) && DataStore.amoledTheme)
+
+        val bgColor = when {
+            isBlack -> Color.BLACK
+            Theme.isWhiteTheme(currentContext) -> Color.WHITE
+            Theme.isLightGrayTheme(currentContext) -> Color.parseColor("#F5F5F7")
+            else -> {
+                val surface = MaterialColors.getColor(this, com.google.android.material.R.attr.colorSurface, Color.BLACK)
+                val primary = MaterialColors.getColor(this, R.attr.colorPrimary, surface)
+                if (Theme.usingNightMode(currentContext)) {
+                    surface
+                } else {
+                    primary
+                }
+            }
+        }
+
+        backgroundTintList = ColorStateList.valueOf(bgColor)
+
+        (background as? MaterialShapeDrawable)?.let { shape ->
+            if (isBlack) {
+                shape.strokeWidth = 1f * resources.displayMetrics.density
+                shape.strokeColor = ColorStateList.valueOf(Color.parseColor("#33FFFFFF"))
+            } else {
+                shape.strokeWidth = 0f
+            }
+        }
+
+        val isLightBg = ColorUtils.calculateLuminance(bgColor) > 0.45
+
+        if (isLightBg) {
+            val primaryTextColor = Color.parseColor("#1E293B")
+            val secondaryTextColor = Color.parseColor("#64748B")
+            txText.setTextColor(secondaryTextColor)
+            rxText.setTextColor(secondaryTextColor)
+            statusText.setTextColor(primaryTextColor)
+            exitText?.setTextColor(primaryTextColor)
+        } else {
+            val primaryTextColor = Color.WHITE
+            val secondaryTextColor = Color.parseColor("#B3FFFFFF")
+            txText.setTextColor(secondaryTextColor)
+            rxText.setTextColor(secondaryTextColor)
+            statusText.setTextColor(primaryTextColor)
+            exitText?.setTextColor(primaryTextColor)
+        }
+    }
+
+    override fun onFinishInflate() {
+        super.onFinishInflate()
+        ensureViews()
+        updateThemeColors()
+    }
+
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         // BottomAppBar places the cradle here, not always through an invalidation of the shape.
         foreground?.invalidateSelf()
+        updateThemeColors()
         val transition = pendingTransition
         if (transition != null) {
             pendingTransition = null
@@ -158,15 +231,15 @@ class StatsBar @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
-        statusText = findViewById(R.id.status)
-        txText = findViewById(R.id.tx)
-        rxText = findViewById(R.id.rx)
-        exitText = findViewById(R.id.exit_country)
+        ensureViews()
+        updateThemeColors()
         super.setOnClickListener(l)
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        ensureViews()
+        updateThemeColors()
         ExitIp.listener = exitListener
         showExit()
     }
@@ -369,6 +442,8 @@ class StatsBar @JvmOverloads constructor(
     }
 
     fun changeState(state: BaseService.State) {
+        ensureViews()
+        updateThemeColors()
         currentState = state
         updateHideOnScroll()
         when {
