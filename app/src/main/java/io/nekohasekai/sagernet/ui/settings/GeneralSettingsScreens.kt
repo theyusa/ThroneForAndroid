@@ -134,11 +134,15 @@ class AppearanceSettingsFragment : SettingsScreenFragment(R.xml.settings_appeara
             applyThemeInstantly()
             true
         }
-        pref<SwitchPreference>(Key.AMOLED_THEME).setOnPreferenceChangeListener { _, _ ->
+        pref<SwitchPreference>(Key.AMOLED_THEME).setOnPreferenceChangeListener { _, newValue ->
+            DataStore.amoledTheme = newValue as Boolean
+            applyPreferenceIconTint()
             applyThemeInstantly()
             true
         }
-        pref<SwitchPreference>(Key.TINT_PREFERENCE_ICONS).setOnPreferenceChangeListener { _, _ ->
+        pref<SwitchPreference>(Key.TINT_PREFERENCE_ICONS).setOnPreferenceChangeListener { _, newValue ->
+            DataStore.tintPreferenceIcons = newValue as Boolean
+            applyPreferenceIconTint()
             applyThemeInstantly()
             true
         }
