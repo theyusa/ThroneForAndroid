@@ -163,7 +163,7 @@ class StatsBar @JvmOverloads constructor(
         val currentContext = context ?: return
 
         val isBlack = Theme.isBlackTheme(currentContext) ||
-            (Theme.usingNightMode(currentContext) && DataStore.amoledTheme)
+            (Theme.usingNightMode(currentContext) && (DataStore.amoledTheme || DataStore.nightTheme == 3))
 
         val bgColor = when {
             isBlack -> Color.BLACK

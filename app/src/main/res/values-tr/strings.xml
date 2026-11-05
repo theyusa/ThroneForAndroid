@@ -113,6 +113,9 @@
     <string name="enable">Etkinleştir</string>
     <string name="follow_system">Sistemi Takip Et</string>
     <string name="night_mode">Gece Modu</string>
+    <string name="night_mode_dark">Koyu</string>
+    <string name="night_mode_light">Açık</string>
+    <string name="night_mode_amoled">Saf Siyah (OLED)</string>
     <string name="lines">%d Satır</string>
     <string name="license">Lisans</string>
     <string name="need_reload">Değişiklikleri uygulamak için vekil sunucu servisini yeniden başlatın</string>
