@@ -151,4 +151,48 @@
     <string name="network_interfaces_copy_hint">Kopyalamak için uzun basın</string>
     <string name="network_interfaces_live_active">Canlı izleme etkin</string>
     <string name="network_interfaces_live_desc">Ağ bağlantıları değiştikçe arayüz listesi anlık olarak güncellenir.</string>
+    <!-- Active Network & Overview -->
+    <string name="network_active_overview_title">Aktif Ağ &amp; Sistem DNS</string>
+    <string name="network_interfaces_default_route">Varsayılan rota</string>
+    <string name="network_interfaces_vpn_active">VPN Tüneli Aktif</string>
+    <string name="network_interfaces_direct_wifi">Doğrudan Wi-Fi</string>
+    <string name="network_interfaces_direct_cellular">Hücresel Veri</string>
+    <string name="network_interfaces_private_dns_active">Özel DNS (DoT): Aktif (%1$s)</string>
+    <string name="network_interfaces_private_dns_none">Özel DNS (DoT): Aktif Değil</string>
+    <string name="network_interfaces_active_dns_label">Aktif Sistem DNS: %1$s</string>
+    <string name="network_interfaces_default_gateway_label">Varsayılan: %1$s · Ağ Geçidi: %2$s</string>
+    <string name="network_interfaces_routes_more">+%1$d rota daha (genişletmek için dokunun)</string>
+    <string name="network_interfaces_routes_collapse">Daraltmak için dokunun</string>
+    <string name="network_interfaces_vpn_standby">Beklemede (Bağlı Değil)</string>
+    <string name="network_interfaces_vpn_dns_hint">VPN Tünel DNS / Fake-IP</string>
+    <string name="network_interfaces_underlying_dns_hint">Fiziksel Arayüz DNS</string>
+
+    <!-- DNS Leak & Routing Check -->
+    <string name="tools_dns_leak">DNS Sızıntısı &amp; Fake-IP Kontrolü</string>
+    <string name="tools_dns_leak_summary">Gerçek DNS çıkışını ve Fake-IP durumunu test ederek IP/DNS sızıntılarını tespit edin.</string>
+    <string name="start_dns_leak_test">Sızıntı Testini Başlat</string>
+    <string name="testing_dns">DNS yönlendirmesi ve sızıntı durumu test ediliyor…</string>
+    <string name="dns_leak_safe_title">GÜVENLİ (Sızıntı Yok)</string>
+    <string name="dns_leak_safe_desc">Tüm DNS sorguları VPN tüneli veya güvenli sunucu üzerinden iletiliyor. İSS sızıntısı bulunamadı.</string>
+    <string name="dns_leak_warning_title">OLASI DNS SIZINTISI</string>
+    <string name="dns_leak_warning_desc">Uyarı: DNS sorgularınız yerel servis sağlayıcınız (%1$s) üzerinden çözümleniyor gibi görünüyor. Fake-IP veya Katı Rota etkinleştirin.</string>
+    <string name="dns_leak_fakeip_title">KORUMALI (Fake-IP Aktif)</string>
+    <string name="dns_leak_fakeip_desc">Fake-IP modu devrede. Alan adları cihazda sahte IP ile yakalanıp şifreli tünelde çözümleniyor; sıfır sızıntı.</string>
+    <string name="dns_leak_direct_title">DOĞRUDAN BAĞLANTI</string>
+    <string name="dns_leak_direct_desc">VPN şu anda bağlı değil. Trafik ve DNS sorguları doğrudan fiziksel operatörünüz üzerinden akıyor.</string>
+    <string name="dns_leak_fakeip_card_title">Fake-IP &amp; Yerel Yakalama</string>
+    <string name="dns_leak_fakeip_active">Aktif (%1$s) · Sıfır Sızıntı</string>
+    <string name="dns_leak_fakeip_inactive">Standart DNS (Doğrudan Çözümleme)</string>
+    <string name="dns_leak_egress_card_title">Genel İnternet Çıkışı (Egress IP)</string>
+    <string name="dns_leak_resolver_card_title">DNS Çözümleyici Çıkışı (Sızıntı Tespiti)</string>
+    <string name="dns_leak_system_dns_card_title">Sistem &amp; Özel DNS</string>
+    <string name="dns_leak_verdict_card_title">Sızıntı Teşhis Sonucu</string>
+    <string name="dns_leak_tested_domains">Test edilen alan adları</string>
+    <string name="dns_leak_public_ip">Genel IP</string>
+    <string name="dns_leak_resolver_ip">Çözümleyici Çıkış IP Adresi</string>
+    <string name="dns_leak_resolver_geo">Çözümleyici İSS / Konum</string>
+    <string name="dns_leak_recommendation">Öneri</string>
+    <string name="dns_leak_rec_fakeip">Sızıntısız internet için Rota Ayarları bölümünde Fake-IP özelliğini açık tutun.</string>
+    <string name="dns_leak_rec_fix">Ayar &gt; Gelen &gt; TUN Ayarları bölümünden Katı Rota (Strict Route) seçeneğini açarak yerel DNS kaçaklarını engelleyin.</string>
+    <string name="dns_leak_rec_safe">Mevcut bağlantı yapılandırmanız DNS sızıntılarına karşı tamamen korumalıdır.</string>
 </resources>

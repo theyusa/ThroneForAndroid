@@ -88,6 +88,11 @@
             android:exported="false"
             android:label="@string/cellular_network_title" />
         <activity
+            android:name="io.nekohasekai.sagernet.ui.DnsLeakActivity"
+            android:configChanges="uiMode"
+            android:exported="false"
+            android:label="@string/tools_dns_leak" />
+        <activity
             android:name="io.nekohasekai.sagernet.ui.NetworkInterfacesActivity"
             android:configChanges="uiMode"
             android:exported="false"

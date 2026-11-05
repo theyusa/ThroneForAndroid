@@ -151,4 +151,48 @@
     <string name="network_interfaces_copy_hint">Long-press to copy</string>
     <string name="network_interfaces_live_active">Live monitoring active</string>
     <string name="network_interfaces_live_desc">Interface list updates automatically as network connections change.</string>
+    <!-- Active Network & Overview -->
+    <string name="network_active_overview_title">Active Network &amp; System DNS</string>
+    <string name="network_interfaces_default_route">Default route</string>
+    <string name="network_interfaces_vpn_active">VPN Tunneled</string>
+    <string name="network_interfaces_direct_wifi">Direct Wi-Fi</string>
+    <string name="network_interfaces_direct_cellular">Cellular Data</string>
+    <string name="network_interfaces_private_dns_active">Private DNS (DoT): Active (%1$s)</string>
+    <string name="network_interfaces_private_dns_none">Private DNS (DoT): Not active</string>
+    <string name="network_interfaces_active_dns_label">Active DNS: %1$s</string>
+    <string name="network_interfaces_default_gateway_label">Default: %1$s · Gateway: %2$s</string>
+    <string name="network_interfaces_routes_more">+%1$d more routes (tap to expand)</string>
+    <string name="network_interfaces_routes_collapse">Tap to collapse</string>
+    <string name="network_interfaces_vpn_standby">Standby (Disconnected)</string>
+    <string name="network_interfaces_vpn_dns_hint">VPN Tunnel DNS / Fake-IP</string>
+    <string name="network_interfaces_underlying_dns_hint">Underlying Interface DNS</string>
+
+    <!-- DNS Leak & Routing Check -->
+    <string name="tools_dns_leak">DNS Leak &amp; Fake-IP Check</string>
+    <string name="tools_dns_leak_summary">Detect DNS resolution egress, test for DNS leaks, and inspect Fake-IP status.</string>
+    <string name="start_dns_leak_test">Run Leak Test</string>
+    <string name="testing_dns">Testing DNS egress and leak status…</string>
+    <string name="dns_leak_safe_title">SECURE (No Leak)</string>
+    <string name="dns_leak_safe_desc">All DNS queries are safely routed through your VPN tunnel / secure resolver. No ISP leak detected.</string>
+    <string name="dns_leak_warning_title">POSSIBLE DNS LEAK</string>
+    <string name="dns_leak_warning_desc">Warning: Your DNS queries appear to resolve through your local ISP (%1$s). Enable Fake-IP or Strict Route to secure your DNS.</string>
+    <string name="dns_leak_fakeip_title">PROTECTED (Fake-IP Active)</string>
+    <string name="dns_leak_fakeip_desc">Fake-IP mode is active. Domains are intercepted and synthesized locally; zero DNS queries leave your device unencrypted.</string>
+    <string name="dns_leak_direct_title">DIRECT CONNECTION</string>
+    <string name="dns_leak_direct_desc">VPN is currently disconnected. Traffic and DNS queries are routed directly through your physical network provider.</string>
+    <string name="dns_leak_fakeip_card_title">Fake-IP &amp; Local Interception</string>
+    <string name="dns_leak_fakeip_active">Active (%1$s) · Zero Leak</string>
+    <string name="dns_leak_fakeip_inactive">Standard DNS (Direct Resolution)</string>
+    <string name="dns_leak_egress_card_title">Client Public Egress</string>
+    <string name="dns_leak_resolver_card_title">DNS Resolver Egress (Leak Check)</string>
+    <string name="dns_leak_system_dns_card_title">System &amp; Private DNS</string>
+    <string name="dns_leak_verdict_card_title">Diagnostic Verdict</string>
+    <string name="dns_leak_tested_domains">Tested probe domains</string>
+    <string name="dns_leak_public_ip">Public IP</string>
+    <string name="dns_leak_resolver_ip">Resolver Exit IP</string>
+    <string name="dns_leak_resolver_geo">Resolver ISP / Location</string>
+    <string name="dns_leak_recommendation">Recommendation</string>
+    <string name="dns_leak_rec_fakeip">Keep Fake-IP enabled in Route Settings for leak-proof browsing.</string>
+    <string name="dns_leak_rec_fix">In Settings > Inbound > TUN settings, enable Strict Route to prevent local DNS bypassing.</string>
+    <string name="dns_leak_rec_safe">Your current connection setup is completely secure against DNS leaks.</string>
 </resources>
