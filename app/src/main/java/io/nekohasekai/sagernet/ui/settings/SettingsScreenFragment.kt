@@ -1,5 +1,6 @@
 package io.nekohasekai.sagernet.ui.settings
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -195,20 +196,25 @@ fun Preference.tintPreferenceIcon(color: Int) {
 
 fun PreferenceFragmentCompat.applyPreferenceIconTint() {
     val ctx = context ?: return
-    val isBlack = Theme.isBlackTheme(ctx)
     val color = if (DataStore.tintPreferenceIcons) {
-        if (isBlack) {
-            ContextCompat.getColor(ctx, android.R.color.white)
-        } else if (Theme.isWhiteTheme(ctx)) {
-            ContextCompat.getColor(ctx, R.color.color_white_theme_accent)
-        } else if (Theme.isLightGrayTheme(ctx)) {
-            ContextCompat.getColor(ctx, R.color.color_light_gray_accent)
-        } else {
-            val accent = ctx.getColorAttr(R.attr.colorAccent)
-            if (accent != 0) accent else ctx.getColorAttr(R.attr.colorPrimary)
+        val accent = ctx.getColorAttr(R.attr.colorAccent)
+        val primary = ctx.getColorAttr(R.attr.colorPrimary)
+        when {
+            accent != 0 && accent != Color.WHITE -> accent
+            primary != 0 && primary != Color.WHITE -> primary
+            Theme.isWhiteTheme(ctx) -> ContextCompat.getColor(ctx, R.color.color_white_theme_accent)
+            Theme.isLightGrayTheme(ctx) -> ContextCompat.getColor(ctx, R.color.color_light_gray_accent)
+            else -> ContextCompat.getColor(ctx, android.R.color.white)
         }
     } else {
-        ctx.getColorAttr(R.attr.colorControlNormal)
+        val isNight = Theme.usingNightMode(ctx)
+        val isBlack = Theme.isBlackTheme(ctx)
+        if (isBlack || isNight) {
+            Color.parseColor("#9E9E9E")
+        } else {
+            ctx.getColorAttr(R.attr.colorControlNormal).takeIf { it != 0 }
+                ?: Color.parseColor("#757575")
+        }
     }
     preferenceScreen?.tintPreferenceIcon(color)
 }
