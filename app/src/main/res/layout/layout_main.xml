@@ -43,7 +43,7 @@
             android:elevation="6dp"
             android:foreground="@drawable/fab_focus_ring"
             android:nextFocusDown="@+id/stats"
-            app:backgroundTint="?colorPrimary"
+            app:backgroundTint="?attr/fabColorBackground"
             app:layout_anchor="@id/stats"
             app:layout_dodgeInsetEdges="top"
             app:pressedTranslationZ="6dp"
@@ -55,7 +55,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:nextFocusUp="@+id/fab"
-            app:backgroundTint="?colorPrimary"
             app:contentInsetStart="0dp"
             app:hideOnScroll="true">
 

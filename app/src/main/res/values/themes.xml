@@ -851,7 +851,7 @@
         <item name="colorMaterial100">@color/color_black_theme_material_100</item>
         <item name="colorMaterial300">@color/color_black_theme_material_300</item>
         <item name="selectedColorPrimary">@color/white</item>
-        <item name="fabColorBackground">@color/black</item>
+        <item name="fabColorBackground">@color/color_black_theme_fab</item>
         <item name="itemShapeFillColor">@color/color_black_theme_item_shape</item>
         <item name="tabTextColor">@color/color_black_theme_tab_unselected</item>
         <item name="tabSelectedTextColor">@color/white</item>
@@ -963,7 +963,7 @@
         <item name="cardElevatedSurfaceColor">@color/color_black_theme_card_elevated</item>
         <item name="profileCardStrokeColor">?attr/colorPrimary</item>
         <item name="selectedColorPrimary">@color/white</item>
-        <item name="fabColorBackground">@color/black</item>
+        <item name="fabColorBackground">@color/color_black_theme_fab</item>
         <item name="itemShapeFillColor">@color/color_black_theme_item_shape</item>
         <item name="accentOrTextSecondary">?android:textColorSecondary</item>
         <item name="accentOrTextPrimary">?android:textColorPrimary</item>
@@ -1032,6 +1032,7 @@
     </style>
 
     <style name="Theme.SagerNet.Amoled" parent="Theme.SagerNet">
+        <item name="fabColorBackground">@color/color_black_theme_fab</item>
         <item name="elevationOverlayEnabled">false</item>
         <item name="dialogButtonColor">@color/white</item>
         <item name="android:colorBackground">@color/black</item>
