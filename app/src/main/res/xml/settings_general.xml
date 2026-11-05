@@ -10,7 +10,7 @@
             app:title="@string/service_mode"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreference
-            app:icon="@drawable/ic_communication_phonelink_ring"
+            app:icon="@drawable/ic_baseline_cast_connected_24"
             app:key="remember_enable"
             app:summary="@string/auto_connect_summary"
             app:title="@string/auto_connect" />
@@ -24,12 +24,12 @@
     <PreferenceCategory app:title="@string/cag_behaviour">
         <SwitchPreference
             app:defaultValue="true"
-            app:icon="@drawable/ic_baseline_flip_camera_android_24"
+            app:icon="@drawable/ic_baseline_compare_arrows_24"
             app:key="networkChangeResetConnections"
             app:title="@string/network_change_reset_connections" />
         <SwitchPreference
             app:defaultValue="true"
-            app:icon="@drawable/ic_baseline_alarm_24"
+            app:icon="@drawable/ic_baseline_timelapse_24"
             app:key="wakeResetConnections"
             app:title="@string/wake_reset_connections" />
         <Preference

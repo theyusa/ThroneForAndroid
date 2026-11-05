@@ -71,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/backup_create"
-                    android:textColor="?whiteOrTextPrimary"
                     app:cornerRadius="24dp" />
 
                 <LinearLayout
@@ -131,7 +130,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/backup_to_webdav"
-                    android:textColor="?whiteOrTextPrimary"
                     app:cornerRadius="24dp" />
 
                 <Button

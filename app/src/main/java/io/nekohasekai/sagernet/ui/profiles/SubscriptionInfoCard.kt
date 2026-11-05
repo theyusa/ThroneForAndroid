@@ -18,6 +18,10 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.core.widget.ImageViewCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.graphics.Color
+import com.google.android.material.card.MaterialCardView
+import io.nekohasekai.sagernet.database.DataStore
+import io.nekohasekai.sagernet.utils.Theme
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.database.ProxyGroup
@@ -136,6 +140,21 @@ internal class SubscriptionInfoCard(val view: View) {
     /** [group]: the current tab's, null for none (the picker). Also redraws the time left. */
     fun bind(group: ProxyGroup?) {
         wanted = group != null && group.isSubscription && group.subOptions.showInfoCard && render(group, group.subInfo)
+        if (view is MaterialCardView) {
+            if (Theme.isBlackTheme(context)) {
+                val isAmoledSeed = DataStore.appTheme == Theme.BLACK || (Theme.isBlackTheme(context) && DataStore.appTheme in setOf(Theme.BLACK, Theme.WHITE, Theme.LIGHT_GRAY))
+                val strokeColor = if (isAmoledSeed) {
+                    Color.WHITE
+                } else {
+                    val prim = context.getColorAttr(R.attr.colorPrimary)
+                    if (ColorUtils.calculateLuminance(prim) < 0.08) Color.WHITE else prim
+                }
+                view.strokeColor = if (strokeColor == Color.WHITE) Color.parseColor("#55FFFFFF") else ColorUtils.setAlphaComponent(strokeColor, 150)
+                view.strokeWidth = context.resources.getDimensionPixelSize(R.dimen.card_stroke_width)
+            } else {
+                view.strokeWidth = 0
+            }
+        }
     }
 
     /** updateData (SubscriptionInfoCard.cpp:465-540); false when there is nothing to show. */

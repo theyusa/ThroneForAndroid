@@ -507,7 +507,7 @@ class ConfigurationFragment : ToolbarFragment(R.layout.layout_group_list),
         }
         val single = groups.size < 2
         header?.tabsWanted = !single
-        toolbar?.elevation = if (single) 0f else dp2px(4).toFloat()
+        toolbar?.elevation = 0f
         val index = pagerAdapter.indexOf(targetGroupId).takeIf { it >= 0 } ?: 0
         if (pager.currentItem != index) pager.setCurrentItem(index, false)
         onPageShown()

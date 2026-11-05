@@ -98,7 +98,7 @@ class MainActivity : ThemedActivity(),
                 R.style.Theme_SagerNet_Black,
                 // The White theme and its night fallback read ?itemShapeFillColor too, so the selection stays visible
                 R.style.Theme_SagerNet_White,
-                R.style.Theme_SagerNet_White_Night
+                R.style.Theme_SagerNet_LightGray
             )
         ) {
             navigation = binding.navView

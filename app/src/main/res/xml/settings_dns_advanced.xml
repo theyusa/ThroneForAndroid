@@ -2,24 +2,30 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory app:title="@string/cag_cache">
         <EditTextPreference
+            app:icon="@drawable/ic_baseline_layers_24"
             app:key="dns_cache_capacity"
             app:title="@string/dns_cache_capacity"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_block_24"
             app:key="dns_disable_cache"
             app:title="@string/dns_disable_cache" />
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_timelapse_24"
             app:key="dns_disable_expire"
             app:title="@string/dns_disable_expire" />
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_refresh_24"
             app:key="dns_optimistic"
             app:summary="@string/dns_optimistic_sum"
             app:title="@string/dns_optimistic" />
         <EditTextPreference
             app:dialogMessage="@string/duration_dialog_message"
+            app:icon="@drawable/ic_baseline_hourglass_empty_24"
             app:key="dns_optimistic_timeout"
             app:title="@string/dns_optimistic_timeout" />
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_folder_open_24"
             app:key="dns_persist_cache"
             app:summary="@string/dns_persist_cache_sum"
             app:title="@string/dns_persist_cache" />
@@ -28,9 +34,11 @@
     <PreferenceCategory app:title="@string/cag_advanced">
         <EditTextPreference
             app:dialogMessage="@string/duration_dialog_message"
+            app:icon="@drawable/ic_baseline_alarm_24"
             app:key="dns_query_timeout"
             app:title="@string/dns_query_timeout" />
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_compare_arrows_24"
             app:key="dns_reverse_mapping"
             app:title="@string/dns_reverse_mapping" />
     </PreferenceCategory>

@@ -413,18 +413,16 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnShareHotspotLink"
-                                style="@style/Widget.SagerNet.Button"
+                                style="@style/Widget.SagerNet.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:minHeight="38dp"
                                 android:text="@string/lan_sharing_share_link_btn"
-                                android:textColor="?whiteOrTextPrimary"
                                 android:textSize="12sp"
                                 app:icon="@drawable/ic_social_share"
-                                app:iconSize="16dp"
-                                app:iconTint="?whiteOrTextPrimary" />
+                                app:iconSize="16dp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -623,18 +621,16 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnShareWifiLink"
-                                style="@style/Widget.SagerNet.Button"
+                                style="@style/Widget.SagerNet.Button.OutlinedButton"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_weight="1"
                                 android:minHeight="38dp"
                                 android:text="@string/lan_sharing_share_link_btn"
-                                android:textColor="?whiteOrTextPrimary"
                                 android:textSize="12sp"
                                 app:icon="@drawable/ic_social_share"
-                                app:iconSize="16dp"
-                                app:iconTint="?whiteOrTextPrimary" />
+                                app:iconSize="16dp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

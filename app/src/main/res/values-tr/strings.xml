@@ -231,6 +231,8 @@
     <string name="use_system_theme_summary">Sistem Monet renklerini kullan (Android 12+)</string>
     <string name="amoled_theme">OLED siyah tema</string>
     <string name="amoled_theme_summary">Gece modunda saf siyah arka plan kullan</string>
+    <string name="tint_preference_icons">Ayar simgelerini renklendir</string>
+    <string name="tint_preference_icons_summary">Ayar simgelerine tema vurgu rengini uygula</string>
     <string name="menu_dashboard">sing-box paneli</string>
     <string name="action_copy">Kopyala</string>
     <string name="update_all_subscription">Tüm abonelikleri güncelle</string>
@@ -2661,4 +2663,12 @@
     <string name="lan_sharing_x_off">Paylaşım kapalı; proxy yalnızca bu cihaz tarafından kullanılır</string>
     <string name="lan_sharing_x_auth_warn">Şifresiz: ağdaki herkes bu proxy\'yi kullanabilir</string>
     <string name="lan_sharing_y_configure">Yapılandır</string>
+
+    <!-- Theme System Strings -->
+    <string name="theme_seed_subtitle">Seçilen tohuma göre üçlü ton uyumu (derin zemin, kart kutusu ve canlı vurgu) otomatik uygulanır.</string>
+    <string name="theme_monet_title">Material You (Dinamik)</string>
+    <string name="theme_monet_desc">Duvar kağıdınızdan türetilen dinamik Material You renk paleti</string>
+    <string name="custom_color_title">Özel Tohum Rengi</string>
+    <string name="custom_color_apply">Uygula</string>
+    <string name="custom_color_hex_hint">Ör. #00E676</string>
 </resources>

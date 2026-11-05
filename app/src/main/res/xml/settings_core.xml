@@ -11,6 +11,7 @@
         <moe.matsuri.nb4a.ui.SimpleMenuPreference
             app:entries="@array/xray_log_level"
             app:entryValues="@array/xray_log_level"
+            app:icon="@drawable/ic_action_description"
             app:key="xray_log_level"
             app:title="@string/xray_log_level"
             app:useSimpleSummaryProvider="true" />
@@ -23,6 +24,7 @@
             app:summary="@string/enable_stats_sum"
             app:title="@string/enable_stats" />
         <SwitchPreference
+            app:icon="@drawable/ic_device_data_usage"
             app:key="disable_traffic_stats"
             app:summary="@string/disable_traffic_stats_sum"
             app:title="@string/disable_traffic_stats" />
@@ -36,14 +38,17 @@
             app:summary="@string/enable_clash_api_summary"
             app:title="@string/enable_clash_api" />
         <EditTextPreference
+            app:icon="@drawable/ic_hardware_router"
             app:key="coreClashApiPort"
             app:persistent="false"
             app:title="@string/listen_port" />
         <EditTextPreference
+            app:icon="@drawable/ic_baseline_domain_24"
             app:key="core_box_clash_listen_addr"
             app:title="@string/listen_address"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            app:icon="@drawable/ic_settings_password"
             app:key="core_box_clash_api_secret"
             app:title="@string/clash_api_secret" />
     </PreferenceCategory>
@@ -56,11 +61,13 @@
             app:summary="@string/api_dashboard_enable_sum"
             app:title="@string/api_dashboard_enable" />
         <EditTextPreference
+            app:icon="@drawable/ic_hardware_router"
             app:key="coreApiDashboardPort"
             app:persistent="false"
             app:title="@string/listen_port" />
         <EditTextPreference
             app:dialogMessage="@string/api_dashboard_secret_hint"
+            app:icon="@drawable/ic_settings_password"
             app:key="core_box_api_secret"
             app:title="@string/clash_api_secret" />
     </PreferenceCategory>
@@ -69,11 +76,13 @@
         <moe.matsuri.nb4a.ui.SimpleMenuPreference
             app:entries="@array/xray_vless_preference_entries"
             app:entryValues="@array/int_array_3"
+            app:icon="@drawable/ic_baseline_layers_24"
             app:key="xray_vless_preference"
             app:title="@string/xray_vless_preference"
             app:useSimpleSummaryProvider="true" />
         <Preference
             app:fragment="io.nekohasekai.sagernet.ui.settings.XrayGeoSettingsFragment"
+            app:icon="@drawable/baseline_public_24"
             app:key="xrayGeoAssets"
             app:summary="@string/xray_geo_assets_sum"
             app:title="@string/xray_geo_assets" />
@@ -103,19 +112,23 @@
             app:summary="@string/enable_ntp_sum"
             app:title="@string/enable_ntp" />
         <EditTextPreference
+            app:icon="@drawable/ic_baseline_domain_24"
             app:key="ntp_server_address"
             app:title="@string/ntp_server_address"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            app:icon="@drawable/ic_hardware_router"
             app:key="ntp_server_port"
             app:title="@string/ntp_server_port" />
         <EditTextPreference
             app:dialogMessage="@string/duration_dialog_message"
+            app:icon="@drawable/ic_baseline_alarm_24"
             app:key="ntp_interval"
             app:title="@string/ntp_interval" />
         <moe.matsuri.nb4a.ui.SimpleMenuPreference
             app:entries="@array/ntp_outbound_values"
             app:entryValues="@array/ntp_outbound_values"
+            app:icon="@drawable/ic_baseline_alt_route_24"
             app:key="ntp_outbound"
             app:title="@string/ntp_outbound"
             app:useSimpleSummaryProvider="true" />

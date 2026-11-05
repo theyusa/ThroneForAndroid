@@ -168,12 +168,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnStandardSettings"
-                style="@style/Widget.SagerNet.Button"
+                style="@style/Widget.SagerNet.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/cellular_network_standard_settings"
-                android:textColor="?whiteOrTextPrimary" />
+                android:text="@string/cellular_network_standard_settings" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

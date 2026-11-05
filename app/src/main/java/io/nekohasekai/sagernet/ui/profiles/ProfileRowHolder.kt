@@ -28,6 +28,9 @@ import io.nekohasekai.sagernet.ktx.tryToShow
 import io.nekohasekai.sagernet.ui.test.RowPhase
 import moe.matsuri.nb4a.Protocols
 import moe.matsuri.nb4a.Protocols.getProtocolColor
+import android.graphics.drawable.GradientDrawable
+import io.nekohasekai.sagernet.ktx.dp2px
+import io.nekohasekai.sagernet.utils.Theme
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.Locale
@@ -292,7 +295,14 @@ internal class ProfileRowHolder(view: View, private val adapter: ProfileListAdap
         val context = itemView.context
         name.text = profile.displayName()
         type.text = TypeLabel.of(profile)
-        type.setTextColor(context.getProtocolColor(profile.type))
+        val protoColor = context.getProtocolColor(profile.type)
+        type.setTextColor(protoColor)
+        val chipAlpha = if (Theme.isBlackTheme(context)) 0.18 else 0.14
+        val chipBg = GradientDrawable().apply {
+            cornerRadius = dp2px(6).toFloat()
+            setColor(ColorUtils.setAlphaComponent(protoColor, (255 * chipAlpha).toInt()))
+        }
+        type.background = chipBg
         bindContent()
         bindState()
     }
@@ -330,6 +340,7 @@ internal class ProfileRowHolder(view: View, private val adapter: ProfileListAdap
         placeholder = true
         name.text = ""
         type.text = ""
+        type.background = null
         for (view in arrayOf(address, result, testProgress, traffic, error, selectCheck, editButton, shareButton, moreButton)) {
             view.isVisible = false
         }
@@ -372,14 +383,35 @@ internal class ProfileRowHolder(view: View, private val adapter: ProfileListAdap
         val surface = context.getColorAttr(R.attr.colorSurface)
         var background = surface
         selectedIndicator.isVisible = selected
-        // The shadow does not show on OLED black, so that theme outlines the card instead
-        val stroke = context.getColorAttr(R.attr.profileCardStrokeColor)
-        if (stroke != 0) card.strokeColor = stroke
-        card.strokeWidth = if (stroke != 0) context.resources.getDimensionPixelSize(R.dimen.card_stroke_width) else 0
+        val isAmoled = Theme.isBlackTheme(context)
+        if (isAmoled) {
+            val isAmoledSeed = DataStore.appTheme == Theme.BLACK || (Theme.isBlackTheme(context) && DataStore.appTheme in setOf(Theme.BLACK, Theme.WHITE, Theme.LIGHT_GRAY))
+            val strokeColor = if (isAmoledSeed) {
+                Color.WHITE
+            } else {
+                val prim = context.getColorAttr(R.attr.colorPrimary)
+                if (ColorUtils.calculateLuminance(prim) < 0.08) Color.WHITE else prim
+            }
+            if (selected) {
+                card.strokeColor = strokeColor
+                card.strokeWidth = dp2px(2)
+            } else {
+                card.strokeColor = if (strokeColor == Color.WHITE) Color.parseColor("#55FFFFFF") else ColorUtils.setAlphaComponent(strokeColor, 150)
+                card.strokeWidth = context.resources.getDimensionPixelSize(R.dimen.card_stroke_width)
+            }
+        } else {
+            val stroke = context.getColorAttr(R.attr.profileCardStrokeColor)
+            if (stroke != 0) {
+                card.strokeColor = stroke
+                card.strokeWidth = context.resources.getDimensionPixelSize(R.dimen.card_stroke_width)
+            } else {
+                card.strokeWidth = 0
+            }
+        }
         card.cardElevation = context.resources.getDimension(R.dimen.profile_card_elevation_classic)
         if (selected) {
             val primary = context.getColorAttr(R.attr.selectedColorPrimary)
-            background = ColorUtils.compositeColors(ColorUtils.setAlphaComponent(primary, 20), surface)
+            background = ColorUtils.compositeColors(ColorUtils.setAlphaComponent(primary, 24), surface)
         }
         if (checked) {
             val accent = context.getColorAttr(R.attr.colorAccent)

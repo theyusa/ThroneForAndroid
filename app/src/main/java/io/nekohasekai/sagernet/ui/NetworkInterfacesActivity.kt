@@ -90,16 +90,19 @@ class NetworkInterfacesActivity : ThemedActivity() {
 
     private var refreshJob: Job? = null
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
+    private var lastSnapshot: NetworkInterfacesSnapshot? = null
 
     override fun onStart() {
         super.onStart()
-        requestRefresh()
+        requestRefresh(debounceMs = 0L, showLoading = true)
         registerLiveMonitoring()
     }
 
     override fun onStop() {
         super.onStop()
         unregisterLiveMonitoring()
+        refreshJob?.cancel()
+        refreshJob = null
     }
 
     private fun registerLiveMonitoring() {
@@ -107,19 +110,19 @@ class NetworkInterfacesActivity : ThemedActivity() {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                requestRefresh(debounceMs = 300)
+                requestRefresh(debounceMs = 500L, showLoading = false)
             }
 
             override fun onLost(network: Network) {
-                requestRefresh(debounceMs = 300)
+                requestRefresh(debounceMs = 500L, showLoading = false)
             }
 
             override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
-                requestRefresh(debounceMs = 300)
+                requestRefresh(debounceMs = 500L, showLoading = false)
             }
 
             override fun onLinkPropertiesChanged(network: Network, linkProperties: LinkProperties) {
-                requestRefresh(debounceMs = 300)
+                requestRefresh(debounceMs = 500L, showLoading = false)
             }
         }
         networkCallback = callback
@@ -138,20 +141,27 @@ class NetworkInterfacesActivity : ThemedActivity() {
         }
     }
 
-    private fun requestRefresh(debounceMs: Long = 0L) {
-        binding.progressBarLoading.visibility = View.VISIBLE
+    private fun requestRefresh(debounceMs: Long = 0L, showLoading: Boolean = false) {
+        if (showLoading) {
+            binding.progressBarLoading.visibility = View.VISIBLE
+        }
         refreshJob?.cancel()
         refreshJob = lifecycleScope.launch {
             if (debounceMs > 0) delay(debounceMs)
             val snapshot = withContext(Dispatchers.IO) {
                 repository.collect()
             }
-            renderSnapshot(snapshot)
+            if (snapshot != lastSnapshot) {
+                lastSnapshot = snapshot
+                renderSnapshot(snapshot)
+            } else if (showLoading) {
+                binding.progressBarLoading.visibility = View.GONE
+            }
         }
     }
 
     private fun refresh() {
-        requestRefresh(debounceMs = 0L)
+        requestRefresh(debounceMs = 0L, showLoading = true)
     }
 
     private fun renderSnapshot(snapshot: NetworkInterfacesSnapshot) {
