@@ -264,7 +264,7 @@
                                 android:textColor="?android:attr/textColorSecondary" />
                         </LinearLayout>
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/switchPhysicalNetwork"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -297,8 +297,7 @@
                         style="@style/Widget.SagerNet.Button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/stun_action_start"
-                        android:textColor="?whiteOrTextPrimary" />
+                        android:text="@string/stun_action_start" />
 
                     <ProgressBar
                         android:id="@+id/progressBarStun"

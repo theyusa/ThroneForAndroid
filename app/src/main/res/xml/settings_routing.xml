@@ -50,6 +50,7 @@
             app:persistent="false"
             app:title="@string/route_auto_update" />
         <EditTextPreference
+            app:icon="@drawable/ic_baseline_timelapse_24"
             app:key="routeAutoUpdateInterval"
             app:persistent="false"
             app:title="@string/auto_update_interval" />

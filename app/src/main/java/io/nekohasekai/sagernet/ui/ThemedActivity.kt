@@ -11,9 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.ColorUtils
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import io.nekohasekai.sagernet.R
+import io.nekohasekai.sagernet.database.DataStore
+import io.nekohasekai.sagernet.ktx.getColorAttr
 import io.nekohasekai.sagernet.utils.Theme
 import io.nekohasekai.sagernet.widget.applyTopInset
 
@@ -22,7 +23,6 @@ abstract class ThemedActivity : AppCompatActivity {
     constructor(contentLayoutId: Int) : super(contentLayoutId)
 
     companion object {
-        // The scrims androidx.activity uses for 3-button navigation before API 29 (from 29 the system draws one).
         private val LIGHT_SCRIM = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
         private val DARK_SCRIM = Color.argb(0x80, 0x1b, 0x1b, 0x1b)
     }
@@ -31,17 +31,28 @@ abstract class ThemedActivity : AppCompatActivity {
     var uiMode = 0
     open val isDialog = false
 
-    /** Dark status bar icons (a light toolbar colour). */
+    private var lastUseSystemTheme: Boolean = false
+    private var lastWallpaperColor: Int? = null
+    private var lastAppTheme: Int = 0
+    private var lastNightTheme: Int = 0
+    private var lastUsingNight: Boolean = false
+
     var lightStatusBar = false
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        lastUseSystemTheme = DataStore.useSystemTheme
+        lastWallpaperColor = if (DataStore.useSystemTheme) Theme.getSystemWallpaperColor(this) else null
+        lastAppTheme = DataStore.appTheme
+        lastNightTheme = DataStore.nightTheme
+        lastUsingNight = Theme.usingNightMode(this)
+
+        Theme.applyNightTheme()
         if (!isDialog) {
             Theme.apply(this)
         } else {
             Theme.applyDialog(this)
         }
-        Theme.applyNightTheme()
         if (!isDialog) enableEdgeToEdge(statusBarStyle(), navigationBarStyle())
 
         super.onCreate(savedInstanceState)
@@ -49,10 +60,10 @@ abstract class ThemedActivity : AppCompatActivity {
         uiMode = resources.configuration.uiMode
     }
 
-    /** Status bar icons in contrast to the toolbar colour (dark icons on light bars such as the white theme's). */
     private fun statusBarStyle(): SystemBarStyle {
-        val toolbar = MaterialColors.getColor(this, R.attr.colorPrimary, Color.BLACK)
-        lightStatusBar = ColorUtils.calculateLuminance(toolbar) > 0.5
+        val isDark = Theme.isBlackTheme(this)
+        val isLightSurface = !isDark && ColorUtils.calculateLuminance(getColorAttr(R.attr.colorSurface)) > 0.45
+        lightStatusBar = isLightSurface
         return if (lightStatusBar) {
             SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
         } else {
@@ -60,8 +71,20 @@ abstract class ThemedActivity : AppCompatActivity {
         }
     }
 
-    /** Navigation bar icons follow the window background; 3-button navigation keeps a scrim. */
-    private fun navigationBarStyle() = SystemBarStyle.auto(LIGHT_SCRIM, DARK_SCRIM) { Theme.usingNightMode() }
+    private fun navigationBarStyle() = SystemBarStyle.auto(LIGHT_SCRIM, DARK_SCRIM) { Theme.usingNightMode(this) }
+
+    override fun onResume() {
+        super.onResume()
+        val currentWallpaperColor = if (DataStore.useSystemTheme) Theme.getSystemWallpaperColor(this) else null
+        val currentUsingNight = Theme.usingNightMode(this)
+        if (lastUseSystemTheme != DataStore.useSystemTheme ||
+            (DataStore.useSystemTheme && lastWallpaperColor != currentWallpaperColor) ||
+            (!DataStore.useSystemTheme && lastAppTheme != DataStore.appTheme) ||
+            lastNightTheme != DataStore.nightTheme ||
+            lastUsingNight != currentUsingNight) {
+            ActivityCompat.recreate(this)
+        }
+    }
 
     override fun onContentChanged() {
         super.onContentChanged()
@@ -70,7 +93,6 @@ abstract class ThemedActivity : AppCompatActivity {
 
     override fun setTheme(resId: Int) {
         super.setTheme(resId)
-
         themeResId = resId
     }
 

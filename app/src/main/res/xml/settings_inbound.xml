@@ -7,11 +7,12 @@
             app:summary="@string/disable_mixed_inbound_sum"
             app:title="@string/disable_mixed_inbound" />
         <EditTextPreference
-            app:icon="@drawable/ic_maps_directions_boat"
+            app:icon="@drawable/ic_hardware_router"
             app:key="inbound_socks_port"
             app:title="@string/port_proxy"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_shuffle_24"
             app:key="random_inbound_port"
             app:summary="@string/random_inbound_port_sum"
             app:title="@string/random_inbound_port" />
@@ -40,10 +41,12 @@
             app:summary="@string/inbound_auth_sum"
             app:title="@string/inbound_auth" />
         <EditTextPreference
+            app:icon="@drawable/ic_baseline_person_24"
             app:key="inbound_user"
             app:title="@string/username"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            app:icon="@drawable/ic_settings_password"
             app:key="inbound_pass"
             app:title="@string/password" />
     </PreferenceCategory>

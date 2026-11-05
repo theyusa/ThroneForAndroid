@@ -5,6 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
     app:statusBarBackground="@android:color/transparent"
     tools:openDrawer="start">
 
@@ -68,6 +69,9 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         style="@style/Widget.Design.NavigationView"
+        app:elevation="0dp"
+        android:background="?android:attr/colorBackground"
+        app:backgroundTint="?android:attr/colorBackground"
         app:insetForeground="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -85,6 +89,9 @@
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_black"
         style="@style/Widget.Design.NavigationView"
+        app:elevation="0dp"
+        android:background="?android:attr/colorBackground"
+        app:backgroundTint="?android:attr/colorBackground"
         app:insetForeground="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

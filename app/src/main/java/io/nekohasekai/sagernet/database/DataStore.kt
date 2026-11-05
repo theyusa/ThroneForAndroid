@@ -79,6 +79,8 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var useSystemTheme by configurationStore.boolean(Key.USE_SYSTEM_THEME)
     var nightTheme by configurationStore.stringToInt(Key.NIGHT_THEME)
     var amoledTheme by configurationStore.boolean(Key.AMOLED_THEME)
+    var tintPreferenceIcons by configurationStore.boolean(Key.TINT_PREFERENCE_ICONS) { true }
+    var customThemeColor by configurationStore.int("custom_theme_color") { 0x00E676 }
     var appLanguage by configurationStore.string(Key.APP_LANGUAGE) { "" }
     var serviceMode by configurationStore.string(Key.SERVICE_MODE) { Key.MODE_VPN }
 

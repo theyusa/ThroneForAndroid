@@ -122,28 +122,23 @@ class AppearanceSettingsFragment : SettingsScreenFragment(R.xml.settings_appeara
 
     override fun bind() {
         val appTheme = pref<ColorPickerPreference>(Key.APP_THEME)
-        val useSystemTheme = pref<SwitchPreference>(Key.USE_SYSTEM_THEME)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            useSystemTheme.isVisible = false
-        } else {
-            useSystemTheme.setOnPreferenceChangeListener { _, newValue ->
-                appTheme.isEnabled = !(newValue as Boolean)
-                applyThemeInstantly()
-                true
-            }
-            appTheme.isEnabled = !DataStore.useSystemTheme
-        }
         appTheme.setOnPreferenceChangeListener { _, _ ->
             applyThemeInstantly()
             true
         }
         pref<SimpleMenuPreference>(Key.NIGHT_THEME).setOnPreferenceChangeListener { _, newTheme ->
-            Theme.currentNightMode = (newTheme as String).toInt()
+            val mode = (newTheme as String).toInt()
+            DataStore.nightTheme = mode
+            Theme.currentNightMode = mode
             Theme.applyNightTheme()
+            applyThemeInstantly()
             true
         }
-        // AMOLED black: recreate the host so the overlay is applied or removed
         pref<SwitchPreference>(Key.AMOLED_THEME).setOnPreferenceChangeListener { _, _ ->
+            applyThemeInstantly()
+            true
+        }
+        pref<SwitchPreference>(Key.TINT_PREFERENCE_ICONS).setOnPreferenceChangeListener { _, _ ->
             applyThemeInstantly()
             true
         }

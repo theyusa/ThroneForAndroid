@@ -21,15 +21,18 @@
 
     <PreferenceCategory app:title="@string/cag_private_range_bypass">
         <SwitchPreference
+            app:icon="@drawable/ic_baseline_alt_route_24"
             app:key="tunBypassPrivateRanges"
             app:persistent="false"
             app:summary="@string/bypass_private_ranges_sum"
             app:title="@string/bypass_private_ranges" />
         <io.nekohasekai.sagernet.ui.settings.StringListPreference
             app:dialogMessage="@string/private_ranges_dialog_message"
+            app:icon="@drawable/ic_baseline_rule_folder_24"
             app:key="vpn_private_ranges"
             app:title="@string/private_ranges" />
         <Preference
+            app:icon="@drawable/ic_baseline_refresh_24"
             app:key="tunRestoreRanges"
             app:title="@string/restore_default_ranges" />
     </PreferenceCategory>
@@ -44,14 +47,17 @@
 
     <PreferenceCategory app:title="@string/cag_tun_address">
         <EditTextPreference
+            app:icon="@drawable/ic_baseline_input_24"
             app:key="vpn_tun_ipv4_cidr"
             app:title="@string/tun_ipv4_cidr"
             app:useSimpleSummaryProvider="true" />
         <EditTextPreference
+            app:icon="@drawable/ic_image_looks_6"
             app:key="vpn_tun_ipv6_cidr"
             app:title="@string/tun_ipv6_cidr"
             app:useSimpleSummaryProvider="true" />
         <Preference
+            app:icon="@drawable/ic_baseline_refresh_24"
             app:key="tunRestoreAddresses"
             app:title="@string/restore_default_addresses" />
     </PreferenceCategory>

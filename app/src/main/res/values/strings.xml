@@ -15,6 +15,8 @@
     <string name="use_system_theme_summary">Use system Monet colors (Android 12+)</string>
     <string name="amoled_theme">OLED black theme</string>
     <string name="amoled_theme_summary">Use pure black background in night mode</string>
+    <string name="tint_preference_icons">Tint preference icons</string>
+    <string name="tint_preference_icons_summary">Apply theme accent color to setting icons</string>
     <string name="document">Documentation</string>
     <string name="quick_toggle">Toggle</string>
     <string name="quick_enable">Enable</string>
@@ -2882,4 +2884,12 @@
     <string name="lan_sharing_x_auth_warn">No authentication: everyone on this network can use this proxy</string>
     <string name="lan_sharing_y_configure">Configure</string>
     <string name="lan_sharing_open_btn">Start</string>
+
+    <!-- Theme System Strings -->
+    <string name="theme_seed_subtitle">A 3-tone palette (deep background, container box and vibrant accent) is automatically harmonized from the seed color.</string>
+    <string name="theme_monet_title">Material You (Dynamic)</string>
+    <string name="theme_monet_desc">Dynamic Material You palette extracted from your wallpaper</string>
+    <string name="custom_color_title">Custom Seed Color</string>
+    <string name="custom_color_apply">Apply</string>
+    <string name="custom_color_hex_hint">e.g. #00E676</string>
 </resources>

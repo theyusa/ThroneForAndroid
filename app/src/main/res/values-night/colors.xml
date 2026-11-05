@@ -1,37 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default thin card border: about 12% white -->
+    <color name="fab_color_progress">@color/material_light_white</color>
+    <color name="preference_simple_menu_background">#303030</color>
+    <color name="spinner_dropdown_bg">#2D2F33</color>
+    <color name="spinner_dropdown_stroke">#4B5563</color>
+    <color name="spinner_dropdown_arrow">#94A3B8</color>
+    <!-- Material Design 3 全局色彩与层级系统 (夜间模式) -->
+    <color name="md3_background">#121212</color>
+    <color name="md3_surface">#1E1E1E</color>
+    <color name="md3_text_primary">#E6E1E5</color>
+    <color name="md3_text_secondary">#CAC4D0</color>
+    <color name="md3_top_app_bar">#1E1E1E</color>
+    <color name="nav_icon_unselected">#CAC4D0</color>
+
+    <!-- 卡片默认细边框：约 12% 白 -->
     <color name="card_stroke">#29FFFFFF</color>
+    <color name="popup_dropdown_stroke">#38FFFFFF</color>
 
-    <!-- Route rule types (night, lighter) -->
-    <color name="color_route_block">#EF5350</color>
-    <color name="color_route_direct">#66BB6A</color>
-    <color name="color_route_proxy">#42A5F5</color>
-    <color name="color_route_config">#AB47BC</color>
 
-    <!-- Tinted elevated card surfaces: #121212 + 11% of each primary -->
-    <color name="card_elevated_pink">#2A131B</color>
-    <color name="card_elevated_pink_ssr">#2C1D21</color>
-    <color name="card_elevated_amber">#2C2511</color>
-    <color name="card_elevated_blue">#14212B</color>
-    <color name="card_elevated_blue_grey">#1B1E1F</color>
-    <color name="card_elevated_brown">#1D1918</color>
-    <color name="card_elevated_cyan">#102527</color>
-    <color name="card_elevated_deep_orange">#2C1A14</color>
-    <color name="card_elevated_deep_purple">#1B1624</color>
-    <color name="card_elevated_green">#182319</color>
-    <color name="card_elevated_grey">#212121</color>
-    <color name="card_elevated_indigo">#171924</color>
-    <color name="card_elevated_light_blue">#10232B</color>
-    <color name="card_elevated_light_green">#1F2518</color>
-    <color name="card_elevated_lime">#272816</color>
-    <color name="card_elevated_orange">#2C2110</color>
-    <color name="card_elevated_purple">#211423</color>
-    <color name="card_elevated_red">#2B1716</color>
-    <color name="card_elevated_teal">#10211F</color>
-    <color name="card_elevated_yellow">#2C2A17</color>
-    <color name="card_elevated_black">#151515</color>
-    <color name="card_elevated_verdant_mint">#10241C</color>
+    <!-- 路由规则类型颜色（夜间，稍浅） -->
+    <color name="color_route_block">#EF5350</color>   <!-- 屏蔽：浅红 -->
+    <color name="color_route_direct">#66BB6A</color>  <!-- 直连：浅绿 -->
+    <color name="color_route_proxy">#42A5F5</color>   <!-- 代理：浅蓝 -->
+    <color name="color_route_config">#AB47BC</color>  <!-- 配置：浅紫 -->
+
+    <!-- Material 3 3-Tone System: Tone 1 (En Arka / Deep Dark Background) -->
+    <color name="bg_red">#150507</color>
+    <color name="bg_verdant_mint">#04140D</color>
+    <color name="bg_blue">#050F1E</color>
+    <color name="bg_purple">#11061C</color>
+    <color name="bg_deep_purple">#0E0519</color>
+    <color name="bg_orange">#160B04</color>
+    <color name="bg_deep_orange">#180803</color>
+    <color name="bg_amber">#151003</color>
+    <color name="bg_yellow">#151203</color>
+    <color name="bg_green">#051406</color>
+    <color name="bg_light_green">#061505</color>
+    <color name="bg_lime">#0B1503</color>
+    <color name="bg_teal">#031414</color>
+    <color name="bg_cyan">#031317</color>
+    <color name="bg_light_blue">#04121E</color>
+    <color name="bg_indigo">#07091C</color>
+    <color name="bg_pink">#160510</color>
+    <color name="bg_pink_ssr">#170512</color>
+    <color name="bg_brown">#140B07</color>
+    <color name="bg_blue_grey">#0A1116</color>
+    <color name="bg_grey">#121212</color>
+
+    <!-- Material 3 3-Tone System: Tone 2 (Onundeki Box / Harmonious Surface Container) -->
+    <color name="card_elevated_red">#240B10</color>
+    <color name="card_elevated_verdant_mint">#0B2418</color>
+    <color name="card_elevated_blue">#0D1C34</color>
+    <color name="card_elevated_purple">#200E32</color>
+    <color name="card_elevated_deep_purple">#1A0B2C</color>
+    <color name="card_elevated_orange">#261408</color>
+    <color name="card_elevated_deep_orange">#281006</color>
+    <color name="card_elevated_amber">#251B07</color>
+    <color name="card_elevated_yellow">#252007</color>
+    <color name="card_elevated_green">#0D2511</color>
+    <color name="card_elevated_light_green">#10260E</color>
+    <color name="card_elevated_lime">#172608</color>
+    <color name="card_elevated_teal">#082324</color>
+    <color name="card_elevated_cyan">#082128</color>
+    <color name="card_elevated_light_blue">#0B1F34</color>
+    <color name="card_elevated_indigo">#121634</color>
+    <color name="card_elevated_pink">#270B1D</color>
+    <color name="card_elevated_pink_ssr">#290C20</color>
+    <color name="card_elevated_brown">#24160E</color>
+    <color name="card_elevated_blue_grey">#142028</color>
+    <color name="card_elevated_grey">#1E1E1E</color>
+    <color name="card_elevated_black">#141414</color>
+
+    <!-- 纯黑主题在深色模式下的颜色映射 -->
+    <color name="color_ng_black_accent">#FFFFFF</color>
+    <color name="color_ng_black_primary">#2C2C2E</color>
 
     <!-- Dialog button text: the 200 tones (4.8:1 or more on the dialog surface) -->
     <color name="dialog_button_purple">#CE93D8</color>

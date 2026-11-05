@@ -18,6 +18,10 @@ import io.nekohasekai.sagernet.ktx.needReload
 import io.nekohasekai.sagernet.ui.ValidationForm
 import io.nekohasekai.sagernet.validation.Rule
 import moe.matsuri.nb4a.ui.EditConfigPreference
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import io.nekohasekai.sagernet.ktx.getColorAttr
+import io.nekohasekai.sagernet.utils.Theme
 
 /**
  * One settings sub-screen bound to the configuration store. Sub-classes wire their preferences in [bind]; values
@@ -28,6 +32,7 @@ abstract class SettingsScreenFragment(@XmlRes private val preferences: Int) : Pr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listView.layoutManager = FixedLinearLayoutManager(listView)
+        applyPreferenceIconTint()
     }
 
     private var form: ValidationForm? = null
@@ -173,4 +178,37 @@ abstract class SettingsScreenFragment(@XmlRes private val preferences: Int) : Pr
     companion object {
         const val ARG_TITLE = "title"
     }
+}
+
+fun Preference.tintPreferenceIcon(color: Int) {
+    if (this is PreferenceGroup) {
+        for (i in 0 until preferenceCount) {
+            getPreference(i).tintPreferenceIcon(color)
+        }
+    }
+    icon?.let { d ->
+        val wrapped = DrawableCompat.wrap(d.mutate())
+        DrawableCompat.setTint(wrapped, color)
+        icon = wrapped
+    }
+}
+
+fun PreferenceFragmentCompat.applyPreferenceIconTint() {
+    val ctx = context ?: return
+    val isBlack = Theme.isBlackTheme(ctx)
+    val color = if (DataStore.tintPreferenceIcons) {
+        if (isBlack) {
+            ContextCompat.getColor(ctx, android.R.color.white)
+        } else if (Theme.isWhiteTheme(ctx)) {
+            ContextCompat.getColor(ctx, R.color.color_white_theme_accent)
+        } else if (Theme.isLightGrayTheme(ctx)) {
+            ContextCompat.getColor(ctx, R.color.color_light_gray_accent)
+        } else {
+            val accent = ctx.getColorAttr(R.attr.colorAccent)
+            if (accent != 0) accent else ctx.getColorAttr(R.attr.colorPrimary)
+        }
+    } else {
+        ctx.getColorAttr(R.attr.colorControlNormal)
+    }
+    preferenceScreen?.tintPreferenceIcon(color)
 }
