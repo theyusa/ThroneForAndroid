@@ -13,26 +13,26 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.databinding.ActivityNetworkInterfacesBinding
 import io.nekohasekai.sagernet.databinding.ItemNetworkInterfaceBinding
 import io.nekohasekai.sagernet.utils.HotspotKind
+import io.nekohasekai.sagernet.utils.InterfaceIp
 import io.nekohasekai.sagernet.utils.InterfaceKind
+import io.nekohasekai.sagernet.utils.InterfaceRoute
 import io.nekohasekai.sagernet.utils.NetworkInterfaceInfo
 import io.nekohasekai.sagernet.utils.NetworkInterfacesRepository
 import io.nekohasekai.sagernet.utils.NetworkInterfacesSnapshot
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.Job
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import android.net.NetworkRequest
 import android.net.NetworkCapabilities
 import android.net.Network
@@ -64,9 +64,6 @@ class NetworkInterfacesActivity : ThemedActivity() {
             layoutManager = LinearLayoutManager(this@NetworkInterfacesActivity)
             adapter = interfacesAdapter
         }
-
-        // onStart triggers live monitoring and initial refresh
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -168,6 +165,39 @@ class NetworkInterfacesActivity : ThemedActivity() {
         binding.progressBarLoading.visibility = View.GONE
         binding.cardPartialWarning.visibility = if (snapshot.partial) View.VISIBLE else View.GONE
         binding.textEmpty.visibility = if (snapshot.interfaces.isEmpty()) View.VISIBLE else View.GONE
+
+        // Render Active Network & System DNS Overview
+        val active = snapshot.activeNetwork
+        if (active != null) {
+            binding.cardActiveOverview.visibility = View.VISIBLE
+            binding.badgeActiveMode.text = when {
+                active.isVpnActive -> getString(R.string.network_interfaces_vpn_active)
+                active.kind == InterfaceKind.WIFI -> getString(R.string.network_interfaces_direct_wifi)
+                active.kind == InterfaceKind.CELLULAR -> getString(R.string.network_interfaces_direct_cellular)
+                else -> active.interfaceName ?: getString(R.string.network_interfaces_up)
+            }
+
+            val gatewayStr = active.gateway ?: getString(R.string.network_interfaces_unavailable)
+            val ifaceStr = active.interfaceName ?: getString(R.string.network_interfaces_unavailable)
+            binding.textActiveDefaultIface.text = getString(R.string.network_interfaces_default_gateway_label, ifaceStr, gatewayStr)
+
+            val dnsListStr = if (active.dnsServers.isNotEmpty()) {
+                active.dnsServers.joinToString(", ")
+            } else {
+                getString(R.string.network_interfaces_unavailable)
+            }
+            binding.textActiveDns.text = getString(R.string.network_interfaces_active_dns_label, dnsListStr)
+
+            binding.textActivePrivateDns.text = if (active.isPrivateDnsActive) {
+                val provider = active.privateDnsServerName ?: getString(R.string.stun_preset_fast)
+                getString(R.string.network_interfaces_private_dns_active, provider)
+            } else {
+                getString(R.string.network_interfaces_private_dns_none)
+            }
+        } else {
+            binding.cardActiveOverview.visibility = View.GONE
+        }
+
         interfacesAdapter.submitList(snapshot.interfaces)
     }
 
@@ -215,9 +245,13 @@ class NetworkInterfacesActivity : ThemedActivity() {
             // Up / Down badge
             itemBinding.badgeStatus.text = when (info.up) {
                 true -> getString(R.string.network_interfaces_up)
-                false -> getString(R.string.network_interfaces_down)
+                false -> if (info.isVpn) getString(R.string.network_interfaces_vpn_standby) else getString(R.string.network_interfaces_down)
                 null -> getString(R.string.network_interfaces_unavailable)
             }
+
+            // Default Route badge
+            itemBinding.badgeDefaultRoute.visibility = if (info.isDefaultRoute) View.VISIBLE else View.GONE
+            itemBinding.badgeDefaultRoute.text = getString(R.string.network_interfaces_default_route)
 
             // Hotspot badge
             when (info.hotspot) {
@@ -261,7 +295,6 @@ class NetworkInterfacesActivity : ThemedActivity() {
                 }
                 itemBinding.layoutAddresses.addView(noneView)
             } else {
-                val inflater = LayoutInflater.from(this@NetworkInterfacesActivity)
                 info.addresses.forEach { ip ->
                     val addrLine = buildString {
                         append(ip.address)
@@ -285,23 +318,63 @@ class NetworkInterfacesActivity : ThemedActivity() {
                 }
             }
 
-            // Routes
+            // Routes Section (Collapsible if > 4 routes)
+            fun formatRoute(route: InterfaceRoute): String {
+                val dest = route.destination.let {
+                    if (it.prefixLength != null) "${it.address}/${it.prefixLength}" else it.address
+                }
+                return if (route.gateway != null) "$dest  ➔  ${route.gateway}" else dest
+            }
+
             if (info.routes.isNotEmpty()) {
                 itemBinding.layoutRoutesSection.visibility = View.VISIBLE
-                itemBinding.textRoutes.text = info.routes.joinToString("\n") { route ->
-                    val dest = route.destination.let {
-                        if (it.prefixLength != null) "${it.address}/${it.prefixLength}" else it.address
+                val maxCollapsed = 4
+                if (info.routes.size > maxCollapsed) {
+                    var expanded = false
+                    val collapsedText = info.routes.take(maxCollapsed).joinToString("\n") { formatRoute(it) }
+                    val fullText = info.routes.joinToString("\n") { formatRoute(it) }
+                    val remaining = info.routes.size - maxCollapsed
+
+                    itemBinding.textRoutes.text = collapsedText
+                    itemBinding.textRoutesExpand.visibility = View.VISIBLE
+                    itemBinding.textRoutesExpand.text = getString(R.string.network_interfaces_routes_more, remaining)
+
+                    val toggleExpand = View.OnClickListener {
+                        expanded = !expanded
+                        if (expanded) {
+                            itemBinding.textRoutes.text = fullText
+                            itemBinding.textRoutesExpand.text = getString(R.string.network_interfaces_routes_collapse)
+                        } else {
+                            itemBinding.textRoutes.text = collapsedText
+                            itemBinding.textRoutesExpand.text = getString(R.string.network_interfaces_routes_more, remaining)
+                        }
                     }
-                    if (route.gateway != null) "$dest  ➔  ${route.gateway}" else dest
+                    itemBinding.textRoutesExpand.setOnClickListener(toggleExpand)
+                    itemBinding.textRoutes.setOnClickListener(toggleExpand)
+                } else {
+                    itemBinding.textRoutes.text = info.routes.joinToString("\n") { formatRoute(it) }
+                    itemBinding.textRoutesExpand.visibility = View.GONE
+                    itemBinding.textRoutes.setOnClickListener(null)
+                    itemBinding.textRoutesExpand.setOnClickListener(null)
                 }
             } else {
                 itemBinding.layoutRoutesSection.visibility = View.GONE
             }
 
-            // DNS
+            // DNS Section
             if (info.dns.isNotEmpty()) {
                 itemBinding.layoutDnsSection.visibility = View.VISIBLE
-                itemBinding.textDns.text = info.dns.joinToString(", ")
+                val dnsHint = when {
+                    info.isVpn -> " (${getString(R.string.network_interfaces_vpn_dns_hint)})"
+                    info.kind == InterfaceKind.WIFI || info.kind == InterfaceKind.CELLULAR ->
+                        " (${getString(R.string.network_interfaces_underlying_dns_hint)})"
+                    else -> ""
+                }
+                itemBinding.textDns.text = "${info.dns.joinToString(", ")}$dnsHint"
+                itemBinding.textDns.setOnLongClickListener {
+                    copyToClipboard(info.name, info.dns.joinToString(", "))
+                    true
+                }
             } else {
                 itemBinding.layoutDnsSection.visibility = View.GONE
             }

@@ -20,6 +20,16 @@ data class InterfaceIp(
 
 data class InterfaceRoute(val destination: InterfaceIp, val gateway: String?)
 
+data class ActiveNetworkOverview(
+    val interfaceName: String?,
+    val kind: InterfaceKind,
+    val isVpnActive: Boolean,
+    val isPrivateDnsActive: Boolean = false,
+    val privateDnsServerName: String? = null,
+    val dnsServers: List<String> = emptyList(),
+    val gateway: String? = null,
+)
+
 data class NetworkInterfaceInfo(
     val name: String,
     val index: Int? = null,
@@ -32,13 +42,17 @@ data class NetworkInterfaceInfo(
     val mac: String? = null,
     val kind: InterfaceKind = InterfaceKind.OTHER,
     val hotspot: HotspotKind = HotspotKind.NONE,
+    val isDefaultRoute: Boolean = false,
+    val isVpn: Boolean = false,
     val addresses: List<InterfaceIp> = emptyList(),
     val routes: List<InterfaceRoute> = emptyList(),
     val dns: List<String> = emptyList(),
+    val domains: String? = null,
 )
 
 data class NetworkInterfacesSnapshot(
     val interfaces: List<NetworkInterfaceInfo> = emptyList(),
+    val activeNetwork: ActiveNetworkOverview? = null,
     val partial: Boolean = false,
 )
 
@@ -66,4 +80,20 @@ object NetworkInterfacesPolicy {
 
     fun filterMac(mac: String?): String? =
         mac?.takeUnless { it == "02:00:00:00:00:00" }
+
+    fun sortPriority(info: NetworkInterfaceInfo, activeIface: String?): Int = when {
+        info.name == activeIface -> 0
+        info.isDefaultRoute -> 1
+        info.kind == InterfaceKind.VPN && info.up == true -> 2
+        info.hotspot == HotspotKind.CONFIRMED -> 3
+        info.kind == InterfaceKind.WIFI && info.up == true -> 4
+        info.kind == InterfaceKind.CELLULAR && info.up == true -> 5
+        info.kind == InterfaceKind.ETHERNET && info.up == true -> 6
+        info.hotspot == HotspotKind.POSSIBLE -> 7
+        info.kind == InterfaceKind.VPN -> 8 // configured / standby VPN
+        info.up == true && !info.loopback && info.kind != InterfaceKind.OTHER -> 9
+        info.up == true && !info.loopback -> 10 // dummy0 etc.
+        info.loopback -> 11 // lo
+        else -> 12 // down interfaces
+    }
 }

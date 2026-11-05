@@ -32,6 +32,13 @@ class NetworkFragment : Fragment(R.layout.layout_network) {
         binding.lanSharingCard.setOnClickListener(openLanSharing)
         binding.lanSharingBtn.setOnClickListener(openLanSharing)
 
+        val openDnsLeak = View.OnClickListener {
+            val ctx = context ?: return@OnClickListener
+            startActivity(Intent(ctx, DnsLeakActivity::class.java))
+        }
+        binding.dnsLeakCard.setOnClickListener(openDnsLeak)
+        binding.dnsLeakBtn.setOnClickListener(openDnsLeak)
+
         val openNatDiscovery = View.OnClickListener {
             val ctx = context ?: return@OnClickListener
             startActivity(Intent(ctx, StunActivity::class.java))

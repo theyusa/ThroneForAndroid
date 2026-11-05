@@ -56,6 +56,20 @@
                 android:paddingVertical="2dp"
                 android:textAppearance="?attr/textAppearanceCaption"
                 tools:text="Up" />
+            <!-- Default Route Badge -->
+            <TextView
+                android:id="@+id/badgeDefaultRoute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_badge_soft"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorPrimary"
+                android:visibility="gone"
+                tools:text="Default route"
+                tools:visibility="visible" />
         </LinearLayout>
 
         <!-- Hotspot badge if applicable -->
@@ -124,6 +138,16 @@
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary"
                 tools:text="0.0.0.0/0 -> 192.168.1.1" />
+            <TextView
+                android:id="@+id/textRoutesExpand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorPrimary"
+                android:visibility="gone"
+                tools:text="+20 more routes (tap to expand)"
+                tools:visibility="visible" />
         </LinearLayout>
 
         <!-- DNS Section -->
