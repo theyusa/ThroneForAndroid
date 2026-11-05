@@ -41,8 +41,8 @@
     <string name="stun_unknown_server">Bilinmeyen sunucu</string>
     <string name="stun_server_status_pending">Bekliyor</string>
     <string name="stun_server_status_running">Test ediliyor…</string>
-    <string name="stun_server_status_complete">Tam davranış testi tamamlandı</string>
-    <string name="stun_server_status_partial">Genel eşleme bulundu; tam analiz desteklenmiyor</string>
+    <string name="stun_server_status_complete">Tam test tamamlandı</string>
+    <string name="stun_server_status_partial">Temel STUN (Kısmi)</string>
     <string name="stun_server_status_failed">Test başarısız</string>
     <string name="stun_server_status_cancelled">İptal edildi</string>
     <string name="stun_rtt_value">Ping: %1$d ms</string>

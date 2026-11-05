@@ -41,8 +41,8 @@
     <string name="stun_unknown_server">Unknown server</string>
     <string name="stun_server_status_pending">Pending</string>
     <string name="stun_server_status_running">Testing…</string>
-    <string name="stun_server_status_complete">Full behaviour test completed</string>
-    <string name="stun_server_status_partial">Public mapping found; full analysis unavailable</string>
+    <string name="stun_server_status_complete">Full test complete</string>
+    <string name="stun_server_status_partial">Basic STUN only</string>
     <string name="stun_server_status_failed">Test failed</string>
     <string name="stun_server_status_cancelled">Cancelled</string>
     <string name="stun_rtt_value">Ping: %1$d ms</string>
