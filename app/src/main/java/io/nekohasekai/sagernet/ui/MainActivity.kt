@@ -42,6 +42,7 @@ import io.nekohasekai.sagernet.bg.test.TestSpec
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.database.SettingsRegistry
 import io.nekohasekai.sagernet.database.ProfileManager
+import io.nekohasekai.sagernet.database.SagerDatabase
 import io.nekohasekai.sagernet.database.preference.OnPreferenceDataStoreChangeListener
 import io.nekohasekai.sagernet.database.backup.BackupEntry
 import io.nekohasekai.sagernet.databinding.LayoutMainBinding
@@ -586,6 +587,7 @@ class MainActivity : ThemedActivity(),
 
     override fun onServiceDisconnected() = changeState(BaseService.State.Idle)
     override fun onBinderDied() {
+        changeState(BaseService.State.Idle)
         connection.disconnect(this)
         connection.connect(this, this)
     }
@@ -598,11 +600,29 @@ class MainActivity : ThemedActivity(),
     private val wifiFlow = WifiPermissionFlow(this)
 
     private fun toggleService() {
-        if (DataStore.serviceState.canStop) SagerNet.stopService() else startFromUi()
+        when {
+            DataStore.serviceState.canStop -> SagerNet.stopService()
+            DataStore.serviceState == BaseService.State.Stopping -> {
+                SagerNet.stopService()
+                changeState(BaseService.State.Idle)
+            }
+            else -> startFromUi()
+        }
     }
 
     /** Wi-Fi rules of the routing profile the selected profile starts with ask for location access once before a start from here. */
     private fun startFromUi() {
+        if (DataStore.selectedProxy <= 0L) {
+            val fallback = SagerDatabase.proxyDao.getAll().firstOrNull()
+            if (fallback != null) {
+                DataStore.selectedProxy = fallback.id
+                DataStore.currentProfile = fallback.id
+                refreshConfigurationProfileState()
+            } else {
+                snackbar(R.string.profile_empty).show()
+                return
+            }
+        }
         if (DataStore.wifiPermissionAsked || WifiStateAccess.status(this) == WifiStateAccess.Status.OK) {
             return launchConnect()
         }

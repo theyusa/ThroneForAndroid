@@ -160,8 +160,8 @@ class ConfigGenerator @JvmOverloads constructor(
             if (id < 0) continue
             val needed = reads.get(id)
             if (needed == null) {
-                state.error = "The routing profile is referencing outbounds that no longer exist, consider revising your settings"
-                return
+                pre.outboundMap[id] = Tags.PROXY
+                continue
             }
             if (needed.isExtraCore() || TypeAccess.isCustomFullConfig(needed) || needed.isXrayFullConfig()) {
                 state.error = "Outbounds used in routing profile cannot use an extra core or be a custom full config"
@@ -170,17 +170,14 @@ class ConfigGenerator @JvmOverloads constructor(
             val (grpLanding, grpFront, _) = reads.groupProxies(id)
             val fullHops = ArrayList<Long>()
             if (needed.type == "chain") {
-                val hops = TypeAccess.chainHops(needed)
+                val rawHops = TypeAccess.chainHops(needed)
+                val hops = rawHops.filter { reads.get(it) != null }
                 if (hops.isEmpty()) {
-                    state.error = "Chain outbound in routing profile is empty or corrupted"
-                    return
+                    pre.outboundMap[id] = Tags.PROXY
+                    continue
                 }
                 for (hopId in hops) {
-                    val hop = reads.get(hopId)
-                    if (hop == null) {
-                        state.error = "Chain outbound in routing profile contains a missing profile"
-                        return
-                    }
+                    val hop = reads.get(hopId)!!
                     if (hop.isExtraCore() || TypeAccess.isCustomFullConfig(hop) || hop.isXrayFullConfig() || hop.type == "chain") {
                         state.error = "Chain hops in routing profile cannot use an extra core, a custom full config, or be of type chain"
                         return
@@ -664,7 +661,10 @@ class ConfigGenerator @JvmOverloads constructor(
             // Exit first: the landing proxy becomes "proxy", the stored chain list is reversed, the front proxy is dialed directly.
             val hopIds = ArrayList<Long>()
             if (landingProxyId > 0) hopIds.add(landingProxyId)
-            if (profile.type == "chain") hopIds.addAll(TypeAccess.chainHops(profile).asReversed()) else hopIds.add(profileId)
+            if (profile.type == "chain") {
+                val validHops = TypeAccess.chainHops(profile).filter { reads.get(it) != null }
+                hopIds.addAll(validHops.asReversed())
+            } else hopIds.add(profileId)
             if (frontProxyId > 0) hopIds.add(frontProxyId)
             if (hopIds.isEmpty()) {
                 state.error = "The chain has no hops"

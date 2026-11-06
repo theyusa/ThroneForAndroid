@@ -482,8 +482,22 @@ object BackupRestore {
                 }
             }
             for (selection in listOf(Key.PROFILE_ID, Key.PROFILE_CURRENT)) {
-                val id = readSetting(db, selection)?.trim()?.toLongOrNull() ?: continue
-                if (id > 0L && id !in profiles) writeSetting(db, selection, null)
+                val id = readSetting(db, selection)?.trim()?.toLongOrNull() ?: 0L
+                if (id <= 0L || id !in profiles) {
+                    val currentGid = readSetting(db, key)?.trim()?.toLongOrNull()
+                    val fallback = (if (currentGid != null) {
+                        ids("SELECT `id` FROM `$PROFILES` WHERE `gid` = $currentGid ORDER BY `user_order`, `id`").firstOrNull()
+                    } else null) ?: profiles.firstOrNull()
+                    writeSetting(db, selection, fallback?.toString())
+                }
+            }
+
+            val activeProfileId = readSetting(db, Key.PROFILE_ID)?.trim()?.toLongOrNull()
+            if (activeProfileId != null && activeProfileId in profiles) {
+                val profileGroup = ids("SELECT `gid` FROM `$PROFILES` WHERE `id` = $activeProfileId").firstOrNull()
+                if (profileGroup != null && profileGroup in groups) {
+                    writeSetting(db, key, profileGroup.toString())
+                }
             }
         }
 

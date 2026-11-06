@@ -66,7 +66,7 @@ class BaseService {
 
     interface ExpectedException
 
-    class Data internal constructor(private val service: Interface) {
+    class Data internal constructor(internal val service: Interface) {
         var state = State.Stopped
         var proxy: ProxyInstance? = null
         var notification: ServiceNotification? = null
@@ -177,7 +177,7 @@ class BaseService {
 
         override fun registerCallback(cb: ISagerNetServiceCallback, id: Int) {
             if (id == SagerConnection.CONNECTION_ID_RESTART_BG) {
-                Runtime.getRuntime().exit(0)
+                data?.service?.stopRunner(false)
                 return
             }
             if (!callbackIdMap.contains(cb)) {
