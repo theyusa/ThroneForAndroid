@@ -106,7 +106,7 @@ class StunActivity : ThemedActivity() {
         }
 
         // VPN active warning check
-        val isVpnActive = DataStore.serviceState == BaseService.State.Connected
+        val isVpnActive = DataStore.serviceState.connected
         binding.layoutVpnWarning.visibility = if (isVpnActive) View.VISIBLE else View.GONE
 
         // Server results recycler

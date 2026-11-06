@@ -2,6 +2,7 @@
 package io.nekohasekai.sagernet.utils.stun
 
 import java.net.DatagramSocket
+import java.net.InetAddress
 import java.net.InetSocketAddress
 
 /**
@@ -10,6 +11,7 @@ import java.net.InetSocketAddress
  */
 interface StunSocketFactory {
     fun createDatagramSocket(): DatagramSocket
+    fun resolve(host: String): Array<InetAddress> = InetAddress.getAllByName(host)
 }
 
 /**
