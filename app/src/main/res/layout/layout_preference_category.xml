@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
+    android:divider="@null"
     android:orientation="vertical"
     android:paddingStart="24dp"
-    android:paddingTop="4dp"
+    android:paddingTop="2dp"
     android:paddingEnd="24dp"
-    android:paddingBottom="4dp">
+    android:paddingBottom="2dp"
+    android:showDividers="none">
 
     <TextView
         android:id="@android:id/title"
@@ -17,16 +19,16 @@
         android:fontFamily="sans-serif-medium"
         android:textAlignment="viewStart"
         android:textColor="?attr/colorPrimary"
-        android:textSize="14sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@android:id/summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:lineSpacingExtra="2dp"
+        android:layout_marginTop="1dp"
+        android:lineSpacingExtra="1dp"
         android:textAlignment="viewStart"
         android:textColor="?android:attr/textColorSecondary"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
 </LinearLayout>
