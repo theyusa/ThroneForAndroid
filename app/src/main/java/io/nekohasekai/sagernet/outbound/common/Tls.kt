@@ -1007,9 +1007,12 @@ class Tls {
         // the "custom" implementation is emitted at the dialer level by Outbound.baseBuild instead
         if (fragmentEffectivelyOn(ctx) && ctx.fragmentImplementation != "custom") {
             obj["fragment"] = true
+            obj["record_fragment"] = true
+            obj["fragment_fallback_delay"] = fragment_fallback_delay.ifEmpty { "20ms" }
+        } else if (record_fragment) {
+            obj["record_fragment"] = true
             if (fragment_fallback_delay.isNotEmpty()) obj["fragment_fallback_delay"] = fragment_fallback_delay
         }
-        if (record_fragment) obj["record_fragment"] = record_fragment
         if (tlsTricksEffectivelyOn(ctx)) obj["tls_tricks"] = jsonObjectOf("mixedcase_sni" to true)
         ech.build(ctx).let { if (it.isNotEmpty()) obj["ech"] = it }
         val utlsObj = utls.build(ctx)
