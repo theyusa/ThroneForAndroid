@@ -22,6 +22,10 @@ class AndroidStunSocketFactory(
     }
 
     override fun resolve(host: String): Array<InetAddress> {
-        return network?.getAllByName(host) ?: InetAddress.getAllByName(host)
+        return try {
+            network?.getAllByName(host) ?: InetAddress.getAllByName(host)
+        } catch (_: Exception) {
+            InetAddress.getAllByName(host)
+        }
     }
 }
