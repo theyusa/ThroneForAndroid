@@ -11,7 +11,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.ui.settings.SettingsScreenFragment
-import io.nekohasekai.sagernet.ui.settings.applyPreferenceIconTint
+import io.nekohasekai.sagernet.ui.settings.applyExpressiveSettingsStyle
 import io.nekohasekai.sagernet.utils.Theme
 import io.nekohasekai.sagernet.widget.applyListInsets
 
@@ -32,7 +32,7 @@ class SettingsFragment : ToolbarFragment(R.layout.layout_config_settings),
         override fun onFragmentViewCreated(fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?) {
             (f as? PreferenceFragmentCompat)?.let { prefFrag ->
                 prefFrag.listView?.applyListInsets()
-                prefFrag.applyPreferenceIconTint()
+                prefFrag.applyExpressiveSettingsStyle()
             }
         }
     }

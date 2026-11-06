@@ -33,6 +33,7 @@ import io.nekohasekai.sagernet.BuildConfig
 import io.nekohasekai.sagernet.Key
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.SagerNet
+import io.nekohasekai.sagernet.ui.settings.ExpressiveSettingsHelper
 import io.nekohasekai.sagernet.aidl.ISagerNetService
 import io.nekohasekai.sagernet.aidl.SpeedDisplayData
 import io.nekohasekai.sagernet.aidl.TrafficDataBatch
@@ -143,6 +144,13 @@ class MainActivity : ThemedActivity(),
             navigation = binding.navViewBlack
             binding.drawerLayout.removeView(binding.navView)
         }
+        val drawerBgColor = when {
+            isAmoled || isBlackTheme -> Color.BLACK
+            else -> MaterialColors.getColor(binding.root, android.R.attr.colorBackground, Color.BLACK)
+        }
+        navigation.setBackgroundColor(drawerBgColor)
+        navigation.backgroundTintList = ColorStateList.valueOf(drawerBgColor)
+        ExpressiveSettingsHelper.applyDrawerMaskedIcons(navigation, this)
         navigation.setNavigationItemSelectedListener(this)
         // NavigationView pads its header and menu itself (top/bottom); its side follows side bars and cutouts.
         ViewCompat.setOnApplyWindowInsetsListener(binding.drawerLayout) { _, insets ->

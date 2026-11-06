@@ -33,7 +33,7 @@ abstract class SettingsScreenFragment(@XmlRes private val preferences: Int) : Pr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listView.layoutManager = FixedLinearLayoutManager(listView)
-        applyPreferenceIconTint()
+        applyExpressiveSettingsStyle()
     }
 
     private var form: ValidationForm? = null
@@ -181,40 +181,6 @@ abstract class SettingsScreenFragment(@XmlRes private val preferences: Int) : Pr
     }
 }
 
-fun Preference.tintPreferenceIcon(color: Int) {
-    if (this is PreferenceGroup) {
-        for (i in 0 until preferenceCount) {
-            getPreference(i).tintPreferenceIcon(color)
-        }
-    }
-    icon?.let { d ->
-        val wrapped = DrawableCompat.wrap(d.mutate())
-        DrawableCompat.setTint(wrapped, color)
-        icon = wrapped
-    }
-}
-
 fun PreferenceFragmentCompat.applyPreferenceIconTint() {
-    val ctx = context ?: return
-    val color = if (DataStore.tintPreferenceIcons) {
-        val accent = ctx.getColorAttr(R.attr.colorAccent)
-        val primary = ctx.getColorAttr(R.attr.colorPrimary)
-        when {
-            accent != 0 && accent != Color.WHITE -> accent
-            primary != 0 && primary != Color.WHITE -> primary
-            Theme.isWhiteTheme(ctx) -> ContextCompat.getColor(ctx, R.color.color_white_theme_accent)
-            Theme.isLightGrayTheme(ctx) -> ContextCompat.getColor(ctx, R.color.color_light_gray_accent)
-            else -> ContextCompat.getColor(ctx, android.R.color.white)
-        }
-    } else {
-        val isNight = Theme.usingNightMode(ctx)
-        val isBlack = Theme.isBlackTheme(ctx)
-        if (isBlack || isNight) {
-            Color.parseColor("#9E9E9E")
-        } else {
-            ctx.getColorAttr(R.attr.colorControlNormal).takeIf { it != 0 }
-                ?: Color.parseColor("#757575")
-        }
-    }
-    preferenceScreen?.tintPreferenceIcon(color)
+    applyExpressiveSettingsStyle()
 }

@@ -33,6 +33,7 @@ import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.database.ProfileManager
 import io.nekohasekai.sagernet.database.SagerDatabase
 import io.nekohasekai.sagernet.database.SettingsMapper
+import io.nekohasekai.sagernet.ui.settings.applyExpressiveSettingsStyle
 import io.nekohasekai.sagernet.database.preference.OnPreferenceDataStoreChangeListener
 import io.nekohasekai.sagernet.ktx.Logs
 import io.nekohasekai.sagernet.ktx.onMainDispatcher
@@ -393,6 +394,7 @@ abstract class ProfileSettingsActivity<T : Outbound>(
                 dirtyAfterRebuild = false
                 DataStore.profileCacheStore.registerChangeListener(this)
             }
+            applyExpressiveSettingsStyle()
         }
 
         @SuppressLint("CheckResult")

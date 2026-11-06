@@ -9,7 +9,7 @@
     <dimen name="profile_card_elevation_classic">2dp</dimen>
 
     <dimen name="input_corner_radius">12dp</dimen>
-    <dimen name="popup_corner_radius">12dp</dimen>
+    <dimen name="popup_corner_radius">16dp</dimen>
     <dimen name="dialog_corner_radius">28dp</dimen>
     <dimen name="dialog_background_inset">24dp</dimen>
 

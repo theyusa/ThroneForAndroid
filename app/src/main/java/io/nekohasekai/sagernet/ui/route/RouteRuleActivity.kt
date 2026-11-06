@@ -30,6 +30,7 @@ import io.nekohasekai.sagernet.route.RuleSetCatalog
 import io.nekohasekai.sagernet.route.RuleType
 import io.nekohasekai.sagernet.ui.AppListActivity
 import io.nekohasekai.sagernet.ui.ThemedActivity
+import io.nekohasekai.sagernet.ui.settings.applyExpressiveSettingsStyle
 import io.nekohasekai.sagernet.ui.ValidationForm
 import io.nekohasekai.sagernet.ui.WifiPermissionFlow
 import io.nekohasekai.sagernet.ui.profile.multilineInput
@@ -449,6 +450,7 @@ class RouteRuleActivity : ThemedActivity(R.layout.layout_config_settings), OnPre
             super.onViewCreated(view, savedInstanceState)
             listView.layoutManager = FixedLinearLayoutManager(listView)
             ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
+            applyExpressiveSettingsStyle()
         }
 
         override fun onResume() {

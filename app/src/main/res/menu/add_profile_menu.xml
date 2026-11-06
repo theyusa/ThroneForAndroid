@@ -16,14 +16,19 @@
             <menu>
                 <item
                     android:id="@+id/action_scan_qr_code"
+                    android:icon="@drawable/ic_baseline_camera_24"
                     android:title="@string/add_profile_methods_scan_qr_code" />
                 <item
                     android:id="@+id/action_import_clipboard"
+                    android:icon="@drawable/ic_content_copy"
                     android:title="@string/action_import" />
                 <item
                     android:id="@+id/action_import_file"
+                    android:icon="@drawable/ic_baseline_folder_open_24"
                     android:title="@string/action_import_file" />
-                <item android:title="@string/add_profile_methods_manual_settings">
+                <item
+                    android:icon="@drawable/ic_baseline_tune_24"
+                    android:title="@string/add_profile_methods_manual_settings">
                     <menu>
                         <item
                             android:id="@+id/action_new_auto_selector"
@@ -127,21 +132,26 @@
                 <group android:id="@+id/group_menu_subscription">
                     <item
                         android:id="@+id/action_update_subscription"
+                        android:icon="@drawable/ic_baseline_refresh_24"
                         android:title="@string/profiles_update_subscription" />
                 </group>
                 <group android:id="@+id/group_menu_test">
                     <item
                         android:id="@+id/action_test"
+                        android:icon="@drawable/ic_baseline_speed_24"
                         android:title="@string/profiles_test">
                         <menu>
                             <item
                                 android:id="@+id/action_test_url"
+                                android:icon="@drawable/ic_test_latency_24"
                                 android:title="@string/profiles_test_url" />
                             <item
                                 android:id="@+id/action_test_ip"
+                                android:icon="@drawable/ic_test_ip_24"
                                 android:title="@string/profiles_test_ip" />
                             <item
                                 android:id="@+id/action_test_speed"
+                                android:icon="@drawable/ic_test_speed_24"
                                 android:title="@string/profiles_test_speed" />
                             <item
                                 android:id="@+id/action_test_stop"
@@ -151,17 +161,21 @@
                     </item>
                     <item
                         android:id="@+id/action_resolve_domains"
+                        android:icon="@drawable/baseline_public_24"
                         android:title="@string/profiles_resolve_domains" />
                 </group>
                 <group android:id="@+id/group_menu_cleanup">
                     <item
                         android:id="@+id/action_clear_test_results"
+                        android:icon="@drawable/baseline_delete_sweep_24"
                         android:title="@string/connection_test_clear_results" />
                     <item
                         android:id="@+id/action_clear_traffic_statistics"
+                        android:icon="@drawable/ic_device_data_usage"
                         android:title="@string/clear_traffic_statistics" />
                     <item
                         android:id="@+id/action_remove"
+                        android:icon="@drawable/ic_action_delete"
                         android:title="@string/profiles_remove">
                         <menu>
                             <item
@@ -182,6 +196,7 @@
                 <group android:id="@+id/group_menu_order">
                     <item
                         android:id="@+id/action_sort"
+                        android:icon="@drawable/ic_baseline_filter_list_24"
                         android:title="@string/profiles_sort">
                         <menu>
                             <group
@@ -259,6 +274,7 @@
                     </item>
                     <item
                         android:id="@+id/action_show"
+                        android:icon="@drawable/ic_baseline_view_list_24"
                         android:title="@string/profiles_show">
                         <menu>
                             <item

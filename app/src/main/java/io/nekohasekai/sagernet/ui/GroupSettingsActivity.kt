@@ -42,6 +42,7 @@ import io.nekohasekai.sagernet.group.SubscriptionScheduler
 import io.nekohasekai.sagernet.ktx.FixedLinearLayoutManager
 import io.nekohasekai.sagernet.ktx.confirmAction
 import io.nekohasekai.sagernet.ui.settings.DefaultSummaryProvider
+import io.nekohasekai.sagernet.ui.settings.applyExpressiveSettingsStyle
 import io.nekohasekai.sagernet.ui.settings.SettingChecks
 import io.nekohasekai.sagernet.validation.Empty
 import io.nekohasekai.sagernet.validation.Severity
@@ -632,6 +633,7 @@ class GroupSettingsActivity : ThemedActivity(R.layout.layout_config_settings), O
             super.onViewCreated(view, savedInstanceState)
             listView.layoutManager = FixedLinearLayoutManager(listView)
             ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
+            applyExpressiveSettingsStyle()
         }
 
         /** Empty means the resolved global value, shown as the summary and as the input hint. */
