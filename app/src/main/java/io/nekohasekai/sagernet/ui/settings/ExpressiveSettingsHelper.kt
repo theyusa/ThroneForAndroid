@@ -22,51 +22,27 @@ import io.nekohasekai.sagernet.utils.Theme
 import io.nekohasekai.sagernet.widget.ExpressivePreferenceDecoration
 
 /**
- * Material 3 Expressive (Android 14/15 Pixel Settings) design helper.
- * Generates 42dp (settings) and 36dp (drawer) circular pastel masked icon badges
- * harmonized with Throne's 3-tone seed theme system. Fully hardware-accelerated.
+ * Material 3 Expressive design helper.
+ * Generates 42dp (settings) and 36dp (drawer) circular tonal masked icon badges
+ * fully harmonized with Throne's 3-tone seed theme system (Derin zemin, Kart kutusu, Canlı vurgu).
+ * Fully hardware-accelerated and bug-free (protects against nested LayerDrawables).
  */
 object ExpressiveSettingsHelper {
 
-    fun resolveHarmonizedColor(key: String?, baseHue: Float): Int {
-        val hueOffset = when (key) {
-            "settingsGeneral" -> 0f
-            "settingsAppearance" -> 30f
-            "settingsInbound" -> 15f
-            "settingsTun" -> 180f       // Complementary
-            "settingsRouting" -> 120f   // Triadic green
-            "settingsDns" -> 210f       // Analogous blue
-            "settingsPresets" -> 270f   // Lavender
-            "settingsTesting" -> 45f    // Warm amber
-            "settingsSubscriptions" -> 160f // Cyan
-            "settingsCore" -> 280f      // Violet
-            "settingsDiagnostics" -> 350f
-            "settingsBackup" -> 200f
-            "resetSettings" -> 0f
-            "serviceMode" -> 0f
-            "autoConnect" -> 120f
-            "alwaysOnVpn" -> 180f
-            "theme" -> 30f
-            "nightMode" -> 210f
-            "tintPreferenceIcons" -> 0f
-            "language" -> 60f
-            "alwaysShowAddress" -> 45f
-            "compactProfileRows" -> 160f
-            "compactGroupCards" -> 270f
-            "showConfigSecurity" -> 210f
-            // Drawer items
-            "settingsProfiles" -> 0f
-            "settingsGroups" -> 30f
-            "drawerItem" -> 120f
-            else -> {
-                if (key != null) (Math.abs(key.hashCode()) % 360).toFloat() else 0f
-            }
+    /**
+     * Unwraps any existing LayerDrawable layers to extract the original core vector drawable.
+     * Prevents nested layer wrapping, accumulated insets, and disappearing icons.
+     */
+    fun unwrapOriginalIcon(drawable: Drawable): Drawable {
+        var cur = drawable
+        while (cur is LayerDrawable && cur.numberOfLayers >= 2) {
+            cur = cur.getDrawable(1)
         }
-        val finalHue = (baseHue + hueOffset) % 360f
-        return Color.HSVToColor(floatArrayOf(finalHue, 0.60f, 0.90f))
+        return cur
     }
 
     fun createMaskedIcon(
+        context: Context,
         originalDrawable: Drawable,
         containerColor: Int,
         iconColor: Int,
@@ -77,13 +53,7 @@ object ExpressiveSettingsHelper {
         val iconSize = dp2px(iconSizeDp)
         val inset = (size - iconSize) / 2
 
-        // Avoid wrapping LayerDrawables inside LayerDrawables:
-        // Always extract layer 1 (the underlying raw vector icon)
-        val rawIcon = if (originalDrawable is LayerDrawable && originalDrawable.numberOfLayers == 2) {
-            originalDrawable.getDrawable(1)
-        } else {
-            originalDrawable
-        }
+        val rawIcon = unwrapOriginalIcon(originalDrawable)
 
         val background = GradientDrawable().apply {
             shape = GradientDrawable.OVAL
@@ -91,7 +61,7 @@ object ExpressiveSettingsHelper {
             setColor(containerColor)
         }
 
-        val iconCopy = rawIcon.constantState?.newDrawable()?.mutate() ?: rawIcon.mutate()
+        val iconCopy = (rawIcon.constantState?.newDrawable(context.resources) ?: rawIcon).mutate()
         iconCopy.clearColorFilter()
         DrawableCompat.setTint(iconCopy, iconColor)
 
@@ -103,35 +73,34 @@ object ExpressiveSettingsHelper {
 
     fun applyDrawerMaskedIcons(navigation: NavigationView, context: Context) {
         val isDark = Theme.usingNightMode(context)
+        val isAmoled = Theme.isBlackTheme(context)
         val themeAccent = context.getColorAttr(R.attr.colorAccent).takeIf { it != 0 && it != Color.WHITE }
             ?: context.getColorAttr(R.attr.colorPrimary).takeIf { it != 0 && it != Color.WHITE }
             ?: ContextCompat.getColor(context, R.color.material_blue_accent_200)
-        val hsv = FloatArray(3)
-        Color.colorToHSV(themeAccent, hsv)
-        val baseHue = hsv[0]
+
+        val containerColor = when {
+            isAmoled -> ColorUtils.setAlphaComponent(themeAccent, (255 * 0.20f).toInt())
+            isDark -> ColorUtils.setAlphaComponent(themeAccent, (255 * 0.16f).toInt())
+            else -> ColorUtils.blendARGB(themeAccent, Color.WHITE, 0.88f)
+        }
+
         val tintIcons = DataStore.tintPreferenceIcons
+        val iconColor = if (tintIcons) {
+            if (isDark) {
+                ColorUtils.blendARGB(themeAccent, Color.WHITE, 0.15f)
+            } else {
+                themeAccent
+            }
+        } else {
+            if (isDark) Color.parseColor("#C4C7C5") else Color.parseColor("#444746")
+        }
 
         navigation.itemIconTintList = null
 
         val menu = navigation.menu
-        fun processItem(item: MenuItem, key: String) {
+        fun processItem(item: MenuItem) {
             val d = item.icon ?: return
-            val harmonizedColor = resolveHarmonizedColor(key, baseHue)
-            val containerColor = if (isDark) {
-                ColorUtils.setAlphaComponent(harmonizedColor, (255 * 0.24f).toInt())
-            } else {
-                ColorUtils.blendARGB(harmonizedColor, Color.WHITE, 0.82f)
-            }
-            val iconColor = if (tintIcons) {
-                if (isDark) {
-                    ColorUtils.blendARGB(harmonizedColor, Color.WHITE, 0.25f)
-                } else {
-                    ColorUtils.blendARGB(harmonizedColor, Color.BLACK, 0.30f)
-                }
-            } else {
-                if (isDark) Color.parseColor("#E0E0E0") else Color.parseColor("#444746")
-            }
-            item.icon = createMaskedIcon(d, containerColor, iconColor, sizeDp = 36, iconSizeDp = 20)
+            item.icon = createMaskedIcon(context, d, containerColor, iconColor, sizeDp = 36, iconSizeDp = 20)
         }
 
         for (i in 0 until menu.size()) {
@@ -140,57 +109,23 @@ object ExpressiveSettingsHelper {
                 val subMenu = item.subMenu ?: continue
                 for (j in 0 until subMenu.size()) {
                     val subItem = subMenu.getItem(j)
-                    val key = resolveDrawerKey(subItem.itemId)
-                    processItem(subItem, key)
+                    processItem(subItem)
                 }
             } else {
-                val key = resolveDrawerKey(item.itemId)
-                processItem(item, key)
+                processItem(item)
             }
-        }
-    }
-
-    private fun resolveDrawerKey(id: Int): String {
-        return when (id) {
-            R.id.nav_configuration -> "settingsProfiles"
-            R.id.nav_group -> "settingsGroups"
-            R.id.nav_route -> "settingsRouting"
-            R.id.nav_settings -> "settingsGeneral"
-            R.id.nav_logcat -> "settingsDiagnostics"
-            R.id.nav_live_graphs -> "settingsTesting"
-            R.id.nav_traffic -> "settingsTun"
-            R.id.nav_tools -> "settingsPresets"
-            R.id.nav_faq -> "settingsDns"
-            R.id.nav_about -> "settingsAppearance"
-            else -> "drawerItem_$id"
         }
     }
 }
 
-fun Preference.applyMaskedIconBadges(isDark: Boolean, baseHue: Float, tintIcons: Boolean) {
+fun Preference.applyMaskedIconBadges(context: Context, containerColor: Int, iconColor: Int) {
     if (this is PreferenceGroup) {
         for (i in 0 until preferenceCount) {
-            getPreference(i).applyMaskedIconBadges(isDark, baseHue, tintIcons)
+            getPreference(i).applyMaskedIconBadges(context, containerColor, iconColor)
         }
     }
     icon?.let { d ->
-        val harmonizedColor = ExpressiveSettingsHelper.resolveHarmonizedColor(key, baseHue)
-        val containerColor = if (isDark) {
-            ColorUtils.setAlphaComponent(harmonizedColor, (255 * 0.24f).toInt())
-        } else {
-            ColorUtils.blendARGB(harmonizedColor, Color.WHITE, 0.82f)
-        }
-        val iconColor = if (tintIcons) {
-            if (isDark) {
-                ColorUtils.blendARGB(harmonizedColor, Color.WHITE, 0.25f)
-            } else {
-                ColorUtils.blendARGB(harmonizedColor, Color.BLACK, 0.30f)
-            }
-        } else {
-            if (isDark) Color.parseColor("#E0E0E0") else Color.parseColor("#444746")
-        }
-
-        icon = ExpressiveSettingsHelper.createMaskedIcon(d, containerColor, iconColor)
+        icon = ExpressiveSettingsHelper.createMaskedIcon(context, d, containerColor, iconColor)
     }
 }
 
@@ -206,10 +141,17 @@ fun PreferenceFragmentCompat.applyExpressiveSettingsStyle() {
     setDivider(null)
     setDividerHeight(0)
 
+    for (i in list.itemDecorationCount - 1 downTo 0) {
+        val deco = list.getItemDecorationAt(i)
+        if (deco !is ExpressivePreferenceDecoration) {
+            list.removeItemDecoration(deco)
+        }
+    }
+
     val isNight = Theme.usingNightMode(ctx)
     val isAmoled = Theme.isBlackTheme(ctx)
 
-    // 3-Tone Dynamic Theme Harmony: Deep background
+    // 3-Tone Dynamic Theme Harmony: Deep background (Derin zemin)
     val screenBg = when {
         isAmoled -> 0xFF000000.toInt()
         else -> {
@@ -230,14 +172,27 @@ fun PreferenceFragmentCompat.applyExpressiveSettingsStyle() {
         list.addItemDecoration(ExpressivePreferenceDecoration())
     }
 
-    // Resolve theme seed hue for harmonious icon palette
+    // 3-Tone Seed Harmony: Vibrant theme accent (CanlÄ± vurgu)
     val themeAccent = ctx.getColorAttr(R.attr.colorAccent).takeIf { it != 0 && it != Color.WHITE }
         ?: ctx.getColorAttr(R.attr.colorPrimary).takeIf { it != 0 && it != Color.WHITE }
         ?: ContextCompat.getColor(ctx, R.color.material_blue_accent_200)
-    val hsv = FloatArray(3)
-    Color.colorToHSV(themeAccent, hsv)
-    val baseHue = hsv[0]
+
+    val containerColor = when {
+        isAmoled -> ColorUtils.setAlphaComponent(themeAccent, (255 * 0.20f).toInt())
+        isNight -> ColorUtils.setAlphaComponent(themeAccent, (255 * 0.16f).toInt())
+        else -> ColorUtils.blendARGB(themeAccent, Color.WHITE, 0.88f)
+    }
 
     val tintIcons = DataStore.tintPreferenceIcons
-    preferenceScreen?.applyMaskedIconBadges(isNight, baseHue, tintIcons)
+    val iconColor = if (tintIcons) {
+        if (isNight) {
+            ColorUtils.blendARGB(themeAccent, Color.WHITE, 0.15f)
+        } else {
+            themeAccent
+        }
+    } else {
+        if (isNight) Color.parseColor("#C4C7C5") else Color.parseColor("#444746")
+    }
+
+    preferenceScreen?.applyMaskedIconBadges(ctx, containerColor, iconColor)
 }

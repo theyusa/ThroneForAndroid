@@ -47,8 +47,8 @@ class ExpressivePreferenceDecoration : RecyclerView.ItemDecoration() {
 
         val pref = adapter.getItem(pos)
         if (pref is PreferenceCategory) {
-            val topOffset = if (pos == 0) dp2px(6) else dp2px(14)
-            outRect.set(0, topOffset, 0, dp2px(4))
+            val topOffset = if (pos == 0) dp2px(2) else dp2px(8)
+            outRect.set(0, topOffset, 0, dp2px(2))
         } else {
             val marginH = dp2px(16)
             val isBottom = (pos == adapter.itemCount - 1 || adapter.getItem(pos + 1) is PreferenceCategory)

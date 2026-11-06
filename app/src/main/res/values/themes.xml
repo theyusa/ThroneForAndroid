@@ -79,6 +79,7 @@
 
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Choice.SagerNet</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.SagerNet</item>
+        <item name="preferenceFragmentCompatStyle">@style/PreferenceFragment.SagerNet</item>
 
         <item name="itemShapeAppearance">
             @style/ShapeAppearance.MaterialComponents.MediumComponent
@@ -1251,8 +1252,14 @@
         <item name="allowDividerBelow">false</item>
     </style>
 
+    <style name="PreferenceFragment.SagerNet" parent="PreferenceFragment.Material">
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
     <style name="PreferenceThemeOverlay.SagerNet" parent="PreferenceThemeOverlay">
         <item name="preferenceCategoryStyle">@style/Preference.Category.SagerNet</item>
+        <item name="preferenceFragmentCompatStyle">@style/PreferenceFragment.SagerNet</item>
         <item name="android:divider">@null</item>
         <item name="android:dividerHeight">0dp</item>
     </style>
