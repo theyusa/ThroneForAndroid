@@ -182,25 +182,11 @@ fun Fragment.needRestart() {
 fun triggerFullRestart(ctx: Context) {
     runOnDefaultDispatcher {
         SagerNet.stopService()
-        delay(500)
-        SagerConnection.restartingApp = true
-        val connection = SagerConnection(SagerConnection.CONNECTION_ID_RESTART_BG)
-        connection.connect(ctx, RestartCallback {
+        delay(300)
+        onMainDispatcher {
+            SagerConnection.restartingApp = false
             ProcessPhoenix.triggerRebirth(ctx, Intent(ctx, MainActivity::class.java))
-        })
-    }
-}
-
-private class RestartCallback(val callback: () -> Unit) : SagerConnection.Callback {
-    override fun stateChanged(
-        state: BaseService.State,
-        profileName: String?,
-        msg: String?
-    ) {
-    }
-
-    override fun onServiceConnected(service: ISagerNetService) {
-        callback()
+        }
     }
 }
 
