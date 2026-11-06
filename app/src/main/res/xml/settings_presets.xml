@@ -104,7 +104,6 @@
             app:key="fragment_sleep"
             app:title="@string/fragment_sleep" />
         <SwitchPreference
-            app:defaultValue="true"
             app:icon="@drawable/ic_baseline_shuffle_24"
             app:key="fragment_default_on"
             app:summary="@string/preset_fragment_default_on_sum"

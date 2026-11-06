@@ -1,6 +1,5 @@
 package io.nekohasekai.sagernet.outbound
 
-import io.nekohasekai.sagernet.outbound.common.Tls
 import io.nekohasekai.sagernet.outbound.types.Vless
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -10,7 +9,7 @@ import org.junit.Test
 class TlsFragmentTest {
 
     @Test
-    fun defaultTlsEmitsFragmentAndRecordFragment() {
+    fun defaultTlsDoesNotEmitFragmentWhenGlobalDefaultOff() {
         val vless = Vless().apply {
             server = "185.157.217.124"
             serverPort = 443
@@ -20,15 +19,14 @@ class TlsFragmentTest {
         }
 
         val ctx = BuildContext.DEFAULT
-        assertTrue("Default fragmentDefaultOn should be true", ctx.fragmentDefaultOn)
+        assertFalse("Default fragmentDefaultOn should be false to prevent server handshake timeouts", ctx.fragmentDefaultOn)
 
         val built = vless.build(ctx)
         assertTrue(built.ok)
         val tlsObj = built.json.obj("tls")
 
-        assertTrue("fragment must be true", tlsObj.bool("fragment"))
-        assertTrue("record_fragment must be true", tlsObj.bool("record_fragment"))
-        assertEquals("20ms", tlsObj.string("fragment_fallback_delay"))
+        assertFalse("fragment must not be present by default", tlsObj.contains("fragment"))
+        assertFalse("record_fragment must not be present by default", tlsObj.contains("record_fragment"))
     }
 
     @Test
@@ -43,7 +41,7 @@ class TlsFragmentTest {
             tls.fragment_unspecified = false
         }
 
-        val ctx = BuildContext.DEFAULT
+        val ctx = BuildContext(fragmentDefaultOn = true)
         val built = vless.build(ctx)
         assertTrue(built.ok)
         val tlsObj = built.json.obj("tls")
@@ -71,12 +69,11 @@ class TlsFragmentTest {
         val tlsObj = built.json.obj("tls")
 
         assertTrue(tlsObj.bool("fragment"))
-        assertTrue(tlsObj.bool("record_fragment"))
         assertEquals("50ms", tlsObj.string("fragment_fallback_delay"))
     }
 
     @Test
-    fun globalOffSuppressesUnspecifiedFragment() {
+    fun globalOnEmitsFragmentForUnspecified() {
         val vless = Vless().apply {
             server = "1.2.3.4"
             serverPort = 443
@@ -85,12 +82,33 @@ class TlsFragmentTest {
             tls.server_name = "example.com"
         }
 
-        val ctx = BuildContext(fragmentDefaultOn = false)
+        val ctx = BuildContext(fragmentDefaultOn = true)
+        val built = vless.build(ctx)
+        assertTrue(built.ok)
+        val tlsObj = built.json.obj("tls")
+
+        assertTrue(tlsObj.bool("fragment"))
+    }
+
+    @Test
+    fun recordFragmentEmitsIndependently() {
+        val vless = Vless().apply {
+            server = "1.2.3.4"
+            serverPort = 443
+            uuid = "a7c60bce-79c0-4442-9369-7a652b36c625"
+            tls.enabled = true
+            tls.server_name = "example.com"
+            tls.record_fragment = true
+            tls.fragment_fallback_delay = "30ms"
+        }
+
+        val ctx = BuildContext.DEFAULT
         val built = vless.build(ctx)
         assertTrue(built.ok)
         val tlsObj = built.json.obj("tls")
 
         assertFalse(tlsObj.contains("fragment"))
-        assertFalse(tlsObj.contains("record_fragment"))
+        assertTrue(tlsObj.bool("record_fragment"))
+        assertEquals("30ms", tlsObj.string("fragment_fallback_delay"))
     }
 }
