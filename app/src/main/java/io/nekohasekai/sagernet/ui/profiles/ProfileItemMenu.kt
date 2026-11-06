@@ -58,6 +58,7 @@ class ProfileItemMenu(private val host: ConfigurationFragment) {
 
     internal fun showMenu(anchor: View, profile: ProxyEntity, adapter: ProfileListAdapter) {
         val popup = PopupMenu(anchor.context, anchor)
+        popup.setForceShowIcon(true)
         popup.menuInflater.inflate(R.menu.double_column_item_menu, popup.menu)
         val menu = popup.menu
         // the compact card and the compact row have no edit / share buttons

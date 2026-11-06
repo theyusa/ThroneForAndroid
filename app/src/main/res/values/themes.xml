@@ -54,7 +54,7 @@
 
         <!-- 沉浸式 Top App Bar 主题与样式 -->
         <item name="actionBarTheme">@style/ThemeOverlay.SagerNet.Toolbar</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.DayNight</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="appBarLayoutStyle">@style/Widget.SagerNet.AppBarLayout</item>
         <item name="toolbarStyle">@style/Widget.SagerNet.Toolbar</item>
         <item name="actionButtonStyle">@style/Widget.SagerNet.ActionButton</item>
@@ -278,7 +278,7 @@
         <item name="actionMenuTextColor">?android:attr/textColorPrimary</item>
         <item name="colorSurface">@color/md3_surface</item>
         <item name="android:colorBackground">@color/md3_surface</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.DayNight</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="actionButtonStyle">@style/Widget.SagerNet.ActionButton</item>
         <item name="actionOverflowButtonStyle">@style/Widget.SagerNet.ActionOverflowButton</item>
         <item name="toolbarNavigationButtonStyle">@style/Widget.SagerNet.ToolbarNavigationButton</item>
@@ -289,7 +289,7 @@
         <item name="actionMenuTextColor">@color/white</item>
         <item name="colorSurface">@color/black</item>
         <item name="android:colorBackground">@color/black</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="actionButtonStyle">@style/Widget.SagerNet.ActionButton</item>
         <item name="actionOverflowButtonStyle">@style/Widget.SagerNet.ActionOverflowButton</item>
         <item name="toolbarNavigationButtonStyle">@style/Widget.SagerNet.ToolbarNavigationButton</item>
@@ -300,7 +300,7 @@
         <item name="actionMenuTextColor">?android:attr/textColorPrimary</item>
         <item name="colorSurface">@color/md3_surface</item>
         <item name="android:colorBackground">@color/md3_surface</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.DayNight</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="actionButtonStyle">@style/Widget.SagerNet.ActionButton.Compact</item>
         <item name="actionOverflowButtonStyle">@style/Widget.SagerNet.ActionOverflowButton.Compact</item>
         <item name="toolbarNavigationButtonStyle">@style/Widget.SagerNet.ToolbarNavigationButton</item>
@@ -409,6 +409,12 @@
     <style name="Widget.SagerNet.PopupMenu.Overflow" parent="Widget.MaterialComponents.PopupMenu.Overflow">
         <item name="android:popupBackground">@drawable/bg_popup_menu</item>
         <item name="android:popupAnimationStyle">@style/PopupMenuAnimation</item>
+    </style>
+
+    <style name="ThemeOverlay.SagerNet.Popup" parent="ThemeOverlay.AppCompat.DayNight">
+        <item name="android:popupBackground">@drawable/bg_popup_menu</item>
+        <item name="popupMenuStyle">@style/Widget.SagerNet.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.SagerNet.PopupMenu.Overflow</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.SagerNet.BottomSheet" parent="">
@@ -865,7 +871,7 @@
         <item name="elevationOverlayEnabled">false</item>
         <item name="dialogButtonColor">@color/white</item>
         <item name="actionBarTheme">@style/ThemeOverlay.SagerNet.Toolbar.Black</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="appBarLayoutStyle">@style/Widget.SagerNet.AppBarLayout.Black</item>
     </style>
 
@@ -902,7 +908,7 @@
         <item name="android:colorBackground">@color/color_white_theme_bg</item>
         <item name="android:windowBackground">@color/color_white_theme_bg</item>
         <item name="actionBarTheme">@style/ThemeOverlay.SagerNet.Toolbar</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="tabTextColor">@color/color_white_theme_tab_unselected</item>
         <item name="tabSelectedTextColor">@color/color_white_theme_tab_selected</item>
         <item name="tabIndicatorColor">@color/color_white_theme_tab_selected</item>
@@ -936,7 +942,7 @@
         <item name="android:colorBackground">@color/color_light_gray_bg</item>
         <item name="android:windowBackground">@color/color_light_gray_bg</item>
         <item name="actionBarTheme">@style/ThemeOverlay.SagerNet.Toolbar</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.SagerNet.Popup</item>
         <item name="tabTextColor">@color/color_light_gray_tab_unselected</item>
         <item name="tabSelectedTextColor">@color/color_light_gray_tab_selected</item>
         <item name="tabIndicatorColor">@color/color_light_gray_tab_selected</item>
@@ -1241,15 +1247,24 @@
 
     <style name="Preference.Category.SagerNet" parent="Preference.Category.Material">
         <item name="android:layout">@layout/layout_preference_category</item>
+        <item name="allowDividerAbove">false</item>
+        <item name="allowDividerBelow">false</item>
     </style>
 
     <style name="PreferenceThemeOverlay.SagerNet" parent="PreferenceThemeOverlay">
         <item name="preferenceCategoryStyle">@style/Preference.Category.SagerNet</item>
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
     </style>
 
     <style name="ShapeAppearanceOverlay.SagerNet.Pill" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.SagerNet.IconSquircle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
     </style>
 
     <style name="TextAppearance.SagerNet.Button" parent="TextAppearance.MaterialComponents.Button">

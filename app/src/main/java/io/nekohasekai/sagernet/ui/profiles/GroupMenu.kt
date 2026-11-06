@@ -21,7 +21,22 @@ class GroupMenu(private val host: ConfigurationFragment) {
     /** Direction of the next sort; a group that keeps a sort shows its own direction. */
     var sortDescending = false
 
+    private fun enableIcons(menu: Menu) {
+        try {
+            val method = menu.javaClass.getMethod("setOptionalIconsVisible", Boolean::class.javaPrimitiveType)
+            method.isAccessible = true
+            method.invoke(menu, true)
+        } catch (_: Exception) {}
+        for (i in 0 until menu.size()) {
+            val item = menu.getItem(i)
+            if (item.hasSubMenu()) {
+                item.subMenu?.let { enableIcons(it) }
+            }
+        }
+    }
+
     fun setUp(menu: Menu) {
+        enableIcons(menu)
         menu.findItem(R.id.action_misc)?.subMenu?.let { MenuCompat.setGroupDividerEnabled(it, true) }
         keepOpen(menu, R.id.action_sort_ascending) { setDirection(it, false) }
         keepOpen(menu, R.id.action_sort_descending) { setDirection(it, true) }

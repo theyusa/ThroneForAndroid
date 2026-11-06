@@ -25,39 +25,29 @@ class NetworkFragment : Fragment(R.layout.layout_network) {
             insets
         }
 
-        val openLanSharing = View.OnClickListener {
-            val ctx = context ?: return@OnClickListener
+        binding.lanSharingCard.setOnClickListener {
+            val ctx = context ?: return@setOnClickListener
             startActivity(Intent(ctx, LanSharingActivity::class.java))
         }
-        binding.lanSharingCard.setOnClickListener(openLanSharing)
-        binding.lanSharingBtn.setOnClickListener(openLanSharing)
 
-        val openDnsLeak = View.OnClickListener {
-            val ctx = context ?: return@OnClickListener
+        binding.dnsLeakCard.setOnClickListener {
+            val ctx = context ?: return@setOnClickListener
             startActivity(Intent(ctx, DnsLeakActivity::class.java))
         }
-        binding.dnsLeakCard.setOnClickListener(openDnsLeak)
-        binding.dnsLeakBtn.setOnClickListener(openDnsLeak)
 
-        val openNatDiscovery = View.OnClickListener {
-            val ctx = context ?: return@OnClickListener
+        binding.natDiscoveryCard.setOnClickListener {
+            val ctx = context ?: return@setOnClickListener
             startActivity(Intent(ctx, StunActivity::class.java))
         }
-        binding.natDiscoveryCard.setOnClickListener(openNatDiscovery)
-        binding.natDiscoveryBtn.setOnClickListener(openNatDiscovery)
 
-        val openCellularNetwork = View.OnClickListener {
-            val ctx = context ?: return@OnClickListener
+        binding.cellularNetworkCard.setOnClickListener {
+            val ctx = context ?: return@setOnClickListener
             startActivity(Intent(ctx, CellularNetworkActivity::class.java))
         }
-        binding.cellularNetworkCard.setOnClickListener(openCellularNetwork)
-        binding.cellularNetworkBtn.setOnClickListener(openCellularNetwork)
 
-        val openNetworkInterfaces = View.OnClickListener {
-            val ctx = context ?: return@OnClickListener
+        binding.networkInterfacesCard.setOnClickListener {
+            val ctx = context ?: return@setOnClickListener
             startActivity(Intent(ctx, NetworkInterfacesActivity::class.java))
         }
-        binding.networkInterfacesCard.setOnClickListener(openNetworkInterfaces)
-        binding.networkInterfacesBtn.setOnClickListener(openNetworkInterfaces)
     }
 }
