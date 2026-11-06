@@ -270,7 +270,7 @@ object SettingsRegistry {
     @JvmField val XRAY_MUX_XUDP_CONCURRENCY = int("xray_mux_xudp_concurrency", 16) { it in -1..XRAY_MUX_MAX_COUNT }
     @JvmField val XRAY_MUX_XUDP_PROXY_UDP443 = oneOf("xray_mux_xudp_proxy_udp443", "reject", xrayXudpProxyUDP443Modes)
     @JvmField val XRAY_MUX_DEFAULT_ON = bool("xray_mux_default_on", false)
-    @JvmField val FRAGMENT_DEFAULT_ON = bool("fragment_default_on", false)
+    @JvmField val FRAGMENT_DEFAULT_ON = bool("fragment_default_on", true)
     @JvmField val FRAGMENT_IMPLEMENTATION = oneOf("fragment_implementation", "built-in", FRAGMENT_IMPLEMENTATIONS)
     @JvmField val FRAGMENT_SIZE = string("fragment_size", "10-100", SettingValidators::isRangeOrEmpty)
     @JvmField val FRAGMENT_SLEEP = string("fragment_sleep", "2-5", SettingValidators::isRangeOrEmpty)
