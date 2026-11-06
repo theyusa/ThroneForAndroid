@@ -121,7 +121,7 @@ class ServiceButton @JvmOverloads constructor(
         val description = context.getText(if (state.canStop) R.string.disconnect else R.string.connect)
         contentDescription = description
         TooltipCompat.setTooltipText(this, description)
-        val enabled = state.canStop || state == BaseService.State.Stopped
+        val enabled = state != BaseService.State.Stopping
         isEnabled = enabled
         if (Build.VERSION.SDK_INT >= 24) pointerIcon = PointerIcon.getSystemIcon(
             context,
