@@ -310,7 +310,7 @@ class StunNatTester(
 
     private fun resolveServer(address: String, ipv6Mode: Int): InetSocketAddress {
         val (host, port) = parseHostPort(address)
-        val addresses = InetAddress.getAllByName(host)
+        val addresses = socketFactory.resolve(host)
         val selected = selectAddress(addresses, ipv6Mode)
             ?: throw UnknownHostException("No address found matching IPv6 mode $ipv6Mode for $host")
         return InetSocketAddress(selected, port)
