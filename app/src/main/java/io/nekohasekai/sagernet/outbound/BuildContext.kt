@@ -27,7 +27,7 @@ data class BuildContext(
     /** SettingsRepo.h:81 fragment_implementation ("built-in" or "custom") — TLS.cpp:433, Outbound.cpp:156. */
     val fragmentImplementation: String = "built-in",
     /** SettingsRepo.h:82 fragment_default_on — TLS.cpp:462. */
-    val fragmentDefaultOn: Boolean = true,
+    val fragmentDefaultOn: Boolean = false,
     /** SettingsRepo.h:84 fragment_size — Outbound.cpp:161. */
     val fragmentSize: String = "10-100",
     /** SettingsRepo.h:85 fragment_sleep — Outbound.cpp:162. */
